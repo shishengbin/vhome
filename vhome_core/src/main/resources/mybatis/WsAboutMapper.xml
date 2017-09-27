@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsAboutDao">
+	<!-- 增加公司简介 -->
+	<insert id="create" parameterType="WsAbout" keyProperty="id"
+		useGeneratedKeys="true">
+		insert into ws_mt_firminfo(firm_info,Create_name,Create_time)
+		values(#{about},#{createName},#{createTime});
+	</insert>
+	<!-- 修改公司简介 -->
+	<update id="update" parameterType="WsAbout">
+		update ws_mt_firminfo set
+		firm_info=#{about},
+		Update_name=#{updateName}
+		where firm_id=#{id};
+	</update>
+	<!-- 查看公司简介 -->
+	<select id="selectAbout" parameterType="Long" resultType="WsAbout">
+		select mf.firm_id as id,
+		mf.firm_info as about,
+		sc.company_name as company_name,
+		sc.company_address as company_address,
+		sc.company_person as company_person,
+		sc.company_email as company_email,
+		sc.company_fax as company_fax,
+		sc.company_phone as company_phone,
+		sc.company_site as company_site,
+		sc.company_trade as company_trade,
+		mf.create_name as createName,
+		mf.create_time as createTime,
+		mf.update_time as updateTime,
+		mf.update_name as updateName
+		from ws_mt_firminfo mf left join ws_user_firm uf on mf.firm_id =
+		uf.firm_id
+		LEFT JOIN sys_user_company AS suc ON suc.user_id =uf.user_id
+		LEFT JOIN sys_company AS sc ON sc.company_id=suc.company_id
+		where uf.user_id=#{userid} and del_status=1
+	</select>
+	<!-- 删除公司简介 -->
+	<update id="deleteById" parameterType="Long">
+		update ws_mt_firminfo set Del_status=0 where firm_id=#{id};
+	</update>
+	<!-- 注册公司简介模块与企业关联 -->
+	<insert id="addAboutUser" parameterType="WsAboutUser">
+		insert into ws_user_firm(user_id,firm_id,create_name,create_time)
+		values(#{userId},#{aboutId},#{createName},#{createTime});
+	</insert>
+</mapper>

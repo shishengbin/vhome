@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.agt.IndentDao">
+ <resultMap type="Indent" id="indentResult">
+		<id column="indent_id" property="id"/>
+		<result column="Indent_type" property="type"/>
+		<result column="Indent_state" property="states"/>
+		<result column="Indent_term" property="term"/>
+		<result column="indent_monetary" property="monetary"/>
+		<result column="Indent_presentterm" property="presentterm" />
+		<result column="Indent_sumterm" property="sumterm"/>
+		<result column="Indent_formalterm" property="formalterm"/>
+		<result column="Indent_formalid" property="formalid"/>
+		<result column="keyword" property="keyword"/>
+		<result column="create_time" property="createTime"/>
+		<result column="create_name" property="createName"/>
+		<result column="indent_begin_date" property="beginDate"/>
+		<result column="indent_end_date" property="endDate"/>
+		<result column="indent_agency" property="agency"/>
+		<result column="remark" property="remark"/>
+		<result column="indent_balance" property="balance"/>
+		<result column="company_name" property="firmName"/>
+		<result column="register_coding" property="coding"/>
+		<result column="costprice" property="costPrice"/>
+		<association property="firmName" column="sys_user_id" select="queryFirmName" javaType="String"></association>
+		<association property="user" javaType="SysUser" resultMap="com.sy.modules.dao.sys.UserDao.resultListUser"></association>
+		<collection property="market" resultMap="com.sy.modules.dao.agt.MarketDao.marketResult"></collection>
+	</resultMap>
+	
+	<select id="queryFirmName" resultType="String">
+		select company_name from sys_company sc left join rel_agt_company rac on rac.company_id = sc.company_id 
+		where sc.company_state=1 and rac.agt_id = 
+		(select at.agt_id from sys_company c
+		left join sys_user_company suc on suc.company_id = c.company_id
+		left join rel_agt_company at on at.company_id = c.company_id
+		where suc.user_id=#{sys_user_id} and c.company_state=0)
+	</select>
+	<!-- 查询订单与订单所属客户主体 -->
+	<sql id="queryIndentClient">
+		from agt_indent ai
+		left join sys_user_company suc on suc.user_id = ai.sys_user_id
+		left join rel_agt_company ac on ac.company_id = suc.company_id
+		left join agt_user au on au.u_id = ac.agt_id 		
+		left join sys_company com on com.company_id = suc.company_id
+		<where>
+		<choose>
+			<when test="user.role.id>3">
+				ai.create_name = #{user.u_name}and
+				au.u_id = #{user.fatherId}
+			</when>
+			<when test="user.role.id==3">
+				au.u_id = #{user.fatherId}
+			</when>
+			<when test="user.role.id==2">
+				au.u_id=#{user.id}
+			</when>
+		</choose>
+		and com.company_state=0
+		</where>
+	</sql>
+	<!-- 组合查询条件 -->
+	<sql id="wherepage">
+		<if test="keyword!=null and keyword!=''">
+			and ai.keyword like CONCAT('%','${keyword}','%')
+		</if>
+		<if test="indentType!=null">
+			and ai.indent_type=#{indentType}
+		</if>
+		<if test="beginDate!=null and beginDate!=''">
+			and ai.create_time <![CDATA[>]]> #{beginDate}
+		</if>
+		<if test="endDate!=null and endDate!=''">
+			and ai.create_time <![CDATA[<]]> #{endDate}
+		</if>
+	</sql>
+	
+	<!-- 分页查询所有订单  -->
+	<select id="findIndentByPage" parameterType="Map" resultMap="indentResult">
+		select com.company_name,ai.* 
+		<include refid="queryIndentClient"/>
+		<include refid="wherepage"/>
+		GROUP BY ai.indent_id
+		order by ai.create_time DESC
+		<if test="lowerLimit!=null and upperLimit != null">
+		  limit #{lowerLimit},#{upperLimit}
+	    </if>
+	</select>
+	<!-- 总数 -->
+	<select id="count" parameterType="Map" resultType="Integer">
+		select count(*) 
+		<include refid="queryIndentClient"/>
+		<include refid="wherepage"/>
+	</select>
+	<!-- 单条 -->
+	<select id="findById" parameterType="Long" resultMap="indentResult">
+		select i.*,sc.*,ak.*,su.*,am.*,ar.*,au.app_style from agt_indent i 
+		left join sys_user su on su.user_id = i.sys_user_id
+		left join sys_user_company suc on suc.user_id = su.user_id
+		left join rel_approle_user au on au.user_id= su.user_id
+		left join app_role ar on ar.id = au.role_id
+		left join sys_company sc on sc.company_id = suc.company_id
+		left join rel_user_keyword ruk on ruk.sys_user_id = su.user_id
+		left join ag_keyword ak on ak.kw_id = ruk.keyword_id
+		left join rel_indent_market rim on rim.indent_id = i.indent_id
+		left join agt_market am on am.market_id = rim.market_id
+		where i.indent_id =#{id}
+	</select>
+	<!-- 创建订单 -->
+	<insert id="create" parameterType="Indent" useGeneratedKeys="true" keyProperty="id">
+		insert into agt_indent(
+		Indent_type,
+		Indent_term,
+		indent_monetary,
+		Indent_presentterm,
+		Indent_sumterm,
+		Indent_formalterm,
+		Indent_formalid,
+		create_time,
+		create_name,
+		remark,
+		sys_user_id,
+		indent_begin_date,
+		indent_end_date,
+		keyword,
+		indent_agency,
+		indent_balance,
+		register_coding,costprice)
+		values(#{type},#{term},#{monetary},#{presentterm},#{sumterm},#{formalterm},
+		#{formalid},#{createTime},#{createName},#{remark},#{user.id},#{beginDate},#{endDate},#{keyword},#{agency},#{balance},#{coding},#{costPrice});
+	</insert>
+	
+	<!-- 建立带发布与订单关联关系 -->
+	<insert id="createRelMarket" parameterType="java.util.List">
+		insert into rel_indent_market(market_id,indent_id)values
+		<foreach collection="list" item="item" index="" separator=",">
+		(#{item.marketId},#{item.indentId})
+		</foreach>
+	</insert>
+	<!-- 修改订单状态 -->
+	<update id="update" parameterType="Indent">
+		update agt_indent set indent_state=#{states}, indent_begin_date=#{beginDate}  where indent_id=#{id}
+	</update>
+	<!-- 删除订单 -->
+	<update id="deleteById" parameterType="Long">
+		update agt_indent set del_status=0 where indent_id=#{id}
+	</update>
+</mapper>

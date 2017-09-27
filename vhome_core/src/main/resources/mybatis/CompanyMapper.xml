@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.sys.CompanyInfoDao">
+<!-- ////////////////////////////////////////////LC//////////////////////////////// -->
+ <resultMap type="CompanyInfo" id="comResult">
+	<id column="company_id" property="id"/>
+	<result column="company_name" property="companyname"/>
+	<result column="company_address" property="companyaddress"/>
+	<result column="company_trade" property="companytrade"/>
+	<result column="company_person" property="companyperson"/>
+	<result column="company_phone" property="companyphone"/>
+	<result column="company_fax" property="companyfax"/>
+	<result column="company_address" property="companyaddress"/>
+	<result column="company_email" property="companyemail"/>
+	<result column="company_site" property="companysite"/>
+	<result column="company_business" property="companybusiness"/>
+	<result column="company_descibe" property="companydescribe"/>
+</resultMap>
+
+<!-- <resultMap type="CompanyInfo" id="mycomResult" extends="comResult">
+    <collection property="complist" column="companyid" ofType="com.zj.modules.entity.sys.ComPicture" select="getComPicList" />
+</resultMap> -->
+ 
+<select id="getComPicList" parameterType="long" resultMap="comResult">
+     SELECT
+		sp.spid,
+		sp.spname,
+		sp.spurl,
+		sp.companyid
+     FROM
+       sys_picture AS sp
+     WHERE sp.companyid=#{id}
+</select>
+
+<!-- 查看代理商下客户信息 -->
+<select id="findClientByAgentId" parameterType="Long" resultMap="comResult">
+	select sc.* from sys_company sc
+	left join rel_agt_company ac  on sc.company_id = ac.company_id
+	where ac.agt_id =#{id} and sc.company_state=0 and del_stuts=1
+</select>
+	<!-- 建站账号与客户管理 -->
+	<insert id="createUserCompany" parameterType="SysUserCompany" >
+		insert into sys_user_company(user_id,company_id,create_time)
+		values(#{userId},#{companyId},#{createTime});
+	</insert>
+	<!-- 查询所有代理商 -->
+	<select id="queryAgent" resultMap="comResult">
+		select * from sys_company where company_state=1 and del_stuts=1;
+	</select>
+	<!-- 查询所有客户 -->
+	<select id="queryCom" resultMap="comResult">
+		select * from sys_company where company_state=0 and del_stuts=1;
+	</select>
+ <!-- 本公司所有代理商名称 -->
+ <select id="getAllAgent" resultMap="comResult">
+ 	select c.company_id,c.company_name from sys_company c 
+ 	left join rel_agt_company ac on ac.company_id = c.company_id
+	left join agt_user au on au.u_id = ac.agt_id  
+	where c.company_state=1 and au.roleId!=1
+ </select>
+<!--//////////////////////////////////////////////////sss/////////////////////////  -->
+
+<select id="findAccoutAndType" parameterType="long" resultType="CompanyInfo">
+    SELECT
+    sc.company_id as id,
+	sc.company_name as companyname,
+	sc.company_phone as companyphone,
+	sc.company_qq as qqnumber,
+	sc.company_email as companyemail,
+    akt.tname as edtype
+	FROM
+	sys_company AS sc LEFT JOIN sys_user_company  AS uc on sc.company_id=uc.company_id 
+	                  LEFT JOIN sys_user AS su on su.user_id=uc.user_id
+                      LEFT JOIN rel_user_keyword AS ruk on ruk.sys_user_id=su.user_id
+                      LEFT JOIN ag_keyword AS ak ON ak.kw_id=ruk.keyword_id
+                      LEFT JOIN rel_kword_type AS rkt ON rkt.kwid=ak.kw_id
+                      LEFT JOIN ag_kw_type AS akt ON akt.tid=rkt.tyid 
+	where su.user_id=#{userId}
+    
+</select>
+
+<select id="findCompanyInfo" parameterType="long" resultType="CompanyInfo">
+   SELECT
+    sc.company_id as id,
+	sc.company_name as companyname,
+	sc.company_address as companyaddress,
+	sc.company_trade as companytrade,
+	sc.company_person as companyperson,
+	sc.company_phone as companyphone,
+	sc.company_fax as companyfax,
+	sc.company_address as companyaddress,
+	sc.company_email as companyemail,
+	sc.company_site as companysite,
+	sc.company_business as companybusiness,
+	sc.company_descibe as companydescribe
+	FROM
+	sys_company AS sc LEFT JOIN sys_user_company  AS uc on sc.company_id=uc.company_id 
+	                  LEFT JOIN sys_user AS su on su.user_id=uc.user_id 
+	where su.user_id=#{userId}
+</select>
+
+<update id="update" parameterType="CompanyInfo" >
+	update sys_company 
+	<set>
+		<if test="companyname!=null and companyname!=''">company_name=#{companyname},</if>
+		<if test="companytrade!=null and companytrade!=''">company_trade=#{companytrade},</if>
+		<if test="companyperson!=null and companyperson!=''">company_person=#{companyperson},</if>
+		<if test="companyphone!=null and companyphone!=''">company_phone=#{companyphone},</if>
+		<if test="qqnumber!=null and qqnumber!=''">company_qq=#{qqnumber},</if>
+		<if test="companyfax!=null and companyfax!=''">company_fax=#{companyfax},</if>
+		<if test="companyaddress!=null and companyaddress!=''">company_address=#{companyaddress},</if>
+		<if test="companyemail!=null and companyemail!=''">company_email=#{companyemail},</if>
+		<if test="companysite!=null and companysite!=''">company_site=#{companysite},</if>
+		<if test="companybusiness!=null and companybusiness!=''">company_business=#{companybusiness},</if>
+	              company_descibe=#{companydescribe},
+		<if test="createName!=null and createName!=''">create_name=#{createName},</if>
+		<if test="createTime!=null and createTime!=''">create_time=#{createTime}</if>
+	</set>
+	where company_id=#{id}
+	</update>
+
+
+</mapper>

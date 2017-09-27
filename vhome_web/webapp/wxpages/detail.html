@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="css/title.css" rel="stylesheet" type="text/css" />
+<link href="css/add.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/cookieTools.js"></script>
+<title>商品详情</title>
+</head>
+<body style="background-color: #ffffff; padding-bottom: 40px">
+	<input type="hidden" name="humanId" id="humanId">
+	<div class="lay_toptab mod_tab" id="lay_head"
+		style="position: fixed; top: 0; left: 0; z-index: 9999;">
+		<a href="search.html" class="tab_item" id="allClass"> <img
+			src="images/1401947222_grid-2-01.png" width="30px" height="30px" />
+		</a>
+		<!-- <a class="tab_item tab_item_logo" href="#"> <img
+			src="images/headerLogo.png" width="30px" height="30px" />
+		</a> -->
+		<a href="mine.html" class="tab_item" id="mine"> <img
+			src="images/1401947189_user-01.png" width="30px" height="30px" />
+		</a>
+		<a class="tab_item" id="cartdefault" onclick="checklogin()"> <img
+			src="images/1401947144_shop-01.png" width="30px" height="30px" /> <i
+			class="qb_icon icon_number_bubble qb_none"></i>
+		</a>
+	</div>
+	<div class="container"
+		style="position: fixed; bottom: 0; left: 0; z-index: 999; width: 100%; border-top: 1px solid #eeeeef; background-color: #eaeaea; padding: 5px 0">
+		<div class="row">
+			<div class="col-xs-5" style="text-align: center">
+				<button type="button" class="btn btn-danger" id="addCart">加入购物车</button>
+			</div>
+			<div class="col-xs-5" style="text-align: center">
+				<button class="btn btn-default" id="buyOnce">立即购买</button>
+			</div>
+			<div class="col-xs-2" style="text-align: center"></div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12" style="padding-top: 32px;">
+				<img src="" width="100%" id="prod_img">
+				<hr
+					style="height: 1px; border: none; border-top: 1px dashed #dcdcdc;" />
+			</div>
+			<div class="col-xs-12"
+				style="padding-left: 20px; border-bottom: 1px dashed #dcdcdc; padding-bottom: 5px">
+				<p id="prod_name" class="productname"></p>
+				<input type="hidden" name="prod_id" id="prod_id"> <input
+					type="hidden" name="prod_price" id="prod_prices">
+				<p style="color: #FF0000; font-family: Arial;">
+					&yen：<span style="font-weight: bold;" id="prod_price"></span>
+				</p>
+				<p>
+					数量:&nbsp;<a style="text-decoration: none"><button
+							class="button" id="bt_add">+</button></a> <span><input
+						type="text" value="1" id="count"
+						style="width: 33px; text-align: center" disabled></span> <a
+						style="text-decoration: none"><button class="button"
+							id="bt_desc">-</button></a>
+				</p>
+				<p>
+					规格：<span id="specname"></span>
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" style="padding-top: 5px">
+		<div class="row">
+			<div class="col-xs-12">
+				<h3
+					style="font-family: Arial; font-size: 14px; text-indent: 16px; color: #FF0000;">商品详情:</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p style="color: #404040; font-size: 12px; padding: 0 16px;"
+					id="prod_detail"></p>
+			</div>
+		</div>
+	</div>
+	<div class="lay_footer qb_tac qb_fs_s mod_mb15">
+		<div class="fn_quicklinks">
+			<a class="mod_color_weak" href="#" id="foot_index">商户首页</a> <span
+				class="mod_color_comment">|</span> <a class="mod_color_weak"
+				href="#" id="foot_human">会员中心</a> <span class="mod_color_comment">|</span>
+			<a class="mod_color_weak" href="#" id="foot_company">品牌介绍</a>
+		</div>
+		<div class="fn_copyright qb_bfc">
+			<div class="mod_color_comment bfc_m">&copy;&nbsp;上海轩丞信息技术支持</div>
+		</div>
+	</div>
+</body>
+<!-- 页面加载完执行js -->
+<script type="text/javascript" src="js/getUrlParameter.js"></script>
+<script type="text/javascript" src="js/indexinit.js"></script>
+<script type="text/javascript">
+	var humanId = getCookie("humanId");
+	//产品id
+	var id = request("id");
+	$(document).ready(function() {
+		$.ajax({
+			url : '/vhome_web/ws/appwx/showProductForwx',
+			type : 'post',
+			data : {
+				id : id
+			},
+			dataType : 'json',
+			success : function(data) {
+				//console.info(data);
+				$("#prod_img").attr("src", fix_url + data.propicpath);
+				$("#prod_name").html(data.productName);
+				$("#prod_id").val(data.id);
+				$("#prod_price").html(data.productPrice);
+				$("#prod_prices").val(data.productPrice);
+				$("#specname").html(data.specname);
+				$("#prod_detail").html(data.productRemark);
+			},
+			error : function(data) {
+				alert("加载商品详情失败！");
+			}
+		});
+	});
+
+	$("#bt_add").click(function() {
+		$("#count").val(Number($("#count").val()) + 1);
+	});
+	$("#bt_desc").click(function() {
+		var num = Number($("#count").val()) - 1;
+		if (num > 0)
+			$("#count").val(num);
+	});
+
+	$("#addCart").click(function() {
+		var productid = $("#prod_id").val();
+		var count = $("#count").val();
+
+		$.ajax({
+			url : '../indent/addCart',
+			type : 'post',
+			dataType : 'text',
+			data : {
+				productid : productid,
+				count : count,
+				humanId : $("#humanId").val(),
+			},
+			success : function(data) {
+				alert("加入购物车成功");
+			},
+			error : function() {
+				alert("加入购物车失败");
+			}
+		});
+	});
+	//立即购买
+	$("#buyOnce").click(
+			function() {
+				var productid = $("#prod_id").val();
+				var count = $("#count").val();
+				var proName = $("#prod_name").html();
+				var productPrice = $("#prod_prices").val();
+
+				if (humanId == '' || humanId == null) {
+					alert("您还没有登录，请先登录！");
+					location.href = "mall_login.html?accountid=" + accountid
+							+ "&pid=" + id;
+				} else {
+					window.location.href = 'addIndent.html?accountid='
+							+ accountid + '&productName=' + proName + '&count='
+							+ count + '&productPrice=' + productPrice
+							+ '&productid=' + productid + '';
+				}
+			});
+</script>
+</html>

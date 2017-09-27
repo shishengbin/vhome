@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsProTypeDao">
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> 
+   
+   <insert id="create" parameterType="WsProType" useGeneratedKeys="true" keyProperty="id">
+       insert into ws_pro_type (tname,parentid,picurl,remark,uid,create_name,create_time)
+		values (#{tname},#{parentId},#{picurl},#{remark},#{userId},#{createName},#{createTime})
+   </insert>
+   <delete id="deleteById" parameterType="Long">
+      delete from ws_pro_type
+		where tid=#{id}
+   </delete>
+   <update id="update" parameterType="WsProType">
+       update ws_pro_type 
+	       <set>
+			<if test="tname!=null and tname!=''">tname=#{tname},</if>
+			<if test="picurl!=null and picurl!=''">picurl=#{picurl},</if>
+			<if test="updateName!=null and updateName!=''">update_name=#{updateName},</if>
+			<if test="updateTime!=null and updateTime!=''">update_time=#{updateTime}</if>
+		  </set>
+		where tid=#{id}
+   </update>
+   <select id="findById" parameterType="long" resultType="WsProType">
+        SELECT
+         	wpt.tid as id,
+			wpt.tname as tname,
+			wpt.parentid as parentId,
+			wpt.picurl as picurl,
+			wpt.remark as remark,
+			wpt.create_name as createName,
+			wpt.create_time as createTime,
+			wpt.update_name as updateName,
+			wpt.update_time as updateTime
+		FROM
+			ws_pro_type AS wpt
+		WHERE wpt.tid=#{id} 
+       
+   </select>
+  
+   <!-- 查询一级分类 -->
+   <select id="findAllParentTypesByPage" parameterType="map" resultType="WsProType" useCache="false" flushCache="true" >
+       SELECT
+         	wpt.tid as id,
+			wpt.tname as tname,
+			wpt.parentid as parentId,
+			wpt.picurl as picurl,
+			wpt.remark as remark,
+			wpt.create_name as createName,
+			wpt.create_time as createTime,
+			wpt.update_name as updateName,
+			wpt.update_time as updateTime
+			FROM
+			ws_pro_type AS wpt 
+		where 1=1 and wpt.parentid=0 and  wpt.uid=#{id}
+		<if test="tname!=null">
+		  and wpt.tname like "%"#{tname}"%"
+		</if>
+		<if test="lowerLimit!=null and upperLimit != null">
+				limit #{lowerLimit},#{upperLimit}
+	    </if>
+   </select>
+   <!-- 一级分类总数 -->
+   <select id="findAllParentTypeCount" parameterType="map" resultType="long">
+       select count(*) 
+       FROM ws_pro_type AS wpt
+	   where 1=1 and wpt.parentid=0 and  wpt.uid=#{id}
+	   <if test="tname!=null">
+		  and wpt.tname like "%"#{tname}"%"
+		</if>
+   </select>
+   <!-- 一级分类是否存在二级分类 -->
+   <select id="findCountByParId" parameterType="Long" resultType="int">
+       SELECT count(*) 
+       FROM ws_pro_type AS wpt
+	   where 1=1 and wpt.parentid=#{id}
+   </select>
+   
+    <!-- 查询二级分类 -->
+   <select id="findAllSecondTypesByPage" parameterType="map" resultType="WsProType" useCache="false" flushCache="true">
+          SELECT
+         	wpt.tid as id,
+			wpt.tname as tname,
+			wpt.parentid as parentId,
+			wpt.picurl as picurl,
+			wpt.remark as remark,
+			wpt.create_name as createName,
+			wpt.create_time as createTime,
+			wpt.update_name as updateName,
+			wpt.update_time as updateTime
+			FROM
+			ws_pro_type AS wpt 
+		where 1=1 and wpt.parentid=#{tid}
+		<if test="tname!=null">
+		  and wpt.tname like "%"#{tname}"%"
+		</if>
+		<if test="lowerLimit!=null and upperLimit != null">
+				limit #{lowerLimit},#{upperLimit}
+	    </if>
+   </select>
+   <!-- 查询二级分类总数 -->
+   <select id="findAllSecondTypeCount" parameterType="map" resultType="long">
+       select count(*) 
+       FROM ws_pro_type AS wpt
+	   where 1=1 and wpt.parentid=#{tid}
+	   <if test="tname!=null">
+		  and wpt.tname like "%"#{tname}"%"
+		</if>
+   </select>  
+</mapper>

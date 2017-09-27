@@ -1,0 +1,83 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, select, p, blockquote, th, td { margin: 0px; padding: 0px; }
+fieldset, img, input { border: 0px none; }
+address, button, caption, cite, code, dfn, em, input, optgroup, option, select, strong, textarea, th, var { font: inherit; }
+h1, h2, h3, h4, h5, h6, p { font-size: 100%; font-weight: normal; display: block; }
+
+.bg_body {
+	background-image: url(../images/bg_login.jpg);
+	background-repeat: repeat;
+	text-align: center;
+}
+
+.login{
+	
+	margin: 0 auto;
+    min-height: 520px;
+    padding-top: 20px;
+    position: relative;
+    text-align: center;
+    width: 1000px;
+}
+
+.home_in {
+	left: 15px;
+	position: absolute;
+	top: 15px;
+}
+
+.login_logo{
+	left: 65px;
+    position: absolute;
+    top: 60px;
+}
+
+.login_form{
+    height: 40px;
+    padding: 20px 0 0 150px;
+}
+
+
+
+.login_user {
+	background-image: url(../images/bg_user.png);
+}
+
+.login_pwd {
+	width: 292px;
+	height: 33px;
+	padding-top: 5px;
+	background: url(../images/bg_pwd.png) no-repeat left top;
+	float: left;
+}
+
+.login_user {
+	width: 292px;
+	height: 33px;
+	padding-top: 5px;
+	background: url(../images/bg_user.png) no-repeat left top;
+	float: left;
+	margin-right: 40px;
+}
+
+.btnlogin{
+	cursor: pointer;
+    float: left;
+    margin-right: 10px;
+    padding-left: 25px;
+}
+
+p {
+	display: block;
+}
+
+
+
+.loginInfo input {
+	width: 230px;
+	height: 25px;
+	line-height: 25px;
+	border: 0;
+	font-size: 14px;
+	background: transparent;
+	margin-left: 30px;
+}

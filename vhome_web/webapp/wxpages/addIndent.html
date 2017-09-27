@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"> 
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>下订单</title>
+<link href="../../ws/app/css/bootstrap.min.css" rel="stylesheet">
+<link href="../../ws/app/css/buttons.css" rel="stylesheet">
+<script type="text/javascript" src="../../ws/app/js/jquery.min.js"></script>
+<script type="text/javascript" src="../../ws/app/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../ws/app/js/scripts.js"></script>
+<script type="text/javascript" src="js/cookieTools.js"></script>
+<script type="text/javascript">
+function checkperson(){
+	var person=$("#receivePerson").val();
+	if(person==''||person.length<0){
+		$('#errperson').show();
+		$('#receivePerson').focus();
+		return false;
+	}else{
+		$('#errperson').hide();
+		return true;
+	}	
+}
+function checkaddress(){
+	var address=$("#transportDestination").val();
+	if(address==''||address.length<0){
+		$('#erraddress').show();
+		$('#transportDestination').focus();
+		return false;
+	}else{
+		$('#erraddress').hide();
+		return true;
+	}	
+}
+function checkphone(){
+	var phone=$("#receivePhone").val();
+	if(phone==''||phone.length<0){
+		$('#errphone').show();
+		$('#receivePhone').focus();
+		return false;
+	}else{
+		$('#errphone').hide();
+		return true;
+	}	
+}
+
+function checkhotel(){
+	var hotel=$("#remark").val();
+	if(hotel==''||hotel.length<0){
+		$('#errhotel').show();
+		$('#remark').focus();
+		return false;
+	}else{
+		$('#errhotel').hide();
+		return true;
+	}	
+}
+function cartsubmit(){
+	if(checkperson()&&checkaddress()&&checkphone()&&checkhotel()){
+		$("#formCart").attr("action","../indent/addIndent");
+		$("#submit_btn").attr("disabled","true");
+		$("#formCart").submit();
+	}
+}
+</script>
+</head>
+<body>
+<form action="" method="post" id="formCart">
+ <div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+            <p id="pname" style="font-weight: bold;"></p>
+            <p id="pcount"></p>
+            <p id="ptotal" style="color:#FF0000;font-family:Arial;"></p>
+            <p >
+            <p>
+                                              支付方式：
+                <label><input type="radio" name="payway" checked="checked" value="1" />货到付款</label>
+		      <!--   <label><input type="radio" name="payway" value="2"/>支付宝</label> -->
+            </p>
+				<div class="form-group" style="line-height: 15px;">
+				  <label>收货人：</label><input type="text" id="receivePerson" name="receivePerson" placeholder="输入正确的姓名" class="form-control"  onblur="checkperson()"><span style="font-size: 11px; color:#d61f1f;" id="errperson">*收货人不能为空</span><br/>
+                  <label>收货地址：</label><input type="text" placeholder="输入正确的详细地址" id="transportDestination" name="transportDestination" value="" class="form-control" onblur="checkaddress()"><span style="font-size: 11px; color:#d61f1f;" id="erraddress">*收货地址不能为空</span><br/>
+                  <label>联系电话：</label><input type="text" placeholder="输入正确的电话号码" id="receivePhone" id="receivePhone" name="receivePhone" value="" class="form-control" onblur="checkphone()"><span style="font-size: 11px; color:#d61f1f;" id="errphone">*电话号码不能为空</span><br/>
+                  <label>酒店名称：</label><input type="text" placeholder="输入正确的酒店名称" id="remark" id="remark" name="remark" class="form-control"  onblur="checkhotel()"><span style="font-size: 11px; color:#d61f1f;" id="errhotel">*酒店名称不能为空</span><br/>
+				  <label>派送时间：</label><input type="text" placeholder="格式：2015/6/15/12/34" id="sendtime" id="sendtime" name="sendtime" class="form-control"  onblur="checkSendTime()"><span style="font-size: 11px; color:#d61f1f;" id="errsendtime">*派送时间不能为空</span><br/>
+				</div>
+		</div>
+	</div>
+</div>
+<input type="hidden" name="money" value="${product.productPrice*product.count}">
+<input type="hidden" name="productId" value="${product.id}">
+<input type="hidden" name="productName" value="${product.productName}">
+<input type="hidden" name="count" value="${product.count}">
+<input type="hidden" name="productPrice" value="${product.productPrice}">
+<input type="hidden" name="status" value="0">
+<input type="hidden" name="humanId" id="humanId">
+<input type="hidden" name="accountid" id="accountid">
+<div style="padding:0 15px">
+ <button type="button"  id="submit_btn" style="width: 100%" class="button button-block button-rounded button-caution button-large" onclick="cartsubmit()">提交订单</button>
+</div>
+</form>	
+</body>
+<script type="text/javascript" src="js/indexinit.js"></script> 
+<script type="text/javascript">
+	$(function(){
+		$('#receivePerson').focus();
+		$('#errperson').hide();
+		$('#erraddress').hide();
+		$('#errphone').hide();
+		$('#errhotel').hide();
+		$('#errsendtime').hide();
+		var humanId=getCookie("humanId");
+		if(humanId==null||humanId=='')
+		{
+			humanId=request("humanId");
+		}
+		var accountid=request("accountid");
+		var count=request("count");
+		var productName=request("productName");
+		var productPrice=request("productPrice");
+		var productId=request("productid");
+		$("#pname").html('商品名称：'+productName);
+		$("#pcount").html('商品数量：'+count);
+		$("#ptotal").html('总价：&yen'+Number(productPrice)*Number(count));
+		$("input[name='humanId']").val(humanId);
+		$("input[name='count']").val(count);
+		$("input[name='productName']").val(productName);
+		$("input[name='productId']").val(productId);
+		$("input[name='productPrice']").val(productPrice);
+		$("input[name='money']").val(Number(productPrice)*Number(count));
+		$("#accountid").val(accountid);
+	});
+</script>
+</html>

@@ -1,0 +1,59 @@
+.mod_tab {
+	display: box;
+	display: -webkit-box;
+	background-color: #161616;
+	background-image: -webkit-gradient(linear,left top,left bottom,from(#212121),to(#161616));
+	background-image: -webkit-linear-gradient(top,#212121,#161616);
+	background-image: linear-gradient(to bottom,#212121,#161616);
+	height: 44px;
+	border-bottom: 1px solid #000
+}
+.lay_toptab {
+	top: -45px;
+	width: 100%;
+}
+body {
+	-webkit-text-size-adjust: none;
+	line-height: 1.6;
+	font-size: 14px;
+	font-family: "ff-tisa-web-pro-1","ff-tisa-web-pro-2","Lucida Grande","Hiragino Sans GB","Hiragino Sans GB W3"
+}
+a {
+	text-decoration: none
+}
+a:active{
+	text-decoration: none;
+}
+a:visited{
+	text-decoration: none;
+}
+.mod_tab .tab_item {
+	-webkit-box-flex: 1;
+	display: block;
+	cursor: pointer;
+	text-align: center;
+	position: relative;
+	width: 42px;
+	line-height: 35px;
+}
+.mod_tab .tab_item:after {
+	content: "";
+	display: block;
+	width: 1px;
+	border-left: 1px solid #000;
+	background-color: #262626;
+	height: 44px;
+	position: absolute;
+	left: 0;
+	top: 0
+}
+.mod_tab .tab_item_logo {
+	width: auto;
+	padding-left: 5px;
+	padding-right: 5px
+}
+.mod_tab .tab_item_logo img {
+	width: 130px!important;
+    max-height:31px!important;
+	margin-top: 13px!important
+}

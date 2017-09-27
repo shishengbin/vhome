@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.agt.AgtCompanyDao">
+<insert id="create" parameterType="AgtCompany" useGeneratedKeys="true" keyProperty="id">
+      insert into sys_company
+      ( company_name,
+		company_person,
+		company_phone,
+		company_business,
+		create_time,
+		company_email,
+		company_descibe,
+		company_state) 
+      values (#{companyName},#{companyPerson},#{companyPhone},
+              #{companyBusiness},now(),#{companyEmail},#{companyDescibe},#{companyState})
+   </insert> 
+   <insert id="addRAC" parameterType="RelAgtCompany" useGeneratedKeys="true" keyProperty="id">
+       insert into rel_agt_company
+       (agt_id,company_id)
+       values(#{aid},#{cid})
+   </insert>
+   
+     <select id="findById" parameterType="long" resultType="AgtCompany">
+       		SELECT
+			company_id as companyId,
+			company_name as companyName,
+			company_person as companyPerson,
+		    company_phone as companyPhone,
+		    company_email as companyEmail,
+			company_business as companyBusiness,
+			company_descibe as companyDescibe,
+			create_time as createTime
+			FROM
+			sys_company 
+			WHERE
+			company_id = #{id}    
+   </select>
+   <select id="findCompanyByName" parameterType="map" resultType="AgtCompany">
+       		SELECT
+			sc.company_id as companyId,
+			sc.company_name as companyName,
+			sc.company_person as companyPerson,
+		    sc.company_phone as companyPhone,
+		    sc.company_email as companyEmail,
+			sc.company_business as companyBusiness,
+			sc.company_descibe as companyDescibe,
+			sc.create_time as createTime
+			FROM		
+			sys_company  as sc 
+			where
+			sc.company_name = #{companyName} 			
+
+   </select>
+   <select id="findCompanyByName2" parameterType="map" resultType="AgtCompany">
+       		SELECT
+			sc.company_id as companyId,
+			sc.company_name as companyName,
+			sc.company_person as companyPerson,
+		    sc.company_phone as companyPhone,
+		    sc.company_email as companyEmail,
+			sc.company_business as companyBusiness,
+			sc.company_descibe as companyDescibe,
+			sc.create_time as createTime
+			FROM		
+			sys_company  as sc 
+			WHERE
+			sc.company_name = #{companyName} 	
+			AND
+			sc.	create_time = #{createTime}	           
+   </select>
+   <select id="showAgCompanyBypage" parameterType="map" resultType="AgtCompany">
+ 			    SELECT
+				sc.company_id as  companyId,
+				sc.company_name as companyName,
+				sc.company_person as companyPerson,
+				sc.company_phone as companyPhone,
+				sc.company_email as companyEmail,
+				sc.company_business as companyBusiness,
+				sc.company_descibe as companyDescibe,
+				sc.create_time as createTime,
+				sc.company_state as companyState
+				FROM
+				rel_agt_company AS rc
+				join
+				sys_company AS sc 	
+				on
+		        rc.company_id = sc.company_id
+                and
+				rc.agt_id = #{aid}			
+				where
+				sc.company_state = 0	   			
+			  <if test="lowerLimit!=null and upperLimit != null">
+				limit #{lowerLimit},#{upperLimit}
+	          </if>    
+   
+   </select>
+  <select id="findCountByParam"   resultType="integer" parameterType="map">
+		        SELECT
+				count(*)
+				FROM
+				rel_agt_company AS rc
+				join
+				sys_company AS sc 	
+				on
+		        rc.company_id = sc.company_id
+                and
+				rc.agt_id = #{aid}			
+				where
+				sc.company_state = 0	   		
+				<if test="#{info}!=null">
+		            and 
+		          (
+		          sc.company_name LIKE  CONCAT('%','${info}','%')
+		          or
+				  sc.company_person LIKE  CONCAT('%','${info}','%')
+				  )
+				 </if>
+  </select>
+
+   <update id="deleteById" parameterType="long">
+       update sys_company set del_stuts =0  where company_id = #{id}
+   </update>
+   <delete id="delRAC" parameterType="RelAgtCompany">   
+       delete from rel_agt_company where 
+       agt_id = #{aid}
+       and
+       company_id =#{cid}
+   </delete>
+   <update id="update" parameterType="AgtCompany">
+        update sys_company set
+        company_name = #{companyName},
+		company_person = #{companyPerson},
+		company_phone = #{companyPhone},
+		company_business = #{companyBusiness},
+		company_email = #{companyEmail},
+		company_descibe = #{companyDescibe},
+		update_time = now()
+        where 
+        company_id = #{companyId}      
+   </update>
+   <select id="searchCompany" parameterType="map" resultType="AgtCompany">
+			SELECT
+				sc.company_id as  companyId,
+				sc.company_name as companyName,
+				sc.company_person as companyPerson,
+				sc.company_phone as companyPhone,
+				sc.company_email as companyEmail,
+				sc.company_business as companyBusiness,
+				sc.company_descibe as companyDescibe,
+				sc.create_time as createTime,
+				sc.company_state as companyState
+				FROM
+				rel_agt_company AS rc
+				join
+				sys_company AS sc 	
+				on
+				rc.company_id = sc.company_id
+				and
+				rc.agt_id = #{aid}			
+				where
+				sc.del_stuts = 1
+				and
+				sc.company_state = 0	   		
+				and (
+				company_name LIKE  CONCAT('%','${info}','%')
+				or
+				company_person LIKE  CONCAT('%','${info}','%')
+				)
+				<if test="lowerLimit!=null and upperLimit != null">
+					limit #{lowerLimit},#{upperLimit}
+			   </if>   
+   </select>
+   <select id="findUidByCid" parameterType="long" resultType="integer">
+       SELECT 	count(*)
+		FROM  	sys_user_company
+		WHERE  sys_user_company.company_id = #{cid}
+   </select>
+   
+</mapper>

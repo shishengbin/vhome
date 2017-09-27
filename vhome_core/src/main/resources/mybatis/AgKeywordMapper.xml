@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.agt.KeywordDao">
+
+   <resultMap type="Keyword" id="keyResult">
+		<id column="kw_id" property="id"/>
+		<result column="kw_number" property="kw_number"/>
+		<result column="kw_name" property="kw_name"/>
+   </resultMap>
+   
+	<insert id="create" parameterType="Keyword" useGeneratedKeys="true" keyProperty="id">
+	insert into ag_keyword (kw_number,kw_name,create_name,create_time )
+	values (#{kw_number},#{kw_name},#{createName},#{createTime})
+	</insert>
+	
+	<update id="update" parameterType="Keyword" >
+	update ag_keyword <set>
+	<if test="kw_number!=null and kw_number!=''">kw_number=#{kw_number},</if>
+	<if test="kw_name!=null and kw_name!=''">kw_name=#{kw_name},</if>
+	<if test="kw_type!=null and kw_type!=''">kw_type=#{kw_type},</if>
+	<if test="kw_status!=null and kw_status!=''">kw_status=#{kw_status},</if>
+	<if test="updateName!=null and updateName!=''">update_name=#{updateName},</if>
+	<if test="updateTime!=null and updateTime!=''">update_time=#{updateTime}</if>
+	</set> 
+	where kw_id=#{id}
+	</update>
+
+	<select id="count" resultType="long" >
+	select count(*) from ag_keyword
+	</select>
+	
+	<!-- 分页查询所有关键词 -->
+	<select id="findAllKeywordsByPage" parameterType="map" resultType="Keyword" useCache="false" flushCache="true">
+	  SELECT
+		kw.kw_id as id,
+		kw.kw_name as kw_name,
+		kw.kw_number as kw_number,
+		kw.kw_status as kw_status,
+		kw.create_name as createName,
+		kw.create_time as createTime,
+		kw.update_name as updateName,
+		kw.update_time as updateTime,
+        kt.tname,
+        kt.tprice
+		FROM ag_keyword AS kw LEFT JOIN rel_kword_type AS rkt on kw.kw_id=rkt.kwid LEFT JOIN
+        ag_kw_type AS kt ON kt.tid=rkt.tyid
+	    <if test="lowerLimit!=null and upperLimit != null">
+			limit #{lowerLimit},#{upperLimit}
+	    </if>
+	</select>
+	<!-- 查询单个关键词 -->
+    <select id="findKeywordByName" parameterType="String" resultType="Keyword">
+       SELECT
+		kw.kw_id as id,
+		kw.kw_name as kw_name,
+		kw.kw_number as kw_number,
+		kw.kw_status as kw_status,
+		kw.create_name as createName,
+		kw.create_time as createTime,
+		kw.update_name as updateName,
+		kw.update_time as updateTime,
+        kt.tname as tname,
+        kt.tprice as tprice
+		FROM ag_keyword AS kw LEFT JOIN rel_kword_type AS rkt on kw.kw_id=rkt.kwid 
+		LEFT JOIN ag_kw_type AS kt ON kt.tid=rkt.tyid
+        where kw.kw_name=#{kwname} and kw_status=1
+    </select>
+    <!-- //////////////begin////////////////LiuCheng///////////////////////// -->
+    <resultMap type="Keyword" id="keywordResult">
+    	<id column="kw_id" property="id"/>
+    	<result column="kw_name" property="kw_name"/>
+    	<result column="kw_status" property="kw_status"/>
+    	<result column="create_time" property="createTime"/>
+    	<result column="create_name" property="createName"/>
+    	<association property="kwType" javaType="KwType" column="kw_id" select="queryKwType"></association>
+    </resultMap>
+    <select id="queryKwType" parameterType="Long" resultType="KwType">
+    	select akt.tname,akt.tprice from ag_kw_type akt left join rel_kword_type rkt on akt.tid = rkt.tyid
+    	where rkt.kwid=#{kw_id}
+    </select>
+    <insert id="createRelKeyType" parameterType="RelKeyType">
+    	insert into rel_kword_type(kwid,tyid,create_time)
+    	values(#{keyId},#{typeId},#{createTime});
+    </insert>
+    <!-- 查看有可撤单的关键词 -->
+    <select id="queryUndoKey" parameterType="Map" resultMap="keywordResult">
+    	select * from ag_keyword k left join agt_indent i on k.kw_id=i.keyword_id 
+    	left join sys_company c on i.sys_company = c.company_id
+    	left join agt_account a on a.account_id = c.agt_id
+    	where i.create_time <![CDATA[>=]]>#{date} and a.account_id=#{id}
+    </select>
+    <!-- 根据id查询关键词 -->
+    <select id="findById" parameterType="Long" resultMap="keywordResult">
+    	select * from ag_keyword where kw_id=#{id}
+    </select>
+    	<!-- 建站账号与关键词关联 -->
+	<insert id="createUserKey" parameterType="UserKeyword">
+		insert into rel_user_keyword(sys_user_id,keyword_id,create_time)
+		values(#{userId},#{keywordId},#{createTime});
+	</insert>
+	<!-- 修改建站账号与关键词关联 -->
+	<update id="updateUserKey" parameterType="UserKeyword">
+		update rel_user_keyword set sys_user_id=#{userId},del_stuts=1 where keyword_id=#{keywordId};
+	</update>
+	<!-- 建站账号与关键词中间记录是否存在 -->
+	<select id="findUserKeyByKeyId" parameterType="Long" resultType="Long">
+		select user_key_id from rel_user_keyword where keyword_id=#{id};
+	</select>
+	<!-- 查询关键词 -->
+	<select id="queryKey" parameterType="String" resultType="Long">
+		select kw_id from ag_keyword where kw_name=#{keyword};
+	</select>
+    <!--////////////////end////////////////////////////////////////////////  -->
+</mapper>

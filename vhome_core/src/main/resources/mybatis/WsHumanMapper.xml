@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsHumanDao">
+	<!-- 会员封装结果集 -->
+	<resultMap type="WsHuman" id="humanResult">
+		<id column="human_id" property="id" />
+		<result column="human_account" property="human_account" />
+		<result column="human_password" property="human_password" />
+		<result column="human_question" property="human_question" />
+		<result column="human_answer" property="human_answer" />
+		<result column="human_phone" property="human_phone" />
+		<result column="human_qq" property="human_qq" />
+		<result column="human_name" property="human_name" />
+		<result column="human_address" property="human_address" />	
+		<result column="create_name" property="createName" />
+		<result column="create_time" property="createTime" />
+		<result column="update_name" property="updateName" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+
+	<!-- 分页查询会员信息 -->
+	<select id="findAllHumanByPage" parameterType="map" resultType="WsHuman">
+		select 
+          mn.human_id as id,
+          mn.human_account as  human_account,
+          mn.human_password as human_password,
+          mn.human_question as human_question,
+          mn.human_phone as human_phone,
+          mn.human_name as human_name,
+          mn.human_address as human_address,
+          mn.create_name as createName,
+	      mn.create_time as createTime,
+	      mn.update_name as updateName,
+	      mn.update_time as updateTime
+        from ws_Human as mn left join ws_user_Human as un on mn.Human_id = un.Human_id
+		where un.del_status=1 and un.User_id=#{userid}
+		<if test="account!=null">
+	 	    and mn.human_account like CONCAT('%','${account}','%')
+	 	</if>
+	 	<if test="human_name!=null">
+	 	    and mn.human_name like CONCAT('%','${human_name}','%')
+	 	</if>
+	 	order by mn.create_time DESC
+		<if test="lowerLimit!=null and upperLimit!=null">
+			limit #{lowerLimit},#{upperLimit};
+		</if>
+	</select>
+	
+	<select id="findCountByParam" parameterType="map" resultType="long">
+	    select count(*)
+        from ws_Human as mn left join ws_user_Human as un on mn.Human_id = un.Human_id
+		where un.del_status=1 and un.User_id=#{userid}
+		<if test="account!=null">
+	 	    and mn.human_account like CONCAT('%','${account}','%')
+	 	</if>
+	 	<if test="human_name!=null">
+	 	    and mn.human_name like CONCAT('%','${human_name}','%')
+	 	</if>
+	    
+	</select>
+	
+	<!-- 查看单条会员信息 -->
+	<select id="findById" resultMap="humanResult" parameterType="Long">
+		select * from ws_Human as mn where mn.human_id=#{id}
+	</select>
+	<!-- 登录 -->
+	<select id="login" resultMap="humanResult">
+		select * from ws_Human as mn left join ws_user_Human as un on
+		mn.Human_id = un.Human_id
+		where un.del_status=1
+		and un.User_id=#{0}
+	    and mn.human_account=#{1} and mn.human_password=#{2}
+	</select>
+	<!-- 根据会员账号查询会员信息 -->
+	<select id="findByAccount" resultMap="humanResult" parameterType="String">
+		select * from ws_Human as mn where mn.human_account=#{human_account}
+	</select>
+	<!-- 添加会员 -->
+	<insert id="create" parameterType="WsHuman"  keyProperty="id" useGeneratedKeys="true">
+		insert into ws_Human(human_account,human_password,human_question,human_answer,human_phone,human_qq,human_name,human_address,create_name,create_time)
+		values(#{human_account},#{human_password},#{human_question},#{human_answer},#{human_phone},#{human_qq},#{human_name},#{human_address},#{createName},#{createTime})
+	</insert>
+	
+	<!--  微信添加会员 -->
+	<insert id="wxcreate" parameterType="WsHuman"  keyProperty="id" useGeneratedKeys="true">
+		insert into ws_Human(human_account) values(#{human_account})
+	</insert>
+	
+	<!-- 注册会员与用户关系 -->
+	<insert id="addHumanUser" parameterType="com.sy.modules.entity.ws.WsHumanUser">
+		insert into ws_user_Human(human_id,user_id,create_name,create_time)
+		values(#{humanId},#{userId},#{createName},#{createTime});
+	</insert>
+	<!-- 修改会员 -->
+	<update id="update" parameterType="WsHuman">
+		update ws_Human
+		<set>
+		    <if test="human_account!=null and human_account!=''">human_account = #{human_account},</if>
+			human_password =#{human_password},
+			human_question =#{human_question},
+		<!--human_answer =#{human_answer}, -->
+			human_phone =#{human_phone},
+		<!--human_qq =#{human_qq},-->
+			human_name =#{human_name},
+			human_address =#{human_address},
+			update_name =#{updateName}
+		</set>
+		where Human_id = #{id};
+	</update>
+
+	<!-- 删除会员 -->
+	<update id="deleteById"  parameterType="Long">
+	    update ws_user_Human set del_status=0 where Human_id = #{id};
+	</update>
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsIndentDao">
+
+	<resultMap type="WsIndent" id="indentResult">
+		<id column="indent_id" property="id" />
+		<result column="indent_name" property="name" />
+		<result column="indent_number" property="number" />
+		<result column="indent_money" property="money" />
+		<result column="indent_status" property="status" />
+		<result column="payway" property="payway" />
+		<result column="transportation_name" property="transportName" />
+		<result column="transportation_number" property="transportNumber" />
+		<result column="transportation_destination" property="transportDestination" />
+		<result column="transportation_receive_person" property="receivePerson" />
+		<result column="transportation_receive_phone" property="receivePhone" />
+		<result column="create_time" property="createTime" />
+		<result column="indent_sendtime" property="sendtime"/>
+		<result column="remark" property="remark" />
+		<association property="human" resultMap="com.sy.modules.dao.ws.WsHumanDao.humanResult"></association>
+		<!-- <association property="payment" resultMap="com.zj.modules.dao.ws.WsPaymentDao.paymentResult"></association> -->
+		 <collection property="productIndnet" column="indent_id" select="com.sy.modules.dao.ws.WsProductIndentDao.selectProduct" ofType="WsProductIndent"></collection>
+		 <collection property="products" resultMap="com.sy.modules.dao.ws.WsMtProductDao.productResult" javaType="ArrayList" ofType="WsMtProduct"></collection>
+	</resultMap>
+	
+	<sql id="where">
+		<where>
+			<if test="humanId!=null">
+				uh.human_id =#{humanId}
+			</if>
+			<if test="userId!=null">
+				uh.user_id =#{userId}
+			</if>
+			<if test="number!=null">
+				and i.indent_number = #{number}<!-- like CONCAT('%','${}','%') -->
+			</if>
+			<if test="state!=null and state!=-1">
+				and i.indent_status = #{state}
+			</if>
+		</where>
+	</sql>
+	<!-- 附加条件订单列表 -->
+	<select id="findAllByPage" parameterType="map" resultMap="indentResult">
+		select * from sys_indent i left join ws_human h on i.human_id =h.human_id
+		<!-- left join sys_payment p on p.payment_id = i.payment_id -->
+		left join ws_user_human uh on uh.human_id = h.human_id 
+		<include refid="where" />
+		order by i.create_time DESC
+		<if test="lowerLimit!=null and upperLimit!=null">
+			limit #{lowerLimit},#{upperLimit};
+		</if>
+		
+	</select>
+	<!-- 附加条件订单总数 -->
+	<select id="count" parameterType="Map" resultType="Integer">
+		select count(*) from sys_indent i left join ws_human h on i.human_id =h.human_id
+		<!-- left join sys_payment p on p.payment_id = i.payment_id -->
+		left join ws_user_human uh on uh.human_id = h.human_id
+		<include refid="where" />
+	</select>
+	
+	<select id="findById" parameterType="String" resultMap="indentResult">
+		select * from sys_indent si 
+		left join rel_product_indent rpi on si.indent_id=rpi.indent_id
+		left join ws_mt_product wmp on rpi.product_id=wmp.product_id
+		where si.indent_number=#{number}
+	</select>
+	
+	<insert id="addIndent" parameterType="WsIndent" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_indent(human_id,indent_number,indent_name,indent_status,payway,indent_money,
+		transportation_name,transportation_number,transportation_destination,transportation_receive_person,
+		transportation_receive_phone,create_time,remark,indent_sendtime)
+		values(#{human.id},#{number},#{name},#{status},#{payway},#{money},#{transportName},#{transportNumber},
+		#{transportDestination},#{receivePerson},#{receivePhone},#{createTime},#{remark},#{sendtime})
+	</insert>
+	<update id="updateIndentById" parameterType="WsIndent">
+		update sys_indent 
+		<set>
+			<if test="status!=null and status!=''">indent_status=#{status},</if>
+			<if test="transportName!=null and transportName!=''">transportation_name=#{transportName},</if>
+			<if test="transportNumber!=null and transportNumber!=''">transportation_number=#{transportNumber}</if>
+		</set>
+		where indent_number=#{number}
+	</update>
+	
+	<select id="findIndentById" parameterType="String" resultMap="indentResult">
+		select * from sys_indent si 
+		left join rel_product_indent rpi on si.indent_id=rpi.indent_id
+		left join ws_mt_product wmp on rpi.product_id=wmp.product_id
+		where si.indent_number=#{out_trade_no}
+	</select>
+	<delete id="deleteByNumber" parameterType="String">
+		delete from sys_indent where indent_number=#{number}
+	</delete>
+</mapper>

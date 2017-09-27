@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>会员中心</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	    <link href="css/style.css" rel="stylesheet" type="text/css">
+	    <link href="css/title.css" rel="stylesheet" type="text/css"/>
+	    <link href="css/add.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="css/main.css" media="all">
+		<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="js/loop.js"></script>
+        <script type="text/javascript" src="js/nav.js"></script>
+        <link href="css/login.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="js/menu.js"></script>
+	
+		<style type="text/css">
+		  body, textarea, input, button, select, keygen, legend { font: 12px/1.14 "微软雅黑"; outline: 0px none; }
+		</style>
+</head>
+<body>
+
+<input type="hidden" name="humanId" id="humanId">
+	<div class="lay_toptab mod_tab" id="lay_head" style="position: fixed; top:0; left:0;z-index:9999;">
+         <a href="search.html" class="tab_item" id="allClass">
+                <img src="images/1401947222_grid-2-01.png"  width="30px" height="30px" />
+         </a>      
+        <a class="tab_item tab_item_logo" href="#">
+             <img src="images/headerLogo.png"  width="30px" height="30px" />
+        </a>  
+        <a href="mine.html" class="tab_item" id="mine">
+                <img src="images/1401947189_user-01.png" width="30px" height="30px"/>
+        </a>
+        <a  class="tab_item" id="cartdefault" onclick="checklogin()">
+                 <img src="images/1401947144_shop-01.png" width="30px" height="30px"/>
+                 <i class="qb_icon icon_number_bubble qb_none"></i>
+        </a>
+    </div>
+<div class="container">
+   <div  class="banner_logo">
+   	  <div class="index_back">
+   	  	<a href="javascript:history.go(-1)"><p class="back_title">取消</p></a>      
+   	  </div>
+      <div class="index_logo" style="width: 240px;">
+	       <p class="me_title">登录</p>                               
+	  </div>
+   </div>
+  <div class="login">
+  	<div class="head_pic">
+			<img src="images/bg.png" height="80px" width="100%" />
+	</div>
+	<div class="clear"> </div>
+	<div class="dl1">
+		<div style="padding-top:24px;text-align:center;"> 
+			<div>
+				<div class="loginform">
+					  <img class="ico ico-uid" src="images/regist6.png">
+					  <p style="padding-left: 15px;"> 
+					  	<input class="formi" type="text" name="human_question" placeholder="请输入饭店名称" />
+					  </p>
+				</div>
+		        <div class="loginform showplace">
+		        	<img class="ico ico-uid" src="images/regist7.png">
+					  <p style="padding-left: 15px;">  
+					  	<input class="formi" type="text" name="human_address" placeholder="请输入饭店地址"  />
+					  </p>
+			    </div>
+			    <div class="loginform showplace">
+		        	<img class="ico ico-uid" src="images/regist6.png">
+					  <p style="padding-left: 15px;">  
+					  	<input class="formi" type="text" name="human_name" placeholder="请输入联系人姓名"  />
+					  </p>
+			    </div>
+	            <div class="lg1" >提  交</div>
+	         </div>
+	      </div>
+    </div>
+  </div> 
+</div>
+</body>
+</html>

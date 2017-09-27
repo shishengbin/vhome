@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.agt.AgtEmpDao">
+    <insert id="create" parameterType="AgtUser" useGeneratedKeys="true" keyProperty="u_id">
+           INSERT INTO agt_user
+			(u_name,u_pass,u_status,fatherId,roleId)
+			VALUES(#{u_name},#{u_pass},#{u_status},#{fatherId},#{roleId})
+    </insert>
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM agt_user
+        WHERE u_id = #{id}
+    </delete>    
+    <select id="findEmpByParam" parameterType="map" resultType="AgtUser">
+           SELECT
+			u_id,u_name,u_pass,u_status,fatherId,roleId
+			FROM
+			agt_user
+			WHERE
+			u_name = #{u_name}        
+    </select>   
+    <select id="showEmpFormBypage" resultType="AgtEmpForm" parameterType="map">  
+       SELECT
+		au.u_id as id,
+		au.u_name as username,
+		au.u_status as state,
+		sr.role_name as role
+		FROM
+		agt_user as au,
+		sys_role as sr
+		WHERE
+		roleId = sr.role_id    
+		and
+		fatherId = #{fatherId}
+        <if test="lowerLimit!=null and upperLimit != null">
+		limit #{lowerLimit},#{upperLimit}
+        </if>    
+    </select>
+    <select id="findCountByParam"  parameterType="long"  resultType="integer">
+       SELECT
+		count(*)
+		FROM
+		agt_user
+		WHERE
+		fatherId = #{fatherId}
+    </select>
+    <select id="findById" parameterType="long" resultType="AgtUser">
+       SELECT
+			u_id as id,u_name,u_pass,u_status,fatherId,roleId
+			FROM
+			agt_user
+		WHERE
+		u_id = #{id}        
+    </select>
+    <update id="update" parameterType="AgtUser">
+        update agt_user set
+		u_pass = #{u_pass},
+		u_status = #{u_status},
+		roleId = #{roleId}
+        where 
+        u_id = #{id}      
+    </update>
+</mapper>

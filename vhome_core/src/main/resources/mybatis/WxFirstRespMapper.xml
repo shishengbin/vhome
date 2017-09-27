@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.wx.FirstRespDao">
+	<select id="findContentByid" parameterType="long" resultType="com.sy.modules.entity.wx.resp.TextMessageResp">
+		select wa.content from wx_article wa LEFT JOIN wx_first_rep_msg wfm on wa.article_id=wfm.article_id
+				where wfm.account_id=#{userid} and wfm.msg_type=0;
+	</select>
+	<select id="findArticleByid" parameterType="long" resultType="com.sy.modules.entity.wx.resp.Article">
+		select wa.title,wa.description,wa.picurl,wa.url from wx_article wa LEFT JOIN wx_firstresp_msg wfm on wa.msg_id=wfm.msg_id
+				where wfm.account_id=#{userid} and wfm.state=1;
+	</select>	
+	<insert id="saveFirstResp" parameterType="FirstResp" useGeneratedKeys="true" keyProperty="msg_id">
+		insert into wx_firstresp_msg(msg_type,account_id,state) values(#{msg_type},#{account_id},1);
+	</insert>
+	<select id="count" parameterType="FirstResp" resultType="int">
+		select count(*) from wx_firstresp_msg where account_id=#{account_id} and msg_type=#{msg_type};
+	</select>
+	<select id="findFirstResp" parameterType="map" resultType="FirstResp">
+		select * from wx_firstresp_msg where account_id=#{userid} and msg_type=#{msg_type};
+	</select>
+
+	<update id="updateFirstRespstate" parameterType="long">
+		update wx_firstresp_msg set state=0 where account_id=#{userid};
+	</update>
+	
+	<update id="updateFirstResp" parameterType="map">
+		update wx_firstresp_msg set state=1 where msg_id=#{msg_id};
+	</update>
+	
+</mapper>

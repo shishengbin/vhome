@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.wx.AccountDao">
+    
+    <!-- 根据登陆账号查询公众号信息 -->
+    <select id="findAccountInfo" parameterType="long" resultType="Account">
+        SELECT
+            wxa.account_id as id,
+			wxa.u_name,
+			wxa.u_passwd,
+			wxa.ac_name,
+			wxa.ac_city,
+			wxa.ac_original_id,
+			wxa.ac_wx_number,
+			wxa.ac_pic,
+			wxa.ac_interface,
+			wxa.ac_token,
+			wxa.ac_address,
+			wxa.ac_email,
+			wxa.ac_type,
+			wxa.appId,
+			wxa.appSecret,
+			wxa.access_token,
+			wxa.confirm as confirm,
+			wxa.create_time as createTime
+			FROM
+			wx_account AS wxa LEFT JOIN sys_user_account AS sua ON sua.account_id =wxa.account_id
+			                  LEFT JOIN sys_user AS su ON su.user_id = sua.user_id
+			WHERE su.user_id=#{userid}
+    </select>
+    
+    <update id="update" parameterType="Account" >
+		update wx_account set 
+		<if test="ac_name!=null and ac_name!=''">ac_name=#{ac_name},</if>
+		<if test="ac_city!=null and ac_city!=''">ac_city=#{ac_city},</if>
+		<if test="ac_pic!=null and ac_pic!=''">ac_pic=#{ac_pic},</if>
+		<if test="ac_type!=-1">ac_type=#{ac_type},</if>
+		<if test="ac_original_id!=null and ac_original_id!=''">ac_original_id=#{ac_original_id},</if>
+		<if test="ac_wx_number!=null and ac_wx_number!=''">ac_wx_number=#{ac_wx_number},</if>
+		<if test="ac_email!=null and ac_email!=''">ac_email=#{ac_email},</if>
+		<if test="createName!=null and createName!=''">create_name=#{createName},</if>
+		<if test="createTime!=null and createTime!=''">create_time=#{createTime}</if>
+		where account_id=#{id}
+	</update>
+    
+    
+	<select id="findUserAppinfo" parameterType="long" resultType="com.sy.modules.entity.wx.Account">
+		select * from wx_account where account_id=#{userid};
+	</select>
+	<select id="getATState" parameterType="long" resultType="int">
+		select count(*) from wx_account where account_id=#{userid} and update_time+INTERVAL 2 HOUR<![CDATA[<]]>NOW();
+	</select>
+	
+	<select id="findUserID" parameterType="Account" resultType="long">
+		select account_id from wx_account where u_name=#{u_name} and u_passwd=#{u_passwd};
+	</select>
+	
+	<update id="saveAccessToken" parameterType="map">
+		update wx_account set access_token=#{access_token},update_time=NOW() where appId=#{APPID};
+	</update>
+	
+	<update id="saveUserInfo" parameterType="Account">
+		update wx_account set ac_pic=#{ac_pic},ac_email=#{ac_email} where account_id=#{account_id};
+	</update>	
+</mapper>

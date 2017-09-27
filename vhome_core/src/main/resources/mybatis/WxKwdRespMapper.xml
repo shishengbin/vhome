@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.wx.KwdRespDao">
+	<select id="findRespByKw" parameterType="map" resultType="com.sy.modules.entity.wx.resp.TextMessageResp">
+		select wa.content from wx_article wa LEFT JOIN wx_kwd_resp wkr on wa.kw_id=wkr.kwd_id
+		where wkr.account_id=#{userid} and wkr.kwd_name like CONCAT('%',#{content},'%') limit 1;	
+	</select>
+
+	<select id="findArticleRespByKw" parameterType="map" resultType="com.sy.modules.entity.wx.resp.Article">
+		select wa.title,wa.description,wa.picurl,wa.url from wx_article wa LEFT JOIN wx_kwd_resp wkr on wa.kw_id=wkr.kwd_id 
+		where wkr.account_id=#{userid} and wkr.kwd_name like CONCAT('%',#{content},'%')
+	</select>
+	<insert id="saveKeyword" parameterType="Kword" useGeneratedKeys="true" keyProperty="Kwd_id">
+		insert into wx_kwd_resp(kwd_name,article_type,account_id,update_time) values(#{Kwd_name},#{article_type},#{account_id},now())
+	</insert>
+	<insert id="saveKeywordContent" parameterType="map">
+		insert into wx_article(content,kw_id) values(#{content},#{kwd_id});
+	</insert>
+	
+	<select id="findKwResp" parameterType="long" resultType="com.sy.modules.entity.wx.Kword">
+		select kwd_id,kwd_name,article_type,update_time from wx_kwd_resp where account_id=#{userid};
+	</select>
+	
+	<select id="findOneKw" parameterType="long" resultType="com.sy.modules.entity.wx.Kword">
+		select wa.title,wa.content,wkr.kwd_id,wkr.kwd_name,wkr.article_type,wkr.update_time from wx_article wa left join wx_kwd_resp wkr on wa.kw_id=wkr.kwd_id where wkr.kwd_id=#{kwd_id} limit 1;
+	</select>
+	
+	<update id="updateKw" parameterType="Kword">
+		update wx_kwd_resp set kwd_name=#{Kwd_name},article_type=#{article_type} where kwd_id=#{kwd_id}
+	</update>
+	<update id="updateKwContent" parameterType="Kword">
+		update wx_article set content=#{content} where kw_id=#{kwd_id}
+	</update>
+	<update id="updateKwRelID" parameterType="map">
+		update wx_article set kw_id=#{kwd_id} where article_id=#{article_id};
+	</update>
+	<delete id="deleteKw" parameterType="long">
+		delete from wx_kwd_resp where kwd_id=#{kwd_id};
+	</delete>
+	<delete id="deleteKwContent" parameterType="long">
+		delete from wx_article where kw_id=#{kwd_id};
+	</delete>	
+</mapper>

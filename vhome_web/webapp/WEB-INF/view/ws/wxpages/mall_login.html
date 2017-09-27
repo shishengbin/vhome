@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="apple-touch-fullscreen" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<title>商家登录</title>
+		<link rel="stylesheet" type="text/css" href="css/common.css" media="all">
+        <link href="css/menu.css" rel="stylesheet" type="text/css">
+        <link href="css/login.css" rel="stylesheet" type="text/css">
+        <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="js/cookieTools.js"></script>
+        <script type="text/javascript" src="js/indexinit.js"></script> 
+   <style type="text/css">
+	.container {}
+	.banner_logo {background: none repeat scroll 0 0 #000000;margin-bottom: 0px;text-align: center;width: 100%;}
+	.banner_logo .index_logo {height: 44px;margin: 0 auto;width: 320px;}
+	.index_back {float: left;padding-left: 6px;padding-top: 5px;}
+	.back_title {color: #ff6633;font-family: 微软雅黑;font-size: 11px;padding-top: 12px;}
+	.me_title {color: #ffffff;font-family: 微软雅黑;font-size: 14px;padding-top: 12px;}
+   </style>
+</head>
+<body>
+<div class="container">
+   <div  class="banner_logo">
+   	  <div class="index_back">
+   	  	<a href="javascript:history.go(-1)"><p class="back_title">取消</p></a>      
+   	  </div>
+      <div class="index_logo" style="width: 240px;">
+	       <p class="me_title">登录</p>                               
+	  </div>
+   </div>
+  <div class="login">
+  	<div class="head_pic">
+			<img src="images/registbg.jpg" height="80px" width="100%" />
+	</div>
+	<div class="clear"> </div>
+	<div class="dl1">
+		<div style="padding-top:24px;text-align:center;"> 
+			<div>
+				<div class="loginform">
+					  <img class="ico ico-uid" src="images/regist6.png">
+					  <p style="padding-left: 15px;"> 
+					  	<input class="formi" type="text" id="human_account" placeholder="请输入手机号" />
+					  </p>
+				</div>
+		        <div class="loginform showplace">
+		        	<img class="ico ico-uid" src="images/regist7.png">
+					  <p style="padding-left: 15px;">  
+					  	<input class="formi" type="password" id="human_password" placeholder="请输入密码"  />
+					  </p>
+			    </div>
+	         <div class="lg1" onclick="doLogin()">登&nbsp;录</div>
+	         <div class="lg1"><a href=""  id="regist">注&nbsp;册</a></div>
+	        </div>
+	     </div>
+  </div>
+ </div> 
+</div>
+<script>
+  function checkInfo(){
+	  var human_account=$("#human_account").val();
+	  var human_password=$("#human_password").val();
+		if(human_account==""){
+	  		alert("账号不能为空");
+	  		$("#human_account")[0].focus();
+	  		return false;
+	  	}
+		if(human_password==""){
+			alert("密码不能为空");
+			$("#human_password")[0].focus();
+	  		return false;
+		}
+		return true;
+  }
+
+    //账号id
+	var accountid=request("accountid");
+	var pid=request("pid");
+	$("#regist").attr("href","regist.html?accountid="+accountid);
+	function doLogin(){
+		if(checkInfo()){
+			$.ajax({
+				url:'/vhome_r/ws/wap/login',
+		    	type:'post',
+		    	data:{
+		    		'id':accountid,
+		    		'username':$('#human_account').val(),
+		    		'password':$('#human_password').val()
+		    	},
+		    	dataType:'json',
+		    	success:function(data){
+		    		if(data!=null){
+		    			$("#humanId").val(data.id);
+		    			addCookie("humanId",data.id);
+		    			if(pid==''){
+		    				location.href="index.html?accountid="+accountid;
+		    			}else{
+		    				location.href="detail.html?accountid="+accountid+"&id="+pid;
+		    			}		
+		    		}else{
+		    			alert("登录失败！请检查用户名密码是否正确！");
+		    		}
+		    	},
+		    	error:function(){
+		    		alert("登录失败！请重新输入用户名密码！");
+		    	}
+			});
+		}
+	}
+</script> 
+</body>
+</html>

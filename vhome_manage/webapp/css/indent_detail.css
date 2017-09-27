@@ -1,0 +1,47 @@
+	.dindxqxx{
+		width: 90%;
+		margin: auto;
+	}
+	.dindxqxx .ekd{
+		display: block;
+		width: 100%;
+		background:#829DB8; /* 一些不支持背景渐变的浏览器 */  
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#EAEAEA,
+		endColorstr=#FFF8DC, grandientType=0);
+   		background:-moz-linear-gradient(bottom,#EAEAEA,#FFF8DC);  
+   		background:-webkit-gradient(linear, 0 0, 0 bottom, from(#FFF8DC), to(#EAEAEA));  
+    	background:-o-linear-gradient(bottom, #EAEAEA, #FFF8DC);
+	}
+	.dindxqxx .ekd  fieldset{
+		width: 97%;
+		border: none;
+	}
+	.dindxqxx .ekd  fieldset legend {
+		font-weight: bold;
+		color: #CD8500;
+		text-shadow: 0 0 5px #DEDEDE, 0 0 10px #DEDEDE, 0 0 15px #DEDEDE, 0 0 40px #D3D3D3, 0 0 70px #D3D3D3;
+	}
+	.dindxqxx table{
+		width:100%;
+	}
+	.dindxqxx table tr{
+		margin: 10px;
+		padding: 10px;
+	}
+	#appzz{
+	    display:block;
+	    float:left;
+		width: 80px;
+		height: 50px;
+    	background:#829DB8; /* 一些不支持背景渐变的浏览器 */  
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#EC870E,
+		endColorstr=#aaa, grandientType=0);
+   		background:-moz-linear-gradient(bottom,#EC870E,#aaa);  
+   		background:-webkit-gradient(linear, 0 0, 0 bottom, from(#aaa), to(#EC870E));  
+    	background:-o-linear-gradient(bottom, #EC870E, #aaa);
+	}
+	.dindxqxx table tr td{
+		padding:10px;
+		text-align: left;
+		border: 1px #D1D1D1 dotted;
+	}

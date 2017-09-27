@@ -1,0 +1,24 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<title>二维码扫描</title>
+</head>
+<body background="@efefef">
+	<div width="100%">
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;扫描二维码即可下载app。<br>
+		<div align="center">
+			<img alt="" src="" id="erwei" width="80%">
+		</div>
+	</div>
+</body>
+<script src="js/getUrlParameter.js"></script>
+<script type="text/javascript">
+	var id = request("id");
+	$("#erwei").attr("src", "../appShowPicture?id=" + id);
+</script>
+</html>

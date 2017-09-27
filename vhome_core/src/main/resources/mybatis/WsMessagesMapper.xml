@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsMessagesDao">
+    <!-- 映射留言结果集 -->
+    <resultMap type="WsMessages" id="messagesResult">
+        <id column="message_id" property="id"/>
+        <result column="message_title" property="messageTitle"/>
+        <result column="message_content" property="messageContent"/>
+        <result column="message_email" property="messageEmail"/>
+        <result column="message_phone" property="messagePhone"/>
+        <result column="create_name" property="createName"/>
+        <result column="message_qq" property="messageQQ"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="reply" column="message_id" javaType="ArrayList" ofType="reply" select="messageIdQueryReplys" />
+    </resultMap>
+    <!-- 根据留言ID查看所有回复信息 -->
+    <select id="messageIdQueryReplys" parameterType="Long" resultType="WsReply">
+        select 
+        r.reply_id as id,
+        r.reply_content as replyContent,
+        r.create_name as createName,
+        r.create_time as createTime
+        from ws_mt_reply r left join ws_message_reply mr on r.reply_id = mr.reply_id
+        where mr.message_id = #{message_id};
+    </select>
+	<!-- 查看单条留言 -->
+	<select id="findById" parameterType="Long" resultMap="messagesResult">
+	    select * from ws_message m where m.message_id =#{id}; 
+	</select>
+	<!-- 删除留言 -->
+	<update id="deleteById" parameterType="Long">
+	    update ws_message set del_status=0 where message_id=#{id};
+	</update>
+	<!-- 清除留言与用户关系 -->
+	<update id="deleteMessagesUser" parameterType="Long">
+	    update ws_user_message set del_status=0 where message_id=#{id};
+	</update>
+	<!-- 增加留言 -->
+	<insert id="create" parameterType="WsMessages" keyProperty="id" useGeneratedKeys="true">
+	    insert into ws_message(Message_title,message_content,message_email,message_qq,message_phone,create_time,create_name)
+        values(#{messageTitle},#{messageContent},#{messageEmail},#{messageQQ},#{messagePhone},#{createTime},#{createName});
+	</insert>
+	<!-- 分页查看留言详细信息 -->
+	 <select id="findAllMessagesByPage" parameterType="Map" resultMap="messagesResult">
+	    select * from ws_message m left join ws_user_message um on m.message_id = um.message_id
+	 	where m.del_status = 1 and um.del_status=1 and um.user_id = #{userid}
+	 	<if test="humanId!=null">
+	 	    and um.human_id=#{humanId};
+	 	</if>
+	 	<if test="beginDate!=null">
+	 	    and m.create_time > #{beginDate}
+	 	</if>
+	 	<if test="endDate!=null">
+	 	    and m.create_time <![CDATA[<]]> #{endDate}
+	 	</if>
+	 	<if test="lowerLimit!=null and upperLimit!=null">
+			limit #{lowerLimit},#{upperLimit};
+	 	</if>
+	 </select>
+	 
+	 <!--  -->
+	<!-- 注册留言与用户关系 -->
+	 <insert id="addMessagesUser" parameterType="WsMessagesUser">
+	     insert into ws_user_message(user_id,message_id,human_id,create_name,create_time)
+	     values(#{userId},#{messageId},#{humanId},#{createName},#{createTime});
+	 </insert>
+	<!-- 留言总数 -->
+	<select id="count" resultType="int" parameterType="Map">
+	     select count(*) from ws_message m left join ws_user_message um on m.message_id = um.message_id
+	 	 where m.del_status = 1  and um.del_status=1
+	 	 and um.user_id = #{userid}
+	 	 <if test="beginDate!=null">
+	 	    and m.create_time > #{beginDate};
+	 	</if>
+	 	<if test="endDate!=null">
+	 	    and m.create_time <![CDATA[<]]> #{endDate}
+	 	</if>
+	</select>
+	
+</mapper>

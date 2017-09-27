@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsSmsDao">
+    <!-- 映射短信结果集 -->
+    <resultMap type="WsSms" id="smsResult">
+        <id column="sms_id" property="id"/>
+        <result column="sms_title" property="sms_title"/>
+        <result column="sms_content" property="sms_content"/>
+        <result column="sms_use" property="sms_use"/>
+        <result column="create_name" property="createName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_name" property="updateName"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <!-- 查看默认短信 -->
+	<select id="findUseSms" parameterType="Long" resultMap="smsResult">
+	      select  *  from ws_sms  LEFT JOIN ws_user_sms on ws_sms.sms_id=ws_user_sms.sms_id where ws_user_sms.del_status=1 and ws_sms.sms_use=1 and ws_user_sms.user_id=#{id}
+	</select>
+	<!-- 查看单条短信 -->
+	<select id="findById" parameterType="Long" resultMap="smsResult">
+	     select  *  from ws_sms  where sms_id=#{id}
+	</select>
+	<!-- 根据主题查询短信 -->
+	<select id="findByTitle"  resultMap="smsResult">
+	     select  *  from ws_sms  LEFT JOIN ws_user_sms 
+	     on ws_sms.sms_id=ws_user_sms.sms_id 
+	     where ws_user_sms.del_status=1 
+	     and ws_user_sms.user_id=#{0}
+	     and sms_title=#{1}
+	</select>
+	<!-- 更新短信 -->
+	<update id="update" parameterType="WsSms">
+	    update ws_sms set sms_content=#{sms_content},sms_title=#{sms_title},sms_use=#{sms_use},update_name=#{updateName} where sms_id=#{id}
+	</update>
+	<!-- 删除短信 -->
+	<update id="deleteById" parameterType="Long">
+	    update ws_user_sms set ws_user_sms.del_status=0 where sms_id=#{id}
+	</update>
+	<!-- 增加短信 -->
+	<insert id="create" parameterType="WsSms" keyProperty="id" useGeneratedKeys="true">
+		insert into ws_sms(sms_title,sms_content,sms_use,create_name,create_time)values(#{sms_title},#{sms_content},#{sms_use},#{createName},#{createTime});
+	</insert>
+	<!-- 注册短信与用户关系 -->
+	 <insert id="addSmsUser" parameterType="WsSmsUser">
+	     insert into ws_user_sms(sms_id,user_id,create_name,create_time)values(#{sms_id},#{user_id},#{createName},#{createTime})
+	 </insert>
+	<!--分页查询短信 -->
+	<select id="findAllByPage"  resultMap="smsResult" parameterType="Map">
+	    select  *  from ws_sms  left join ws_user_sms 
+	    on  ws_sms.sms_id=ws_user_sms.sms_id 
+	    where ws_user_sms.user_id=#{userid} 
+	    and ws_user_sms.del_status=1 
+	    <if test="content!=null">
+	 	    and ws_sms.sms_content like CONCAT('%',#{content},'%')
+	 	</if>
+	  	 <if test="lowerLimit!=null and upperLimit!=null">
+			limit #{lowerLimit},#{upperLimit};
+		</if>
+	</select>	
+</mapper>

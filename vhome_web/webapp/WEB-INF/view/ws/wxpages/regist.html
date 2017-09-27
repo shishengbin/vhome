@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport"/>   
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <title>商家注册</title>
+    <link rel="stylesheet" type="text/css" href="css/regist.css" />
+    <link rel="stylesheet" type="text/css" href="css/common.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="js/cookieTools.js"></script>
+    <script type="text/javascript" src="js/indexinit.js"></script>   
+
+ <style type="text/css">
+	.container {}
+	.banner_logo {background: none repeat scroll 0 0 #000000;margin-bottom: 0px;text-align: center;width: 100%;}
+	.banner_logo .index_logo {height: 44px;margin: 0 auto;width: 320px;}
+	.index_back {float: left;padding-left: 6px;padding-top: 5px;}
+	.back_title {color: #ff6633;font-family: 微软雅黑;font-size: 11px;padding-top: 12px;}
+	.me_title {color: #ffffff;font-family: 微软雅黑;font-size: 14px;padding-top: 12px;}
+   </style>
+</head>
+<body>
+  <div class="container">
+   <div  class="banner_logo">
+   	  <div class="index_back">
+   	  	<a href="javascript:history.go(-1)"><p class="back_title">取消</p></a>      
+   	  </div>
+      <div class="index_logo" style="width: 240px;">
+	       <p class="me_title">注册</p>                               
+	  </div>
+   </div>
+  <div class="login">
+  	<div class="head_pic">
+			<img src="images/registbg.jpg" height="80px" width="100%" />
+	</div>
+	<div class="clear"> </div>
+	<div class="dl1">
+		<div style="padding-top:24px;text-align:center;"> 
+			<div>
+				<div class="loginform">
+					  <img class="ico ico-uid" src="images/regist6.png">
+					  <p style="padding-left: 15px;"> 
+					  	<input class="formi" type="text" id="human_account" placeholder="请输入手机号" />
+					  </p>
+				</div>
+		        <div class="loginform showplace">
+		        	<img class="ico ico-uid" src="images/regist7.png">
+					  <p style="padding-left: 15px;">  
+					  	<input class="formi" type="password" id="human_password" placeholder="请输入密码"  />
+					  </p>
+			    </div>
+			    <div class="loginform showplace">
+		        	<img class="ico ico-uid" src="images/regist7.png">
+					  <p style="padding-left: 15px;">  
+					  	<input class="formi" type="password" id="human_passwordTwo" placeholder="请确认密码" onblur="checkPasswd()" />
+					  </p>
+			    </div>
+			    <div class="loginform">
+					  <img class="ico ico-uid" src="images/regist6.png">
+					  <p style="padding-left: 15px;"> 
+					  	<input class="formi" type="text" id="human_question" placeholder="请输入饭店名称" />
+					  </p>
+				</div>
+				 <div class="loginform">
+					  <img class="ico ico-uid" src="images/regist6.png">
+					  <p style="padding-left: 15px;"> 
+					  	<input class="formi" type="text" id="human_address" placeholder="请输入饭店地址" />
+					  </p>
+				</div>
+				 <div class="loginform">
+					  <img class="ico ico-uid" src="images/regist6.png">
+					  <p style="padding-left: 15px;"> 
+					  	<input class="formi" type="text" id="human_name" placeholder="请输入联系人" />
+					  </p>
+				</div>
+	         <div class="lg1" onclick="registerHuman()">提 交</div>
+	        </div>
+	     </div>
+  </div>
+ </div> 
+</div>
+  <!--  
+    <h2 class="title">注册</h2>
+    <form >
+      <div  class="content">
+        <div class="contentlist">
+        	<div style="height:30px">
+              <img align="middle" class="username" src="images/login-regist/yonghuming.png" height="30px;"/> 
+              <input type="text"  id="human_account" placeholder="请输入手机号码"/><br />
+            </div>
+            <hr style="height:0;border-left:0;border-right:0;border-top:0;border-bottom:1px solid rgba(255,255,255,.45);"/>
+            <div style="height:30px">
+              <img align="middle" class="username" src="images/login-regist/shurumima.png" height="30px;"/> 
+              <input  class="pwd"  type="password"  id="human_password" placeholder="请输入密码"/>
+            </div>
+            <hr style="height:0;border-left:0;border-right:0;border-top:0;border-bottom:1px solid rgba(255,255,255,.45);" />
+            <div style="height:30px">
+              <img align="middle" class="username" src="images/login-regist/shurumima.png" height="30px;"/> 
+              <input  class="pwd"  type="password"  id="human_passwordTwo" placeholder="请确认密码" onblur="checkPasswd()" />
+            </div>
+             <hr style="height:0;border-left:0;border-right:0;border-top:0;border-bottom:1px solid rgba(255,255,255,.45);" />
+            <div style="height:30px">
+              <img align="middle" class="username" src="images/login-regist/yonghuming.png" height="30px;"/> 
+              <input type="text"  id="human_question" placeholder="请输入饭店名称"/><br />
+            </div> 
+             <hr style="height:0;border-left:0;border-right:0;border-top:0;border-bottom:1px solid rgba(255,255,255,.45);" />
+            <div style="height:30px">
+             <img align="middle" class="username" src="images/login-regist/yonghuming.png" height="30px;"/> 
+              <input type="text"  id="human_address" placeholder="请输入饭店地址"/><br />
+            </div>
+             <hr style="height:0;border-left:0;border-right:0;border-top:0;border-bottom:1px solid rgba(255,255,255,.45);" /> 
+            <div style="height:30px">
+             <img align="middle" class="username" src="images/login-regist/yonghuming.png" height="30px;"/> 
+              <input type="text"  id="human_name" placeholder="请输入联系人姓名"/><br />
+            </div>       
+        </div>     
+      </div>
+      <div id="register">
+     	 <div class="login1" onclick="registerHuman()">注册</div>
+      </div>      
+</form>
+-->
+<!--  <script type="text/javascript" src='js/indexinit.js'></script> -->
+<script>
+function request(paras) {
+	var url = location.href;
+	url = decodeURI(url);
+	var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
+	var paraObj = {};
+	for ( var i = 0; j = paraString[i]; i++) {
+		paraObj[j.substring(0, j.indexOf("=")).toLowerCase()] = j.substring(j
+				.indexOf("=") + 1, j.length);
+	}
+	var returnValue = paraObj[paras.toLowerCase()];
+	if (typeof (returnValue) == "undefined") {
+		return "";
+	} else {
+		return returnValue;
+	}
+}
+
+var accountid=request("accountid");
+function checkPasswd(){
+	var human_password=$("#human_password").val();
+	var human_passwordTwo=$("#human_passwordTwo").val();
+	var human
+	if(human_password!=human_passwordTwo){
+		alert("两次密码输入不一致，请重新输入！");
+		$("#human_passwordTwo")[0].focus();
+		return false;
+	}else{
+		return true;
+	}
+}
+function checkHumanInfo(){
+  	var human_account=$("#human_account").val();
+  	var human_question=$("#human_question").val();
+  	var human_address=$("#human_address").val();
+  	var human_name=$("#human_name").val();
+  	if(human_account==""){
+  		alert("账号不能为空");
+  		$("#human_account")[0].focus();
+  		return false;
+  	}
+	if(human_question==""){
+  		alert("饭店名称不能为空");
+  		$("#human_question")[0].focus();
+  		return false;
+  	}
+	if(human_address==""){
+  		alert("地址不能为空");
+  		$("#human_address")[0].focus();
+  		return false;
+  	}
+	if(human_name==""){
+  		alert("联系人不能为空");
+  		$("#human_name")[0].focus();
+  		return false;
+  	}
+  return true;
+}
+
+/**
+ * 注册商家
+ */
+function registerHuman(){
+	if(checkHumanInfo()&&checkPasswd()){
+	    $.ajax({
+	    	url:'/vhome_r/ws/wap/registerHuman',
+	    	type:'post',
+	    	data:{
+	    		id:accountid,
+	    		human_account:$('#human_account').val(),
+	    		human_password:$('#human_password').val(),
+	    		human_question:$('#human_question').val(),
+	    		human_name:$('#human_name').val(),
+	    		human_address:$('#human_address').val()
+	    	},
+	    	dataType:'text',
+	    	success:function(data){
+	    		if(data=='success'){
+	    			alert("恭喜您，注册成功！");
+	    			location.href="mall_login.html?accountid="+accountid;
+	    		}
+	    		if(data=='fail'){
+	    			alert("很遗憾，注册失败！");
+	    		}
+	    		if(data=='exists'){
+	    			alert("用户名已存在，再选一个吧！");
+	    		}
+	    	},
+	    	error:function(){
+	    		alert("很遗憾，注册失败！");
+	    	}
+	    });  
+	}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.agt.RoleDao">
+<!--  <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+	
+	<!-- 分页查询所有角色 -->
+	<select id="findRolesByPage" parameterType="map" resultType="Role">
+	 select 
+	    role_id as id,
+	    role_name as role_name,
+	    permissions as permissions,
+	    create_name as createName,
+	    create_time as createTime,
+	    update_name as updateName,
+	    update_time as updateTime
+	  from sys_role
+	  where 1=1
+      <if test="roleName!=null">
+      and role_name like "%"#{roleName}"%"
+      </if>
+      <if test="lowerLimit!=null and upperLimit != null">
+	  limit #{lowerLimit},#{upperLimit}
+      </if>	
+	</select>
+	
+	<select id="findCountByParam" parameterType="map" resultType="long">
+	   select  count(*)
+	   from sys_role
+	   where 1=1
+	   <if test="roleName!=null">
+	   and role_name like "%"#{roleName}"%"
+	   </if>
+	</select>
+
+	<select id="getAll" resultType="Role">
+	  select 
+	    role_id as id,
+	    role_name as role_name,
+	    permissions as permissions,
+	    create_name as createName,
+	    create_time as createTime,
+	    update_name as updateName,
+	    update_time as updateTime
+	  from sys_role
+	</select>
+
+	<insert id="create" parameterType="Role" useGeneratedKeys="true" keyProperty="id">
+	  insert into sys_role (role_name,permissions,create_name,create_time)
+	  values ( #{role_name},#{permissions},#{createName},#{createTime} )
+	</insert>
+	
+	<update id="update" parameterType="Role" >
+		update sys_role set 
+		<if test="role_name!=null and role_name!=''">role_name=#{role_name},</if>
+		<if test="permissions!=null and permissions!=''">permissions=#{permissions},</if>
+		<if test="update_name!=null and update_name!=''">update_name=#{update_name}</if>
+		where role_id=#{id}
+	</update>
+
+	<delete id="delete" parameterType="long" >
+	 delete from sys_role
+  	 where role_id=#{id}
+	</delete>
+
+	<select id="count" resultType="long" >
+	 select count(*) from sys_role
+	</select>
+</mapper>

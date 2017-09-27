@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>会员中心</title>
+<link href="css/dialog.css" rel="stylesheet" />
+<link href="css/main.css" rel="stylesheet" />
+<meta charset="UTF-8">
+<meta name="viewport" content=" initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="css/style.css" rel="stylesheet" type="text/css">
+<link href="css/title.css" rel="stylesheet" type="text/css" />
+<link href="css/add.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$(".flex_box").click(
+				function() {
+					$(this).addClass('current').siblings().removeClass(
+							'current').parent().siblings('#itemList')
+							.children().eq($(this).index()).show().siblings()
+							.hide();
+
+				});
+	});
+</script>
+</head>
+<body>
+	<input type="hidden" name="humanId" id="humanId" />
+	<div class="lay_toptab mod_tab" id="lay_head"
+		style="position: fixed; top: 0; left: 0; z-index: 9999;">
+		<a href="search.html" class="tab_item" id="allClass"> <img
+			src="images/1401947222_grid-2-01.png" width="30px" height="30px" />
+		</a> <a class="tab_item tab_item_logo" href="#"> <img
+			src="images/headerLogo.png" width="30px" height="30px" />
+		</a> <a href="mine.html" class="tab_item" id="mine"> <img
+			src="images/1401947189_user-01.png" width="30px" height="30px" />
+		</a> <a class="tab_item" id="cartdefault" onclick="checklogin()"> <img
+			src="images/1401947144_shop-01.png" width="30px" height="30px" /> <i
+			class="qb_icon icon_number_bubble qb_none"></i>
+		</a>
+	</div>
+	<div class="lay_page page_icenter" id="page_icenter"
+		style="margin-top: 44px">
+		<div class="lay_page_wrap">
+			<header>
+				<div class="center_user">
+					<table>
+						<tr>
+							<td>
+								<p
+									style="text-align: center; font-family: Tahoma; font-size: 13px; font-weight: bold; color: #FFFFFF;">欢迎来到饭店掌柜</p>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align: center;"><a
+								class="a_addr" style="cursor: pointer;" onclick="doLogin()">
+									<span style="text-align: center;"></span>登录/注册
+							</a></td>
+						</tr>
+					</table>
+				</div>
+			</header>
+		</div>
+	</div>
+	<div class="qb_quick_tip qb_none" id="bubble"></div>
+
+	<div class="lay_footer qb_tac qb_fs_s mod_mb15">
+		<div class="fn_quicklinks">
+			<a class="mod_color_weak" href="#" id="foot_index">商户首页</a> <span
+				class="mod_color_comment">|</span> <a class="mod_color_weak"
+				href="#" id="foot_human">会员中心</a> <span class="mod_color_comment">|</span>
+			<a class="mod_color_weak" href="#" id="foot_company">品牌介绍</a>
+		</div>
+		<div class="fn_copyright qb_bfc">
+			<div class="mod_color_comment bfc_m">&copy;&nbsp;上海轩丞信息技术支持</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="js/cookieTools.js"></script>
+<script type="text/javascript" src="js/getUrlParameter.js"></script>
+<script type="text/javascript" src="js/indexinit.js"></script>
+<script type="text/javascript">
+	var humanId = request("humanId");
+	$(function() {
+		//loadWatiforpay();
+		//loadFinish();
+		//loadWatiget();
+		//loadWatisend();
+	});
+	//判断是否登录
+	function doLogin() {
+		var str = allCookie();
+		if (str == "") {
+			location.href = "mall_login.html?accountid=2";
+		} else {
+			alert("您已登录");
+		}
+	}
+
+	function deleteOrder(number) {
+		if (confirm("确定删除吗？")) {
+			$.ajax({
+				url : '../indent/deleteIndentForwx',
+				type : 'post',
+				dataType : 'text',
+				data : {
+					number : number,
+				},
+				success : function(data) {
+					$("#" + number).remove();
+				},
+				error : function() {
+
+				}
+			});
+		} else
+			return false;
+	}
+
+	function toPay(number) {
+		window.location.href = "../indent/addIndent?number=" + number;
+	}
+	function toGet(number) {
+		if (confirm("确认收货吗？")) {
+			$.ajax({
+				url : '../indent/updateIndentByIdForwx',
+				dataType : 'text',
+				type : 'post',
+				data : {
+					number : number,
+					status : "4",
+				},
+				success : function() {
+					$("#get_" + number).remove();
+					loadFinish();
+				},
+				error : function() {
+
+				}
+			});
+		}
+	}
+	function loadWatiforpay() {//待付款
+		$
+				.ajax({
+					url : '../indent/appwx/Order',
+					dataType : 'json',
+					type : 'post',
+					data : {
+						id : humanId,
+						state : "0",
+					},
+					success : function(data) {
+						if (data == '') {
+							$("#noOrder").attr("dispaly", "block");
+							$("#waitPayOrder").attr("dispaly", "none");
+						} else {
+							$.each(
+									data,
+									function(index, data) {
+										$("#waitPayOrder")
+												.append(
+														'<div class="mod_cell qb_mb15" id='+data.number+'><div class="mod_celltitle"><h3 class="qb_fl" id="wp_orderId">订单编号：'
+																+ data.number
+																+ '</h3><i class="qb_fr qb_icon icon_arrow_right"></i> </div>'
+																+ '<a href="javascript:;"><div class="mod_slider"><div class="slider_cnt"><ul><li class="single qb_mb10 qb_bfc bfc_f"><img src="images/weishang.png" class="bfc_f" id="wp_Pic"><div class="bfc_c">'
+																+ '<p id="wp_name">'
+																+ data.name
+																+ '</p><p class="qb_fs_s ui_color_weak" id="wp_num"></p></div></li></ul></div></div></a><div class="mod_cell_hr"></div><div class="qb_clearfix qb_fs_s qb_mb10 mod_color_weak copy">'
+																+ '<div class="qb_fl">待付款，未处理</div><div class="qb_fr">总价:<span class="mod_color_strong">&yen;'
+																+ data.money
+																+ '</span></div></div><div class="qb_flex qb_mb10"><span class="mod_btn btn_block btn_em flex_box" onclick="deleteOrder('
+																+ data.number
+																+ ')">删除</span></div><div class="qb_flex qb_mb10"><span class="mod_btn btn_block btn_em flex_box" style="background:#A51515" onclick="toPay('
+																+ data.number
+																+ ')">去支付</span></div></div>');
+									});
+						}
+					},
+					error : function() {
+
+					}
+				});
+	}
+	function loadWatiget() {//待收货
+		$
+				.ajax({
+					url : '../indent/appwx/Order',
+					dataType : 'json',
+					type : 'post',
+					data : {
+						id : humanId,
+						state : "2",
+					},
+					success : function(data) {
+						$.each(
+								data,
+								function(index, data) {
+									$("#waitget")
+											.append(
+													'<div class="mod_cell qb_mb15" id=get_'+data.number+'><div class="mod_celltitle"><h3 class="qb_fl" id="wp_orderId">订单编号：'
+															+ data.number
+															+ '</h3><i class="qb_fr qb_icon icon_arrow_right"></i> </div>'
+															+ '<a href="javascript:;"><div class="mod_slider"><div class="slider_cnt"><ul><li class="single qb_mb10 qb_bfc bfc_f"><img src="../appwx/showImg?id='
+															+ data.productIndnet[0].product.picture[0].id
+															+ '" class="bfc_f" id="wp_Pic"><div class="bfc_c">'
+															+ '<p id="wp_name">'
+															+ data.name
+															+ '</p><p class="qb_fs_s ui_color_weak" id="wp_num"></p></div></li></ul></div></div></a><div class="mod_cell_hr"></div><div class="qb_clearfix qb_fs_s qb_mb10 mod_color_weak copy">'
+															+ '<div class="qb_fl">待收货</div><div class="qb_fr">总价:<span class="mod_color_strong">&yen;'
+															+ data.money
+															+ '</span></div></div><div class="qb_flex qb_mb10"><span class="mod_btn btn_block btn_em flex_box" style="background:#A51515" onclick="toGet('
+															+ data.number
+															+ ')">确认收货</span></div></div>');
+								});
+					},
+					error : function() {
+
+					}
+				});
+	}
+	function loadWatisend() {//待发货
+		$
+				.ajax({
+					url : '../indent/appwx/Order',
+					dataType : 'json',
+					type : 'post',
+					data : {
+						id : humanId,
+						state : "1",
+					},
+					success : function(data) {
+						$.each(
+								data,
+								function(index, data) {
+									$("#waitsend")
+											.append(
+													'<div class="mod_cell qb_mb15" id=send_'+data.number+'><div class="mod_celltitle"><h3 class="qb_fl" id="wp_orderId">订单编号：'
+															+ data.number
+															+ '</h3><i class="qb_fr qb_icon icon_arrow_right"></i> </div>'
+															+ '<a href="javascript:;"><div class="mod_slider"><div class="slider_cnt"><ul><li class="single qb_mb10 qb_bfc bfc_f"><img src="images/weishang.png" class="bfc_f" id="wp_Pic"><div class="bfc_c">'
+															+ '<p id="wp_name">'
+															+ data.name
+															+ '</p><p class="qb_fs_s ui_color_weak" id="wp_num"></p></div></li></ul></div></div></a><div class="mod_cell_hr"></div><div class="qb_clearfix qb_fs_s qb_mb10 mod_color_weak copy">'
+															+ '<div class="qb_fl">等待卖家发货</div><div class="qb_fr">总价:<span class="mod_color_strong">&yen;'
+															+ data.money
+															+ '</span></div></div></div>');
+								});
+					},
+					error : function() {
+
+					}
+				});
+	}
+	function loadFinish() {
+		$
+				.ajax({
+					url : '../indent/appwx/Order',
+					dataType : 'json',
+					type : 'post',
+					data : {
+						id : humanId,
+						state : "4",
+					},
+					success : function(data) {
+						$.each(
+								data,
+								function(index, data) {
+									$("#finishOrder")
+											.append(
+													'<div class="mod_cell qb_mb15"><div class="mod_celltitle"><h3 class="qb_fl" id="wp_orderId">订单编号：'
+															+ data.number
+															+ '</h3><i class="qb_fr qb_icon icon_arrow_right"></i> </div>'
+															+ '<a href="javascript:;"><div class="mod_slider"><div class="slider_cnt"><ul><li class="single qb_mb10 qb_bfc bfc_f"><img src="images/weishang.png" class="bfc_f" id="wp_Pic"><div class="bfc_c">'
+															+ '<p id="wp_name">'
+															+ data.name
+															+ '</p><p class="qb_fs_s ui_color_weak" id="wp_num"></p></div></li></ul></div></div></a><div class="mod_cell_hr"></div><div class="qb_clearfix qb_fs_s qb_mb10 mod_color_weak copy">'
+															+ '<div class="qb_fl">交易已结束</div><div class="qb_fr">总价:<span class="mod_color_strong">&yen;'
+															+ data.money
+															+ '</span></div></div></div>');
+								});
+					},
+					error : function() {
+
+					}
+				});
+	}
+</script>
+</html>

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsMtProductDao">
+    <cache readOnly="true" flushInterval="60000" eviction="fifo" size="512"></cache>
+	<!-- 产品封装结果集 -->
+	<resultMap type="WsMtProduct" id="productResult">
+		<id property="id" column="product_id"/>
+		<result property="productName" column="product_name" />
+		<result property="productPrice" column="product_price" /><!--  打折后价格-->
+		<result property="productFavorable" column="product_favorable" /><!-- 打折率 -->
+		<result property="bazaarPrice" column="bazaar_price" /><!-- 市场价 -->
+		<result property="productCity" column="Product_city" /> <!-- 所属城市 -->
+		<result property="expdate" column="product_expdate" /> <!-- 保质期 -->
+		<result property="producedate" column="product_date" /> <!-- 生产日期 -->
+		<result property="productaddress" column="product_address" /> <!-- 产地 -->
+		<result property="productRemark" column="product_remark" /> <!-- 备注信息 -->
+		<result property="createName" column="create_name"/>
+		<result property="createTime" column="create_time"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="updateName" column="update_name"/>
+		<result property="count" column="count"/>
+		<association property="pictureCount" column="product_id" select="pictureCount" javaType="Integer"/>
+	</resultMap>
+	
+		
+	<!-- 增加产品 -->
+	<insert id="create" parameterType="WsMtProduct" keyProperty="id" useGeneratedKeys="true">
+		insert into ws_mt_product(product_name,product_remark,product_price,product_city,create_name,create_time,
+		    product_favorable,bazaar_price,product_expdate,product_date,product_address,spec_id,supp_id,product_picpath)
+		values(#{productName},#{productRemark},#{productPrice},#{productCity},#{createName},#{createTime},
+		#{productFavorable},#{bazaarPrice},#{expdate},#{producedate},#{productaddress},#{specid},#{suppid},#{propicpath})
+	</insert>
+	
+	<!-- 增加产品与用户关联 -->
+	<insert id="addProductUser" parameterType="WsProductUser" useGeneratedKeys="true" keyProperty="id">
+		insert into ws_user_product(user_id,product_id,create_name,create_time)
+		values(#{userId},#{productId},#{createName},#{createTime});
+	</insert>
+	
+	<!-- 清除产品与用户关系>软删除 -->
+	<update id="deleteProductUser" parameterType="Long">
+	    update ws_user_product set del_status = 0 where product_id=#{id};
+	</update>
+
+	<!-- 商品下架 -->
+	 <update id="downProduct" parameterType="long">
+	     update ws_mt_product set del_status=0 where product_id=#{id}
+	 </update>
+	 <!-- 商品上架 -->
+	 <update id="upProduct" parameterType="long">
+	     update ws_mt_product set del_status=1 where product_id=#{id}
+	 </update>
+	 <!-- 商品促销 -->
+	 <update id="doSales" parameterType="long">
+	     update ws_mt_product set salesStatus=0 where product_id=#{id}
+	 </update>
+	 <!-- 商品正常 -->
+	 <update id="doNormal" parameterType="long">
+	     update ws_mt_product set salesStatus=1 where product_id=#{id}
+	 </update>
+	 
+	 
+	<!-- 修改产品 -->
+	<update id="update" parameterType="WsMtProduct">
+		update ws_mt_product 
+		<set>
+			product_name =#{productName},
+			product_picpath=#{propicpath},
+			product_remark=#{productRemark},
+			product_favorable =#{productFavorable},
+			bazaar_price =#{bazaarPrice},
+			product_price =#{productPrice},
+			product_city =#{productCity},
+			product_expdate=#{expdate},
+			product_date=#{producedate},
+			product_address=#{productaddress},
+			spec_id=#{specid},
+			supp_id=#{suppid},
+			update_name=#{updateName}
+		</set>
+		where product_id = #{id};
+	</update>
+	
+	<!-- 删除产品 >软删-->
+	<delete id="deleteById" parameterType="Long">
+		delete from ws_mt_product  where product_id=#{id}
+	</delete>
+	
+	<select id="findById" parameterType="Long" resultType="WsMtProduct">
+	     SELECT
+			wmp.product_id as id ,
+			wmp.product_name as productName,
+			wmp.product_remark as productRemark,
+			wmp.product_price as productPrice,
+			wmp.product_city as productCity,
+			wmp.del_status as deleteStatus,
+			wmp.supp_id as suppid,
+			ws.supp_company as suppcomany,
+			wmp.product_expdate as expdate,
+			wmp.product_date as producedate,
+			wmp.product_address as productaddress,
+			wmp.spec_id as specid,
+			wsp.spec_name as specname,
+			wmp.module_type_id as wptyeid,
+			wmp.create_name as createName,
+			wmp.create_time as createTime,
+			wmp.update_name as updateName,
+			wmp.update_time as updateTime,
+			wmp.product_favorable as productFavorable,
+			wmp.bazaar_price as bazaarPrice,
+			wmp.product_picpath as propicpath,
+			wpt.tname as tname,
+			rwpt.ws_type_id as tid
+			FROM
+			ws_mt_product AS wmp LEFT JOIN ws_user_product AS wup ON wup.product_id=wmp.product_id
+			                     LEFT JOIN rel_product_type AS rwpt ON rwpt.ws_product_id=wmp.product_id
+			                     LEFT JOIN ws_pro_type AS wpt ON wpt.tid=rwpt.ws_type_id 
+			                     LEFT JOIN ws_supplier AS ws on wmp.supp_id=ws.supp_id 
+			                     LEFT JOIN ws_spec AS wsp on wmp.spec_id=wsp.spec_id 
+			where 1=1 and wmp.product_id=#{id}
+	    
+	</select>
+	
+	
+	
+	<select id="findProductById" parameterType="map" resultType="WsMtProduct">
+		SELECT
+			wmp.product_id as id ,
+			wmp.product_name as productName,
+			wmp.product_remark as productRemark,
+			wmp.product_price as productPrice,
+			wmp.product_city as productCity,
+			wmp.del_status as deleteStatus,
+			wmp.module_type_id as wptyeid,
+			wmp.supp_id as suppid,
+			ws.supp_company as suppcomany,
+			wmp.product_expdate as expdate,
+			wmp.product_date as producedate,
+			wmp.product_address as productaddress,
+			ws.supp_company as suppcomany,
+			wmp.spec_id as specid,
+			wsp.spec_name as specname,
+			wmp.create_name as createName,
+			wmp.create_time as createTime,
+			wmp.update_name as updateName,
+			wmp.update_time as updateTime,
+			wmp.product_favorable as productFavorable,
+			wmp.bazaar_price as bazaarPrice,
+			wmp.product_picpath as propicpath,
+			wpt.tname as tname
+			FROM
+			ws_mt_product AS wmp LEFT JOIN ws_user_product AS wup ON wup.product_id=wmp.product_id
+			                     LEFT JOIN rel_product_type AS rwpt ON rwpt.ws_product_id=wmp.product_id
+			                     LEFT JOIN ws_pro_type AS wpt ON wpt.tid=rwpt.ws_type_id 
+			                     LEFT JOIN ws_supplier AS ws on wmp.supp_id=ws.supp_id 
+			                     left join ws_spec AS wsp on wmp.spec_id=wsp.spec_id 
+			where 1=1 and wmp.product_id=#{productId}
+	</select>
+	
+	<!--根据产品ID取图片  -->
+	<select id="findAllPictureByPid" parameterType="Map" resultType="WsMtPicture">
+		select pic.picture_id as id,pic.picture_name as pictureName,pic.picture as picture from ws_mt_product wmp 
+			left join ws_product_picture pp on wmp .product_id = pp.product_id
+			left join ws_picture pic on pic.picture_id = pp.picture_id where wmp.product_id=#{productId}
+	</select>
+	
+	<select id="findAllProductPic" parameterType="long" resultType="com.sy.modules.entity.ws.WsMtPicture">
+	    SELECT
+			wp.picture_id as id,
+			wp.picture as picture,
+			wp.picture_name as pictureName,
+			wp.create_name,
+			wp.create_time,
+			wp.update_time,
+			wp.update_name
+			FROM
+			ws_picture AS wp INNER JOIN ws_product_picture AS wpp ON wp.picture_id=wpp.picture_id
+                        AND wpp.product_id=#{proid} 
+	    
+	</select>
+	
+	
+	<sql id="productColumn">
+	    p.product_id,p.product_name,p.product_remark,p.product_price,p.product_city,p.product_postage,p.product_favorable,p.bazaar_price,
+		p.create_name,p.create_time,p.update_time,p.update_name,pic.picture_id,pic.picture_name,pic.picture
+	</sql>
+	<sql id="productColumnNoMap">
+	    p.product_id as id,p.product_name as productName,p.product_remark as productRemark,p.product_price as productPrice,p.product_city as productCity,p.product_postage as productPostage,p.product_favorable as productFavorable,p.bazaar_price as bazaarPrice,
+		p.create_name as createName,p.create_time as createTime ,p.update_time as updateTime ,p.update_name as updateTime 
+	</sql>
+	<!-- 分页查询所有产品 -->
+	<select id="findAllProductByPage" parameterType="map" resultType="WsMtProduct">
+	  SELECT
+			wmp.product_id as id ,
+			wmp.product_name as productName,
+			wpt.tid as tid,
+			wmp.product_remark as productRemark,
+			wmp.product_price as productPrice,
+			wmp.product_city as productCity,
+			wmp.del_status as deleteStatus,
+			wmp.salesStatus as salesStatus,
+			wmp.module_type_id as wptyeid,
+			wmp.supp_id as suppid,
+			ws.supp_company as suppcomany,
+			wmp.product_expdate as expdate,
+			wmp.product_date as producedate,
+			wmp.product_address as productaddress,
+			wmp.spec_id as specid,
+			wsp.spec_name as specname,
+			wmp.create_name as createName,
+			wmp.create_time as createTime,
+			wmp.update_name as updateName,
+			wmp.update_time as updateTime,
+			wmp.product_favorable as productFavorable,
+			wmp.bazaar_price as bazaarPrice,
+			wmp.product_picpath as propicpath,
+			wpt.tname as tname
+			FROM
+			ws_mt_product AS wmp LEFT JOIN ws_user_product AS wup ON wup.product_id=wmp.product_id
+			                     LEFT JOIN rel_product_type AS rwpt ON rwpt.ws_product_id=wmp.product_id
+			                     LEFT JOIN ws_pro_type AS wpt ON wpt.tid=rwpt.ws_type_id 
+		                         LEFT join ws_supplier AS ws on wmp.supp_id=ws.supp_id
+		                         LEFT join ws_spec AS wsp on wmp.spec_id=wsp.spec_id 
+			where 1=1 
+			 	<if test="userid!=null">
+		        and wup.user_id = #{userid}
+		       </if>
+			   <if test="productId!=null">
+		        and wmp.product_id = #{productId}
+		       </if>
+			    <if test="typeId!=0">
+			        and wpt.tid=#{typeId} 
+			    </if>
+				<!-- 产品名称模糊 -->
+				<if test="usertext!=null">
+					and wmp.product_name like CONCAT('%','${usertext}','%')
+				</if>
+				    group by wmp.product_id order by wmp.product_id DESC
+				<!-- 分页查询 -->
+				<if test="lowerLimit!=null and upperLimit!=null">
+					limit #{lowerLimit},#{upperLimit};
+				</if>
+	</select>
+
+	<!-- 图片总数 -->
+	<select id="pictureCount" parameterType="Long" resultType="Integer">
+	    select count(*) from ws_picture pic left join ws_product_picture pp on pp.picture_id = pic.picture_id
+	    where pp.product_id = #{id};
+	</select>
+	
+	<!-- 产品总数 -->
+	<select id="count" resultType="Long" parameterType="Long">
+	     SELECT
+			count(*)
+			FROM
+			ws_mt_product AS wmp LEFT JOIN ws_user_product AS wup ON wup.product_id=wmp.product_id
+			                     LEFT JOIN rel_product_type AS rwpt ON rwpt.ws_product_id=wmp.product_id
+			                     LEFT JOIN ws_pro_type AS wpt ON wpt.tid=rwpt.ws_type_id 
+			where 1=1
+			<if test="userid!=null">
+		        and wup.user_id = #{userid}
+		       </if> 
+			<!-- 产品名称模糊 -->
+			<if test="usertext!=null">
+				and wmp.product_name like CONCAT('%','${usertext}','%')
+			</if>
+			<if test="typeId!=0">
+			        and wpt.tid=#{typeId} 
+			</if>
+	</select>
+
+	<!--/////////////////////////////////////////////// wap///////////////////////////////////////////////// -->
+	<!-- 手机端查询所有上架产品 -->
+	<select id="findAllUpProductByJson" parameterType="map" resultType="WsMtProduct">
+	  SELECT
+			wmp.product_id as id ,
+			wmp.product_name as productName,
+			wpt.tid as tid,
+			wmp.product_remark as productRemark,
+			wmp.product_price as productPrice,
+			wmp.product_city as productCity,
+			wmp.del_status as deleteStatus,
+			wmp.salesStatus as salesStatus,
+			wmp.module_type_id as wptyeid,
+			wmp.supp_id as suppid,
+			ws.supp_company as suppcomany,
+			wmp.product_expdate as expdate,
+			wmp.product_date as producedate,
+			wmp.product_address as productaddress,
+			wmp.spec_id as specid,
+			wsp.spec_name as specname,
+			wmp.create_name as createName,
+			wmp.create_time as createTime,
+			wmp.update_name as updateName,
+			wmp.update_time as updateTime,
+			wmp.product_favorable as productFavorable,
+			wmp.bazaar_price as bazaarPrice,
+			wmp.product_picpath as propicpath,
+			wpt.tname as tname
+			FROM
+			ws_mt_product AS wmp LEFT JOIN ws_user_product AS wup ON wup.product_id=wmp.product_id
+			                     LEFT JOIN rel_product_type AS rwpt ON rwpt.ws_product_id=wmp.product_id
+			                     LEFT JOIN ws_pro_type AS wpt ON wpt.tid=rwpt.ws_type_id 
+		                         LEFT join ws_supplier AS ws on wmp.supp_id=ws.supp_id
+		                         LEFT join ws_spec AS wsp on wmp.spec_id=wsp.spec_id 
+			where 1=1 and wmp.del_status=1
+			<if test="typeId!=0 and typeId!=null">
+			      and wpt.tid=#{typeId} 
+			</if>
+			<!-- 产品名称模糊 -->
+			<if test="keyname!=null">
+				and wmp.product_name like CONCAT('%','${keyname}','%')
+			</if>	
+				group by wmp.product_id order by wmp.product_id DESC
+			<!-- 分页查询 -->
+			<if test="lowerLimit!=null and upperLimit!=null">
+					limit #{lowerLimit},#{upperLimit};
+			</if>
+	</select>
+	
+	<!-- 手机端查询所有促销产品 -->
+	<select id="findAllSalesProductByJson" parameterType="map" resultType="WsMtProduct">
+	  SELECT
+			wmp.product_id as id ,
+			wmp.product_name as productName,
+			wpt.tid as tid,
+			wmp.product_remark as productRemark,
+			wmp.product_price as productPrice,
+			wmp.product_city as productCity,
+			wmp.del_status as deleteStatus,
+			wmp.salesStatus as salesStatus,
+			wmp.module_type_id as wptyeid,
+			wmp.supp_id as suppid,
+			ws.supp_company as suppcomany,
+			wmp.product_expdate as expdate,
+			wmp.product_date as producedate,
+			wmp.product_address as productaddress,
+			wmp.spec_id as specid,
+			wsp.spec_name as specname,
+			wmp.create_name as createName,
+			wmp.create_time as createTime,
+			wmp.update_name as updateName,
+			wmp.update_time as updateTime,
+			wmp.product_favorable as productFavorable,
+			wmp.bazaar_price as bazaarPrice,
+			wmp.product_picpath as propicpath,
+			wpt.tname as tname
+			FROM
+			ws_mt_product AS wmp LEFT JOIN ws_user_product AS wup ON wup.product_id=wmp.product_id
+			                     LEFT JOIN rel_product_type AS rwpt ON rwpt.ws_product_id=wmp.product_id
+			                     LEFT JOIN ws_pro_type AS wpt ON wpt.tid=rwpt.ws_type_id 
+		                         LEFT join ws_supplier AS ws on wmp.supp_id=ws.supp_id
+		                         LEFT join ws_spec AS wsp on wmp.spec_id=wsp.spec_id 
+			where 1=1 and wmp.del_status=1 and wmp.salesStatus=0
+			<if test="typeId!=0 and typeId!=null">
+			      and wpt.tid=#{typeId} 
+			</if>
+			<!-- 产品名称模糊 -->
+			<if test="keyname!=null">
+				and wmp.product_name like CONCAT('%','${keyname}','%')
+			</if>	
+				group by wmp.product_id order by wmp.product_id DESC
+			<!-- 分页查询 -->
+			<if test="lowerLimit!=null and upperLimit!=null">
+					limit #{lowerLimit},#{upperLimit};
+			</if>
+	</select>
+
+</mapper>

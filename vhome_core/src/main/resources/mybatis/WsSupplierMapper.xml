@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsSupplierDao">
+    
+    <!-- 封装用户结果集 -->
+    <resultMap type="WsSupplier" id="resultListSupp">
+      <id property="id" column="supp_id"/>
+      <result property="suppcompany" column="supp_company"/>
+      <result property="suppname" column="supp_name"/>
+      <result property="supptel" column="supp_tel"/>
+      <result property="remark" column="supp_remark"/>
+      <result property="createName" column="create_name"/>
+      <result property="createTime" column="create_time"/>
+      <result property="updateName" column="update_name"/>
+      <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="create" parameterType="WsSupplier" useGeneratedKeys="true" keyProperty="id">
+		insert into ws_supplier (supp_company,supp_name,supp_tel,supp_remark,create_name,create_time)
+		values (#{suppcompany},#{suppname},#{supptel},#{remark},#{createName},#{createTime})
+	</insert>
+	
+    <delete id="deleteById" parameterType="long">
+        delete from ws_supplier where supp_id=#{id}
+    </delete>
+    
+    <update id="update" parameterType="WsSupplier">
+		update ws_supplier 
+		  <set>
+			<if test="suppcompany!=null and suppcompany!=''">supp_company=#{suppcompany},</if>
+			<if test="suppname!=null and suppname!=''">supp_name=#{suppname},</if>
+			<if test="supptel!=null and supptel!=''">supp_tel=#{supptel},</if>
+			<if test="remark!=null and remark!=''">supp_remark=#{remark},</if>
+			<if test="updateName!=null and updateName!=''">update_name=#{updateName},</if>
+			<if test="updateTime!=null and updateTime!=''">update_time=#{updateTime}</if>
+		  </set>
+		where supp_id=#{id}
+	</update>
+    
+    <select id="findAllSupplierByPage" parameterType="map" resultType="WsSupplier" useCache="false" flushCache="true">
+        select
+		ws.supp_id as id,
+		ws.supp_company as suppcompany,
+		ws.supp_name as suppname,
+		ws.supp_tel as supptel,
+		ws.supp_remark as remark,
+		ws.create_name as createName,
+		ws.create_time as createTime,
+		ws.update_time as updateTime
+		from ws_supplier as ws
+		where 1=1
+		<if test="suppcompany!=null">
+	     and ws.supp_company like "%"#{suppcompany}"%"
+	    </if>
+		<if test="lowerLimit!=null and upperLimit != null">
+			limit #{lowerLimit},#{upperLimit}
+		</if>
+    </select>
+    
+    <select id="findCountByParam" parameterType="map" resultType="int">
+		select count(*) from ws_supplier as ws where 1=1
+		<if test="suppcompany!=null">
+	     and ws.supp_company like "%"#{suppcompany}"%"
+	    </if>
+	</select>
+    
+    <select id="findById" parameterType="long" resultType="WsSupplier">
+         select
+			ws.supp_id as id,
+			ws.supp_company as suppcompany,
+			ws.supp_name as suppname,
+			ws.supp_tel as supptel,
+			ws.supp_remark as remark,
+			ws.create_name as createName,
+			ws.create_time as createTime,
+			ws.update_time as updateTime
+			from ws_supplier as ws
+		where 1=1 and ws.supp_id=#{id}
+    </select>
+    
+    <select id="findAllSupplier" parameterType="map" resultType="WsSupplier" useCache="false" flushCache="true">
+        select
+			ws.supp_id as id,
+			ws.supp_company as suppcompany,
+			ws.supp_name as suppname,
+			ws.supp_tel as supptel,
+			ws.supp_remark as remark,
+			ws.create_name as createName,
+			ws.update_time as updateTime
+		from ws_supplier as ws
+		where 1=1
+    </select>
+</mapper>

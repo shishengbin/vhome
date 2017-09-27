@@ -1,0 +1,1 @@
+var SiteUrl="http://shop.aigegou.com/agg",ApiUrl="http://shop.aigegou.com/agg/mobile",pagesize=10,WapSiteUrl="http://shop.aigegou.com/agg/wap",AndroidSiteUrl="http://shop.aigegou.com/agg/AndroidMall339.apk";

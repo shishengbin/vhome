@@ -1,0 +1,449 @@
+/* CSS Document */
+.sygjcss {
+	background-color: #7A1001;
+	border: 1px #9F5043 solid;
+	width: 39px;
+	height: 22px;
+	color: #fff;
+	cursor: pointer;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#670200,
+		endColorstr=#A12700, grandientType=0);
+	background: -moz-linear-gradient(bottom, #670200, #A12700);
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#A12700),
+		to(#670200));
+	background: -o-linear-gradient(bottom, #670200, #A12700);
+}
+
+#mytable {
+	width: 100%;
+	margin: auto;
+	padding: 0;
+	border: 1px solid #C1DAD7;
+	table-layout: fixed;
+}
+
+#mytable caption {
+	padding: 0 0 5px 0;
+	width: 700px;
+	font: italic 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	text-align: right;
+}
+
+#mytable tr {
+	height: 30px;
+}
+
+#mytable th {
+	font: bold 14px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+	color: #152E48;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: center;
+	padding: 6px 6px 6px 12px;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#01538D,
+		endColorstr=#E9FDFE, grandientType=0);
+	background-image: -moz-linear-gradient(top, #01538D, #ffffff);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff),
+		color-stop(0.1, #01538D), color-stop(0.1, #01538D), to(#ffffff));
+	height: 10px;
+}
+
+#mytable td {
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	font-size: 14px;
+	padding: 6px 6px 6px 12px;
+	color: #4f6b72;
+	text-align: center;
+	word-break: keep-all; /* 不换行 */
+	white-space: nowrap; /* 不换行 */
+	overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
+	text-overflow: ellipsis;
+	/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+}
+
+lc_center {
+	border: solid red 1px;
+	width: 900;
+	maring-top: 0px;
+	text-align: center;
+}
+
+.pagHeadForm {
+	margin-top: 10px;
+	margin-left: 25px;
+	width: 850px;
+	height: 30px;
+}
+
+.centerPage {
+	width: 95%;
+	height: 550px;
+	margin: auto;
+	padding-top: 10px;
+}
+
+select {
+	font-size: 14px;
+}
+
+input [class^=" yy-"] {
+	border-radius: 5px;
+	background-image: url('../img/img/input.gif');
+	border: 1px #DEDEDE solid;
+	height: 26px;
+}
+
+input [class^=" yy-"]:hover {
+	background-position: 0px 32px;
+}
+
+body {
+	overflow: scroll;
+}
+
+#tou {
+	line-height: 30px;
+	width: 100%;
+	height: 60px;
+	background-image: url("../img/ttggg.png");
+}
+
+#wei {
+	line-height: 20px;
+	font-size: 13px;
+	text-align: center;
+	background-image: url("../img/ttggg.png");
+	width: 100%;
+	height: 50px;
+	margin-top: 25px;
+	/* BACKGROUND:#DDD;margin: 0px auto; width:100%; bottom: 0px !important;height:50px; background:#68838B; text-align:center; position:fixed; */
+}
+
+#tou b {
+	margin-left: 20px;
+	color: #F0FFFF;
+	padding: 5px;
+	font-weight: normal;
+	font-size: 13px;
+}
+
+#tou dl dd {
+	float: left;
+	margin-left: 20px;
+	font-size: 12px;
+}
+
+#neir {
+	width: 1100px;
+	height: 800px;
+	border: 1px #9FB6CD solid;
+	margin: auto;
+	margin-top: 58px;
+	border-radius: 15px;
+}
+
+#neir #neir_n {
+	width: 98%;
+	height: 800px;
+	border: 1px #9FB6CD solid;
+	margin: auto;
+	margin-top: 1%;
+	border-radius: 15px;
+}
+
+.td_mar {
+	border: 0px red solid;
+	width: 150px;
+	height: 50px;
+	display: inline;
+	margin: 100px;
+}
+
+.only {
+	font-size: 17px;
+	margin-right: 100px;
+	float: right;
+	text-align: right;
+	padding-right: 100px;
+}
+
+.only input {
+	border: none;
+	background-color: transparent;
+	font-size: 20px;
+	color: red;
+	width: 80px;
+}
+/*��ҳ*/
+div.pagination {
+	width: 625px;
+	clear: both;
+	padding: 10px 0 10px 0;
+	margin: 0px;
+	text-align: center;
+	float: left;
+	clear: both;
+	font-size: 11px;
+	float: right;
+	text-align: right;
+	padding-right: 50px;
+}
+
+div.pagination a {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #52bfea;
+	text-decoration: none;
+	color: #52bfea;
+}
+
+div.pagination a:hover,div.pagination a:active {
+	border: 1px solid #52bfea;
+	color: #fff;
+	background-color: #52bfea;
+}
+
+div.pagination span.current {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #52bfea;
+	font-weight: bold;
+	background-color: #52bfea;
+	color: #FFF;
+}
+
+div.pagination span.disabled {
+	padding: 2px 5px 2px 5px;
+	margin-right: 2px;
+	border: 1px solid #f3f3f3;
+	color: #ccc;
+}
+
+hr {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#000000,
+		endColorstr=#ffffff, grandientType=1);
+	box-shadow: 3px 3px 3px rgba(10, 80, 160, 0);
+	background-image: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#ffffff),
+		color-stop(0.33, #000000), color-stop(0.33, #000000), to(#ffffff));
+	background-image: -moz-linear-gradient(left, #ffffff 5%, #000000, #ffffff);
+	border: none;
+	height: 1px;
+	margin-top: 5px;
+	margin-bottom: 15px;
+}
+
+button {
+	width: 90px;
+	height: 26px;
+	border: none;
+	margin: 15px;
+	background-image: url("../images/botton_gif_015.gif");
+}
+/* ��ʾ�� */
+#panel {
+	display: none;
+	position: absolute;
+	border: 1px #94AAD6 solid;
+	width: 250px;
+	height: 0px;
+	margin: 0px 0px;
+	padding: 8px 0px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	z-index: 99999px;
+	float: left;
+	top: 0px;
+}
+
+#panel,#panel input,.hide_div {
+	background: #829DB8; /* һЩ��֧�ֱ������������� */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#D1EEEE,
+		endColorstr=#aaa, grandientType=0);
+	background: -moz-linear-gradient(bottom, #D1EEEE, #aaa);
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#aaa),
+		to(#D1EEEE));
+	background: -o-linear-gradient(bottom, #D1EEEE, #aaa);
+}
+
+#panel .conent {
+	width: 80%;
+	height: 80px;
+	margin: auto;
+	display: block;
+	background-color: transparent;
+	border-radius: 5px;
+	font-size: 12px;
+	color: #006241;
+}
+
+#panel input {
+	position: relative;
+	float: right;
+	right: 10px;
+	color: #ffffff;
+}
+
+.STYLE8 {
+	color: #FFFFFF;
+	height: 40px;
+	background: url(images/search-container.png)
+}
+
+/* ��ҳ���ϵͳ */
+.hide_div {
+	position: absolute;
+	top: 20%;
+	left: 30%;
+	width: 500px;
+	height: 0px;
+	margin: 0 auto;
+	z-index: 100;
+	opacity: 0;
+	filter: alpha(opacity = 0);
+	background-color: #f7f7f7;
+	display: none;
+}
+
+.hide_div  fieldset {
+	margin: 30px;
+	padding: 10px;
+	font-size: 13px;
+	border-color: #489620;
+}
+
+.hide_div fieldset legend {
+	color: #006241;
+}
+
+.hide_div  fieldset table {
+	margin: 20px;
+	width: 100%;
+	line-height: 50px;
+}
+
+.hide_div  fieldset table #keyci,#keyjiage,#keyzhut,#keylx {
+	width: 120px;
+}
+
+.hide_div  fieldset table #keyci {
+	font-weight: bold;
+	color: #000000;
+}
+
+#keyjiage {
+	color: #000000;
+}
+
+#keylx {
+	color: blue;
+}
+
+#keyzhut {
+	color: #FF7F00;
+}
+
+.hide_div  fieldset table tr {
+	margin: 20px;
+}
+
+.hide_div  fieldset table tr td {
+	margin: 8px;
+	font-size: 13px;
+}
+
+.hide_div p {
+	padding: 20px;
+}
+
+a.guanbu {
+	display: block;
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	right: 5px;
+	top: 5px;
+	background: url("../images/sheet_close.gif") no-repeat;
+}
+
+a:hover.guanbu {
+	background-position: 0 -30px;
+}
+
+a:active.guanbu {
+	background-position: 0 -60px;
+}
+/*������*/
+#zhep {
+	filter: alpha(opacity = 0.3);
+	opacity: 0.3;
+	background-color: #778899;
+	z-index: 999;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 0px;
+	height: 0px;
+}
+
+.zhepcenter {
+	width: 400px;
+	background: #EEEEE0; /* һЩ��֧�ֱ������������� */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#F0F8FF,
+		endColorstr=#EEEEE0, grandientType=0);
+	background: -moz-linear-gradient(bottom, #F0F8FF, #EEEEE0);
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#F0F8FF),
+		to(#EEEEE0));
+	background: -o-linear-gradient(bottom, #EEEEE0, #F0F8FF);
+	border: 1px #7D9EC0 solid;
+	height: 200px;
+	display: block;
+	z-index: 1000;
+	position: absolute;
+	top: 20%;
+	left: 35%;
+	padding: 20px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#buj dl {
+	clear: both;
+	overflow: hidden;
+	_zoom: 1;
+	margin: 2px 0;
+}
+
+#buj dl dt,dl dd {
+	display: table-cell;
+	padding: 20px;
+}
+
+#buj dl dt {
+	float: left;
+}
+
+#buj dl dd {
+	*float: left;
+}
+
+.biaogedaoh tr td {
+	padding-right: 50px;
+}
+/*  ���ذ�ť*/
+.fanh {
+	width: 60px;
+	height: 30px;
+	border: none;
+	background: #829DB8; /* һЩ��֧�ֱ������������� */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#D7D7D7,
+		endColorstr=#F8F8FF, grandientType=0);
+	background: -moz-linear-gradient(bottom, #D7D7D7, #F8F8FF);
+	background: -webkit-gradient(linear, 0 0, 0 bottom, from(#F8F8FF),
+		to(#D7D7D7));
+	background: -o-linear-gradient(bottom, #D7D7D7, #F8F8FF);
+	border-radius: 5px;
+}

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.wx.MyKeywordDao">
+    <!-- 创建关键字回复 -->
+    <insert id="create" parameterType="MyKeyword" useGeneratedKeys="true" keyProperty="id">
+      insert into wx_kwd_resp (kwd_name,article_type,article_id,account_id,remark,create_name,create_time)
+	  values (#{keyname},#{article_type},#{article_id},#{account_id},#{remark},#{createName},#{createTime})
+    </insert>
+    
+    <!-- 删除关键字回复 -->
+    <delete id="deleteById" parameterType="long">
+         delete from wx_kwd_resp
+        where kwd_id=#{id}
+        
+    </delete>
+    <!-- 关键词对应的单图文 -->
+    <select id="findKeyWordBySinArticle" parameterType="map" resultType="com.sy.modules.entity.wx.resp.MyArticle">
+         SELECT
+			wa.article_id as id,
+			wa.title as Title,
+			wa.description as Description,
+			wa.picurl as PicUrl,
+			wa.url as Url,
+            wa.type as atype,
+			wa.content as content,
+			wa.create_name as createName,
+		    wa.create_time as createTime,
+		    wa.update_name as updateName,
+		    wa.update_time as updateTime,
+		    wka.kwd_name
+		FROM
+            wx_kwd_resp as wka,wx_article as wa,wx_rel_article_account as wraa
+        WHERE wraa.account_id=#{userid} 
+           and wraa.mutiarticle_id=0
+           and wa.article_id=wraa.article_id 
+           and wraa.aa_id=wka.article_id 
+           and wka.kwd_name=#{content}
+        
+	</select>
+	
+    <select id="findKeyWordByName" parameterType="String" resultType="MyKeyword">
+       SELECT
+			wkr.kwd_id as id,
+			wkr.kwd_name as keyname
+		FROM
+			wx_kwd_resp AS wkr WHERE wkr.kwd_name=#{keyname}
+        
+    </select>
+    
+    <select id="findKeyWordForManArticleId" parameterType="map" resultType="long">
+          SELECT
+            wka.article_id
+          FROM wx_kwd_resp AS wka where wka.kwd_name=#{content} and wka.account_id=#{userid}
+    </select>
+    
+    <!-- 关键字对应的多图文 -->
+    <select id="findKeyWordByManyArticle" parameterType="long" resultType="com.sy.modules.entity.wx.resp.MyArticle">
+      SELECT
+			wa.article_id as id,
+			wa.title as Title,
+			wa.description as Description,
+			wa.picurl as PicUrl,
+			wa.url as Url,
+            wa.type as atype,
+			wa.content as content,
+			wa.create_name as createName,
+		  wa.create_time as createTime,
+		  wa.update_name as updateName,
+		  wa.update_time as updateTime
+		FROM
+		  wx_article AS wa INNER JOIN wx_rel_article_account AS wraa  ON  wa.article_id=wraa.article_id and wraa.mutiarticle_id=#{manarticleId}
+		  ORDER BY wa.article_id DESC
+	</select>
+    
+    
+    <select id="findMyKeyWordById" parameterType="map" resultType="MyKeyword">
+        SELECT
+            wkr.kwd_id as id,
+			wkr.kwd_name as keyname,
+			wkr.article_type as article_type,
+			wkr.article_id as article_id,
+			wkr.account_id as account_id,
+			wkr.create_name as createName,
+			wkr.create_time as createTime,
+			wkr.update_time as updateTime,
+			wkr.remark as remark,
+			wa.title as title,
+			wa.content as content
+		FROM
+		   wx_kwd_resp AS wkr LEFT JOIN wx_rel_article_account AS wraa ON wkr.article_id = wraa.aa_id
+		                      LEFT JOIN wx_article AS wa ON wa.article_id=wraa.article_id and wkr.account_id=#{accountId}
+		where 1=1 and wkr.kwd_id=#{keyId}  
+        
+    </select>
+    
+    <!-- 分页查询关键词回复 -->
+    <select id="findAllMykeywordsByPage" parameterType="map" resultType="MyKeyword" useCache="false" flushCache="true">
+      SELECT
+            wkr.kwd_id as id,
+			wkr.kwd_name as keyname,
+			wkr.article_type as article_type,
+			wkr.article_id as article_id,
+			wkr.account_id as account_id,
+			wkr.create_name as createName,
+			wkr.create_time as createTime,
+			wkr.update_time as updateTime,
+			wkr.remark as remark,
+			wa.title as title,
+			wa.content as content
+		FROM
+		   wx_kwd_resp AS wkr LEFT JOIN wx_rel_article_account AS wraa ON wkr.article_id = wraa.aa_id
+		                      LEFT JOIN wx_article AS wa ON wa.article_id=wraa.article_id and wkr.account_id=#{accountId}
+		where 1=1   
+		<if test="lowerLimit!=null and upperLimit != null">
+				limit #{lowerLimit},#{upperLimit}
+	    </if>
+    </select>
+    
+    <!-- 查询总数 -->
+    <select id="findCountByParam" parameterType="map" resultType="long">
+         select count(*) 
+         FROM wx_kwd_resp AS wkr LEFT JOIN wx_article AS wa on wkr.article_id=wa.article_id
+         WHERE 1=1
+    </select>
+    
+</mapper>

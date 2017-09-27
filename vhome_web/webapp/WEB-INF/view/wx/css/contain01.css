@@ -1,0 +1,85 @@
+
+#contain01{
+	background-color: #fff;
+    height: 100%;
+    min-height: 1600px;
+    border-right: 1px solid #D6D6D6;
+    box-shadow: 1px 0px 1px #E1E1E1;  
+ 
+}
+#contain01 .home .add_home{
+	margin-top:6px;
+	width: 50px;
+	height: 50px;
+	background: url(../images/home_normal.png) no-repeat;
+
+}
+#contain01 .home .add_home:hover{
+	background: url(../images/home_moveon.png) no-repeat;
+}
+#contain01 .home .add_home:active{
+	background: url(../images/home_down.png) no-repeat;
+}
+#contain01 .home .table{
+	text-align: center;
+	vertical-align: middle;
+}
+#contain01 .home thead td{
+	color: #666;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	text-align: center;
+	font-size: 16px;
+	height: 50px;
+	vertical-align: middle;
+}
+#contain01 .home thead tr{
+	box-shadow: 1px 0px 6px #dddddd;
+}
+#contain01 .home tbody td{
+	color: #333;
+	font-size: 14px;
+	 vertical-align: middle;
+}
+#contain01 .headerpic{
+	box-shadow: -1px -1px 1px #999 ;
+}
+#contain01 .pic{
+	width: 73px;
+	height: 34px;
+	background: url(../images/anniu.png) no-repeat;
+	line-height: 34px;
+	text-align: center;
+	color:#3a96e6;
+}
+#contain01 .choose{
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	height: 35px;
+	width: 134px;
+	margin-right: 28px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+    padding-right: 5px;
+	color:#999;
+	padding-left: 10px;
+}
+#contain01 .save{
+		width: 328px;
+        height: 48px;
+        background: url(../images/save.png) no-repeat;
+        background-position: -4px -3px;
+        line-height: 46px;
+        padding-left: 150px !important;
+        font-weight: bolder;
+        color: #fffff8;
+        font-size: 16px;
+
+}
+#contain01 .save:active{
+        height: 48px;
+        background: url(../images/save.png) no-repeat;
+        background-position: -4px -60px;
+}

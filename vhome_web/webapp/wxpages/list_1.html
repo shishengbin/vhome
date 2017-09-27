@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta content="yes" name="apple-mobile-web-app-capable">
+<meta content="black" name="apple-mobile-web-app-status-bar-style">
+<meta content="telephone=no" name="format-detection">
+<title>二级分类</title>
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="css/style.css" rel="stylesheet" type="text/css">
+<link href="css/title.css" rel="stylesheet" />
+<link href="css/add.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/cookieTools.js"></script>
+<style type="text/css">
+.myrow {
+	border-bottom: 1px dotted #dcdcdc;
+	height: 45px;
+}
+
+.myrow p {
+	margin-left: 20px;
+	margin-top: 10px;
+	font-color: #000000;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.myrowpic {
+	width: 40px;
+	float: right;
+}
+</style>
+</head>
+<body style="background-color: #ffffff">
+	<input type="hidden" name="humanId" id="humanId">
+	<div class="lay_toptab mod_tab" id="lay_head"
+		style="position: fixed; top: 0; left: 0; z-index: 9999;">
+		<a href="search.html" class="tab_item" id="allClass"> <img
+			src="images/1401947222_grid-2-01.png" width="30px" height="30px" />
+		</a> 
+		<!-- <a class="tab_item tab_item_logo" href="#"> <img
+			src="images/headerLogo.png" width="30px" height="30px" />
+		</a> -->
+		 <a href="mine.html" class="tab_item" id="mine"> <img
+			src="images/1401947189_user-01.png" width="30px" height="30px" />
+		</a>
+		 <a class="tab_item" id="cartdefault" onclick="checklogin()"> <img
+			src="images/1401947144_shop-01.png" width="30px" height="30px" /> <i
+			class="qb_icon icon_number_bubble qb_none"></i>
+		</a>
+	</div>
+	<div class="container" style="padding-top: 51px; margin: 0 0.78125em"
+		id="list">
+		<!--   <div class="row" style="padding-top:0.5em">  -->
+		<!-- 
+		      <div class="myrow">
+		 			<a href="product_list.html?secid='+data.id+'&humanId='+humanId+'&accountid='+accountid+'">
+		 			   <div style="float:left;margin-top: 0;"> 
+		 			 	 <p style="margin-left:20px;margin-top:10px;font-color:#000000;font-size:13px;font-weight: bold;">大白菜</p>
+		 			   </div>
+		 			   <div style="width: 40px; float: right;">
+		 			       <img src="images/r.gif" >
+		 			    </div>
+		 			 </a>
+		 	  </div>
+	 	 -->
+		<div class="col-xs-12" style="background: #ffffff">
+			<!-- <img src="images/fd_adpic.jpg" style="width:100%">  -->
+		</div>
+	</div>
+	<div class="lay_footer qb_tac qb_fs_s mod_mb15">
+		<div class="fn_quicklinks">
+			<a class="mod_color_weak" href="#" id="foot_index">商户首页</a> <span
+				class="mod_color_comment">|</span> <a class="mod_color_weak"
+				href="#" id="foot_human">会员中心</a> <span class="mod_color_comment">|</span>
+			<a class="mod_color_weak" href="#" id="foot_company">品牌介绍</a>
+		</div>
+		<div class="fn_copyright qb_bfc">
+			<div class="mod_color_comment bfc_m">&copy;&nbsp;上海轩丞信息技术支持</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="js/indexinit.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var accountid = request("accountid");
+		var humanId = request("humanId");
+		$("#humanId").val(humanId);
+		var classid = request("class1id");
+		$
+				.ajax({
+					url : '/vhome_web/ws/appwx/findAllStypesForWx',
+					type : 'post',
+					dataType : 'json',
+					data : {
+						id : accountid,
+						fatherId : classid
+					},
+					success : function(data) {
+						//console.info(data);
+						$
+								.each(
+										data,
+										function(i, data) {
+											$("#list")
+													.append(
+															'<div class="myrow">'
+																	+ '<a href="product_list.html?class2id='
+																	+ data.id
+																	+ '&humanId='
+																	+ humanId
+																	+ '&accountid='
+																	+ accountid
+																	+ '"><div style="float:left;margin-top: 0;"><p>'
+																	+ data.tname
+																	+ '</p></div>'
+																	+ '<div class="myrowpic"><img src="images/r.gif"></div></a></div>');
+										});
+					},
+					error : function(data) {
+						alert("加载商品分类失败！请检查网络状况！");
+					}
+				});
+	});
+</script>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.sys.PaymentDao">
+   <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/> -->
+    
+    <select id="findAllPayments" resultType="Payment">
+        SELECT
+			sp.pm_id as id,
+			sp.user_id as userid,
+			sp.pm_daoname as daoname,
+			sp.pm_modename as modename,
+			sp.`status` as status,
+			sp.create_name as createName,
+			sp.create_time as createTime,
+			sp.update_name as updateName,
+			sp.update_time as updateTime
+		FROM
+			sys_payment AS sp
+	        
+    </select>
+</mapper>

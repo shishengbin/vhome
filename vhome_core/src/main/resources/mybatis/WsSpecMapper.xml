@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsSpecDao">
+    
+    <!-- 封装用户结果集 -->
+    <resultMap type="WsSpec" id="resultListSpec">
+      <id property="id" column="spec_id"/>
+      <result property="specname" column="spec_name"/>
+      <result property="remark" column="spec_remark"/>
+      <result property="createName" column="create_name"/>
+      <result property="createTime" column="create_time"/>
+      <result property="updateName" column="update_name"/>
+      <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+        <insert id="create" parameterType="WsSpec" useGeneratedKeys="true" keyProperty="id">
+		insert into ws_spec (spec_name,create_name,create_time)
+		values (#{specname},#{createName},#{createTime})
+	</insert>
+	
+    <delete id="deleteById" parameterType="long">
+        delete from ws_spec where spec_id=#{id}
+    </delete>
+    
+    <update id="update" parameterType="WsSpec">
+		update ws_spec 
+		  <set>
+			<if test="specname!=null and specname!=''">spec_name=#{specname},</if>
+			<if test="updateName!=null and updateName!=''">update_name=#{updateName},</if>
+			<if test="updateTime!=null and updateTime!=''">update_time=#{updateTime}</if>
+		  </set>
+		where spec_id=#{id}
+	</update>
+    
+       <select id="findById" parameterType="long" resultType="WsSpec">
+         select
+			ws.spec_id as id,
+			ws.spec_name as specname,
+			ws.spec_remark as remark,
+			ws.create_name as createName,
+			ws.update_time as updateTime
+		from ws_spec as ws
+		where 1=1 and ws.spec_id=#{id}
+    </select>
+    
+    <select id="findAllSpecByPage" parameterType="map" resultType="WsSpec" useCache="false" flushCache="true">
+        select
+		ws.spec_id as id,
+		ws.spec_name as specname,
+		ws.spec_remark as remark,
+		ws.create_name as createName,
+		ws.update_time as updateTime
+		from ws_spec as ws
+		where 1=1
+		<if test="specname!=null">
+	     and ws.spec_name like "%"#{specname}"%"
+	    </if>
+		<if test="lowerLimit!=null and upperLimit != null">
+			limit #{lowerLimit},#{upperLimit}
+		</if>
+    </select>
+    
+    <select id="findCount" parameterType="map" resultType="int">
+		select count(*) from ws_spec as ws where 1=1
+		<if test="specname!=null">
+	     and ws.spec_name like "%"#{specname}"%"
+	    </if>
+	</select>
+    
+    <select id="findAllSpec" parameterType="map" resultType="WsSpec" useCache="false" flushCache="true">
+        select
+			ws.spec_id as id,
+			ws.spec_name as specname,
+			ws.spec_remark as remark,
+			ws.create_name as createName,
+			ws.update_time as updateTime
+			from ws_spec as ws
+		where 1=1
+    </select>
+</mapper>

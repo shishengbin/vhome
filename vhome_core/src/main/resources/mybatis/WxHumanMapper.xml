@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.wx.HumanDao">
+	<insert id="save" parameterType="Human">
+		insert into wx_human(openid,account_id,nickname,sex,language,city,province,country,headimgurl,subscribe_time)
+		values(#{openid},#{account_id},#{nickname},#{sex},#{language},#{city},#{province},#{country},#{headimgurl},#{subscribe_time})
+	</insert>
+	<select id="count" parameterType="String" resultType="int">
+		select count(*) from wx_human where openid=#{openid};
+	</select>
+</mapper>

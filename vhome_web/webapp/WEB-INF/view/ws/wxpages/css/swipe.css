@@ -1,0 +1,14 @@
+.swipe_index { overflow: hidden; visibility: hidden; position: relative; width: 100%;margin: 0 auto; }
+.swipe-wrap { overflow: hidden; position: relative; z-index: 10; height: 100%; min-height: 100%; }
+.swipe-wrap img { width: 100%; }
+.swipe-wrap > div { float: left; width: 100%; position: relative; overflow: hidden; height: auto; }
+.slide-triggers { margin: 7px 0px 0px; position: absolute; bottom: 11px; right: 5%; z-index: 100; }
+.slide-triggers li { float: left; margin: 0px 5px; height: 10px; width: 10px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border-radius: 5px; font-size: 12px; text-align: center; color: rgb(255, 255, 255); cursor: pointer; }
+.slide-triggers li.current { background: none repeat scroll 0% 0% rgb(234, 13, 82); }
+.text-bg { position: absolute; left: 0px; bottom: 0px; width: 100%; height: 30px; background: none repeat scroll 0% 0% rgb(0, 0, 0); opacity: 0.4; z-index: 10; }
+.text { display: block; width: 60%; height: 34px; line-height: 34px; position: absolute; left: 0px; bottom: 0px; font-size: 16px; z-index: 11; overflow: hidden; }
+a.text { color: rgb(255, 255, 255); padding-left: 1em; text-decoration: none; }
+
+a:visited {text-decoration: none; }
+a:hover { text-decoration: none;}
+li{list-style: none;}

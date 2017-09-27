@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsPhoneDao">
+    <!-- 映射号码结果集 -->
+    <resultMap type="WsPhone" id="phoneResult">
+        <id column="phone_id" property="id"/>
+        <result column="phone_name" property="phone_Name"/>
+        <result column="phone_number" property="phone_Number"/>
+        <result column="create_name" property="createName"/>
+        <result column="update_name" property="updateName"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+	<!-- 查看单条号码 -->
+	<select id="findById" parameterType="Long" resultMap="phoneResult">
+	    select * from ws_phone m where m.phone_id =#{id}; 
+	</select>
+	<!-- 根据号码查询 -->
+	<select id="findByNumber"  resultMap="phoneResult">
+	    select * from ws_phone left join ws_user_phone
+	    on  ws_phone.phone_id=ws_user_phone.phone_id 
+	    where ws_user_phone.user_id=#{0} 
+	    and ws_user_phone.del_status=1 
+	    and ws_phone.phone_number =#{1}; 
+	</select>
+	<!-- 删除号码 -->
+	<update id="deleteById" parameterType="Long">
+	    update ws_user_phone set del_status=0 where phone_id=#{id};
+	</update>
+	<!-- 更新号码 -->
+	<update id="update" parameterType="WsPhone">
+	    update ws_phone set phone_name=#{phone_Name},phone_number=#{phone_Number},update_name=#{updateName} where phone_id=#{id}
+	</update>
+	<!-- 增加号码 -->
+	<insert id="create" parameterType="WsPhone" keyProperty="id" useGeneratedKeys="true">
+		insert into ws_phone(phone_name,phone_number,create_name,create_time)values(#{phone_Name},#{phone_Number},#{createName},#{createTime});
+	</insert>
+	<!-- 注册号码与用户关系 -->
+	 <insert id="addPhoneUser" parameterType="WsPhoneUser">
+	     insert into ws_user_phone(phone_id,user_id,create_name,create_time)values(#{phoneId},#{userId},#{createName},#{createTime})
+	 </insert>
+	<!-- 号码总数 -->
+	<select id="count" resultType="int" parameterType="Long">
+	     select  count(*)  from ws_phone  left join ws_user_phone on  ws_phone.phone_id=ws_user_phone.user_phone_id where ws_user_phone.user_id=#{id} and ws_user_phone.del_status=1
+	</select>
+	<!--分页查询号码 -->
+	<select id="findAllByPage"  resultMap="phoneResult" parameterType="Map">
+	    select  *  from ws_phone  left join ws_user_phone 
+	    on  ws_phone.phone_id=ws_user_phone.phone_id 
+	    where ws_user_phone.user_id=#{userid} 
+	    and ws_user_phone.del_status=1 
+	    <if test="name!=null">
+	 	  and ws_phone.phone_name like CONCAT('%',#{name},'%')
+	 	</if>
+	  	<if test="lowerLimit!=null and upperLimit!=null">
+			limit #{lowerLimit},#{upperLimit};
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.wx.MsgTypeDao">
+	<select id="findFRMType" parameterType="long" resultType="int">
+	    select msg_type from wx_first_rep_msg where account_id=#{userid}
+	</select>
+	<select id="findKwMType" parameterType="map" resultType="int">
+		select article_type from wx_kwd_resp where account_id=#{userid} and kwd_name like CONCAT('%',#{content},'%') LIMIT 1
+	</select>
+</mapper>

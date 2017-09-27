@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.agt.AgtMenuDao">
+
+ <select id="getAll" resultType="AgtMenu">
+     SELECT
+		am.m_name as mname,
+		am.m_uri as muri,
+		am.m_fatherId as fatherid,
+		am.m_re as remark
+		FROM
+		agt_menu AS am WHERE am.m_fatherId=1 and  am.m_fatherId <![CDATA[<]]> am.mid
+ </select>
+
+<select id="findMenusByRoleId" parameterType="Long" resultType="AgtMenu">
+	SELECT
+		am.mid as id,
+		am.m_name as mname,
+		am.m_uri as muri,
+		am.m_fatherId as fatherid,
+		am.m_re as remark
+		FROM agt_menu AS am LEFT JOIN rel_role_menu AS rrm ON am.mid=rrm.menu_id
+	where  rrm.role_id=#{roleId}
+</select>
+</mapper>

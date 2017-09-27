@@ -1,0 +1,11 @@
+ul#nav li a { background:none !important; }
+ul#nav li ul li a { white-space:nowrap; }
+ul#page-tools li a { float:left; }
+
+div#search-field-container { width:180px; }
+div#search-field-container input { width:178px; }
+ul#breadcrumbs {margin:7px 0 0 20px;}
+body { position:relative; }
+
+
+

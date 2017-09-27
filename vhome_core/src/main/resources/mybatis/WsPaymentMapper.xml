@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsPaymentDao">
+
+	<resultMap type="WsPayment" id="paymentResult">
+		<id column="payment_id" property="id" />
+		<result column="payment_name" property="name" />
+		<result column="create_time" property="createTime" />
+		<result column="state" property="state" />
+		<association property="user"
+			resultMap="com.sy.modules.dao.sys.UserDao.resultListUser" javaType="SysUser" />
+		<collection property="mark" javaType="ArrayList" ofType="Mark"
+			resultMap="com.sy.modules.dao.ws.WsMarkDao.markResult"></collection>
+	</resultMap>
+
+	<sql id="getAll">
+		select * from sys_payment sp
+		left join sys_payment_mark spm
+		on
+		sp.payment_id = spm.payment_id
+	</sql>
+	<!-- 获取所有支付方式 -->
+	<select id="getPayment" resultMap="paymentResult" parameterType="Long"
+		useCache="true">
+		<include refid="getAll" />
+		where sp.user_id = #{userId};
+	</select>
+
+	<!-- 单条 -->
+	<select id="findById" resultMap="paymentResult" parameterType="Long">
+		<include refid="getAll" />
+		where sp.payment_id = #{id};
+	</select>
+	<!-- 删除支付方式 -->
+	<delete id="deletePayment" parameterType="Long">
+
+		DELETE sys_payment,sys_payment_mark from sys_payment LEFT JOIN
+		sys_payment_mark ON sys_payment.payment_id =
+		sys_payment_mark.payment_id
+		WHERE sys_payment.payment_id=#{id};
+
+	</delete>
+	<!-- 修改支付方式 -->
+	<update id="updatePayment" parameterType="WsPayment">
+		update sys_payment
+		<set>
+			<if test="name!=null">
+				payment_name = #{name},
+			</if>
+			<if test="createTime!=null">
+				create_time = #{createTime},
+			</if>
+			<if test="state!=null and state!=-1">
+				state = #{state}
+			</if>
+		</set>
+		where payment_id = #{id};
+	</update>
+
+	<!-- 增加支付方式 -->
+	<insert id="createPayment" parameterType="WsPayment" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		sys_payment(user_id,payment_name,create_time)
+		values(#{user.id},#{name},#{createTime});
+	</insert>
+
+</mapper>

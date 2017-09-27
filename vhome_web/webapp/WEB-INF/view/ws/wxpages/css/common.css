@@ -1,0 +1,15 @@
+@charset "utf-8";
+html, body, h1, h2, h3, h4, h5, h6, div, dl, dt, dd, ul, ol, li, p, blockquote, pre, hr, figure, table, caption, th, td, form, fieldset, legend, input, button, textarea, menu { margin: 0px; padding: 0px; }
+html, body, fieldset, img, iframe, abbr { border: 0px none; }
+li { list-style: none outside none; }
+h1, h2, h3, h4, h5, h6, small { font-size: 100%; }
+a, button { cursor: pointer;color: #000000 }
+a, a:hover {text-decoration: none;}
+h1, h2, h3, h4, h5, h6, em, strong, b { font-weight: bold; }
+body, textarea, input, button, select, keygen, legend { font: 12px/1.14 "微软雅黑"; outline: 0px none; }
+body { background: none repeat scroll 0% 0% rgb(255, 255, 255); }
+img { vertical-align: middle; }
+img {border: medium none;}
+body a { outline: medium none; }
+body a{outline:none;blr:expression(this.onFocus=this.blur());}/*去掉A标签IE浏览器的虚线*/
+p { color:#444;}

@@ -1,0 +1,101 @@
+#Layer1 {
+	position:absolute;
+	width:376px;
+	height:227px;
+	z-index:1;
+	left: 286px;
+	top: 300px;
+}
+ 
+	#Layer2 {
+	position:absolute;
+	width:207px;
+	height:59px;
+	z-index:2;
+	left: 177px;
+	top: 26px;
+}
+	#Layer3 {
+	position:absolute;
+	width:223px;
+	height:292px;
+	z-index:3;
+	left: 714px;
+	top: 90px;
+}
+	body {
+	background-image: url(../images/bg_login.jpg);
+	background-repeat: repeat;
+	text-align:center;
+}
+  .login_user{
+      background-image:url(../images/bg_user.png);
+  }
+  .login_pwd {
+width: 292px;
+height: 33px;
+padding-top: 5px;
+background: url(../images/bg_pwd.png) no-repeat left top;
+float: left;
+}
+.login_user {
+width: 292px;
+height: 33px;
+padding-top: 5px;
+background: url(../images/bg_user.png) no-repeat left top;
+float: left;
+margin-right: 40px;
+}
+p {
+display: block;
+ 
+}
+.message{
+	display: inline;
+	color: red;
+	width: 250px;
+	font-size: 13px;
+	height: 20px;
+	margin: 10px;
+	position: absolute;
+	left: 300px;
+	top: 365px;
+}
+.loginInfo input {
+width: 230px;
+height: 25px;
+line-height: 25px;
+ border:0;
+font-size: 14px;
+background: transparent;
+margin-left: 30px;
+}
+ 
+ 
+#Layer4 {
+	position:absolute;
+	width:77px;
+	height:38px;
+	z-index:3;
+	left: 499px;
+	top: 466px;
+}
+#Layer5 {
+	position:absolute;
+	width:200px;
+	height:115px;
+	z-index:4;
+}
+#Layer6 {
+	position:absolute;
+	width:295px;
+	height:83px;
+	z-index:5;
+	left: 341px;
+	top: 32px;
+}
+.STYLE1 {
+	font-size: 38px;
+	font-family: "ÐÂËÎÌå";
+	color: #FFFFFF;
+}

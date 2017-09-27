@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="css/vco.css" rel="stylesheet" type="text/css"/>
+
+<title>微信管理系统</title>
+<script src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+
+	function login() {
+		var u_name = $('#name').val();
+		var u_passwd = $('#passwd').val();
+		$.ajax({
+			url : '../wx/wxlogin',
+			type : 'post',
+			dataType : 'text',
+			data : {
+				u_name : u_name,
+				u_passwd : u_passwd
+			},
+			success : function(data) {
+				if(data=="success")
+					window.location.href = "../wx/main.html";
+				if(data=="fail"){
+					alert("请检查用户名和密码是否正确！");
+				}
+			},
+			error : function(data) {
+				alert("请检查用户名和密码是否正确！");
+			}
+		});
+	}
+</script>
+</head>
+<body>
+ <div id="header">
+ 	<div class="header_con044"><img src="images/044.png" width="392" height="55"></div>
+ </div>
+ <div id="content">
+ 	<div class="content_con01 content_con001">
+ 		<div class="content_con">
+ 			<div class="title">
+ 				账户登录
+ 			</div>
+ 			<div>
+ 			<input type="text" placeholder="用户名" class="name" id="name">
+ 			</div>
+ 			<div>
+ 			<input type="password" placeholder="密码" class="password" id="passwd">
+ 			
+ 			</div>
+ 			 <div class="register" onclick="login()">
+ 			 	登录
+ 			 </div>
+ 		</div>
+ 	</div>
+ </div>
+ <div id="footer">
+ 	<p class="footer_con">Copyright © 2013-2014，HuilibraryworldsoftwareCo.Ltd.苏ICP备13050915号</p>
+ </div>
+
+</body>
+</html>

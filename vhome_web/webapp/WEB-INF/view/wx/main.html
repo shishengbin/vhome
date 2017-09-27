@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>公众号管理</title>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/main.css" />
+		<link rel="stylesheet" href="css/contain01.css" />
+		<link rel="stylesheet" href="css/contain02.css" />
+		<link rel="stylesheet" href="css/contain03.css" />
+		<link rel="stylesheet" href="css/contain04.css" />
+		<link rel="stylesheet" href="css/contain05.css" />
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="js/ajaxfileupload.js"></script>
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 8]>
+		<style type="text/css">
+			#contain01 .pic {
+    background:none;
+    color: #3A96E6;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    width: 73px;
+    }
+    .imagesUpload {
+    height: 34px;
+    left: 0;
+    filter:alpha(opacity=100) 
+    position: absolute;
+    top: 0;
+    width: 73px;
+}
+
+		</style>
+		<script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
+		<script src="http://cdn.bootcss.com/respond.js/1.3.0/respond.min.js"></script>
+		<![endif]-->
+
+	</head>
+	<body>
+		<div class="main">
+
+			<!--head-->
+			<div class="header">
+				<div class="container ">
+					<div class="row " >
+						<div class="col-xs-6" >
+							<h2 id="head_name"></h2>
+						</div>
+
+						<div class="col-xs-6" >
+							<div style="float:right; margin-top:-10px;">
+								<div class="head_right" style="float:left;"><img id="head_img"/></div>
+								<div style="float:left; width:110px; height:90px; line-height:90px; text-align:center;" id="head_userName"></div>
+								<div  style="background:url(images/anniu.png); width:73px; height:34px;margin-top:30px; line-height:34px; text-align:center; color:#3a96e6; float:left;" onclick="qiut()">
+									退出
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--head_end-->
+
+			</div>
+			<!--container-->
+			<div class="container">
+				<div class="row">
+					<!--nav-->
+					<div class="col-xs-2 title">
+						<ul>
+							<li class="selected box" id="clicked">
+								<img src="images/z_2.png" id="img1">
+								<br>
+								公众帐号管理
+							</li>
+							<li class="box">
+								<img src="images/s_2.png" id="img2">
+								<br>
+								首次关注回复
+							</li>
+							<li class="box">
+								<img src="images/h_2.png" id="img3">
+								<br>
+								关键字回复
+							</li>
+							<li class="box">
+								<img src="images/sc_2.png" id="img4">
+								<br>
+								素材管理
+							</li>
+							<li class="box">
+								<img src="images/dy_2.png" id="">
+								<br>
+								自定义菜单
+							</li>
+						</ul>
+					</div>
+					<!--nav_end-->
+
+					<div class="lab">
+					
+						<div class="col-xs-10 " id="contain01" >
+							<!-- 首页开始 -->
+							<div class="home">
+								<div class="row title_2">
+								<div class="col-xs-4 "  >
+									<h3>公众帐号管理</h3>
+								</div>
+								<div class="col-xs-1">
+									<div class="add_home" ></div>
+								</div>
+								<div class="col-xs-7"></div>
+							</div>
+							<div class="row">
+								<table class="table table-bordered">
+									<thead >
+										<tr>
+											<td>产品类型</td>
+											<td>创建时间</td>
+											<td>到期时间</td>
+											<td style="width:200px;">接口地址</td>
+											<td>TOKEN</td>
+										</tr>
+
+									</thead>
+									<tbody>
+										<tr>
+											<td><img src="" width="102px" height="102px"  class="img-rounded headerpic" id="t_img"><div style="margin-top:5px;" id="t_name"></div></td>
+											<td> 2013-12-30</td>
+											<td>2015-01-28</td>
+											<td><span id="interface"></span></td>
+											<td><span id="token"></span></td>
+										</tr>
+									</tbody>
+
+								</table>
+
+
+							</div>
+
+
+							</div>
+							<!-- 首页结束 -->
+
+								<!--公众账号管理-->
+							<div style="display:none;" class="home02">
+							<div class="row title_2">
+								<div class="col-md-12 "  >
+									<h3>绑定公众帐号</h3>
+								</div>
+							</div>
+							<form>
+								<div class="row" style="margin-top:24px;">
+
+									<div class="col-xs-3" >
+
+										<p style="font-size:16px; color:#171717; text-align:right;" >
+											头像：
+										</p>
+
+									</div>
+									<div class="col-xs-3">
+										<img id="preview" name="picture" src="" width="102px" height="102px"  class="img-rounded headerpic">
+									</div>
+									<div class="col-xs-6" >
+										<div class="row" >
+											<div class="col-xl-12" style="color:#9B9B9B; font-size:14px; margin-bottom:10px;">
+												请跟微信公众平台头像保持一致
+											</div>
+										</div>
+										<div class="row" style="position:relative;">
+											<div class="col-xl-12 pic">
+												选择图片
+											</div>
+											<input type="file" class="imagesUpload" id="file" name="file" onchange="uploadingImgage(this)">
+										</div>
+									</div>
+								</div>
+
+								<div class="row" style="margin-top:24px;">
+									<div class="col-xs-3" >
+										<p style="font-size:16px; color:#171717; text-align:right;" >
+											公众号名称：
+										</p>
+
+									</div>
+
+									<div class="col-xs-5 "style="padding:0;" >
+										<input class="form-control " style="background-color: #E9F0F6;height: 35px;line-height: 35px; border:none; border-radius: 0; " id="ac_name" type="text" disabled>
+									</div>
+									<div class="col-xs-4"></div>
+								</div>
+
+								<div class="row" style="margin-top:24px;">
+									<div class="col-xs-3" >
+										<p style="font-size:16px; color:#171717; text-align:right;" >
+											公众号原始ID：
+										</p>
+
+									</div>
+									<div class="col-xs-5 "style="padding:0;" >
+										<input class="form-control " style="background-color: #E9F0F6;height: 35px;line-height: 35px; border:none; border-radius: 0; " id="ac_original_id" type="text"  disabled>
+									</div>
+									<div class="col-xs-4"></div>
+								</div>
+								<div class="row" style="margin-top:24px;">
+									<div class="col-xs-3" >
+										<p style="font-size:16px; color:#171717; text-align:right;" >
+											微信号：
+										</p>
+
+									</div>
+
+									<div class="col-xs-5 "style="padding:0;" >
+										<input class="form-control " style="background-color: #E9F0F6;height: 35px;line-height: 35px; border:none; border-radius: 0; " id="ac_wx_number" type="text"  disabled>
+									</div>
+									<div class="col-xs-4"></div>
+								</div>
+								<div class="row" style="margin-top:24px;">
+									<div class="col-xs-3" >
+										<p style="font-size:16px; color:#171717; text-align:right;" >
+											接口地址：
+										</p>
+
+									</div>
+
+									<div class="col-xs-5 "style="padding:0;" >
+										<input class="form-control " style="background-color: #E9F0F6;height: 35px;line-height: 35px; border:none; border-radius: 0; " id="ac_interface" type="text" disabled>
+									</div>
+									<div class="col-xs-4"></div>
+								</div>
+								<div class="row" style="margin-top:24px;">
+									<div class="col-xs-3" >
+										<p style="font-size:16px; color:#171717; text-align:right;" >
+											TOKEN：
+										</p>
+
+									</div>
+
+									<div class="col-xs-5 "style="padding:0;" >
+										<input class="form-control " style="background-color: #E9F0F6;height: 35px;line-height: 35px; border:none; border-radius: 0; " id="ac_token" type="text" disabled>
+									</div>
+									<div class="col-xs-4"></div>
+								</div>
+								<div class="row" style="margin-top:24px; ">
+									<div class="col-xs-3" >
+										<p style="font-size:16px; color:#171717; text-align:right;" >
+											地区：
+										</p>
+									</div>
+
+									<div class="col-xs-9" style="padding-left:0;">
+										<select class="form-control choose">
+											<option >请选择</option>
+										</select>
+										<select class="form-control choose">
+											<option>请选择</option>
+										</select>
+										<select class="form-control choose">
+											<option>请选择</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="row" style="margin-top:24px;">
+									<div class="col-xs-3" >
+										<p style="font-size:16px; color:#171717; text-align:right;" >
+											公众号邮箱：
+										</p>
+									</div>
+
+									<div class="col-xs-5 "style="padding:0;">
+										<input type="text" class="form-control" id="ac_email">
+									</div>
+									<div class="col-xs-4"></div>
+								</div>
+								<div class="row" style="margin-top:24px;">
+									<div class="col-xs-3" ></div>
+									<div class="col-xs-5 "style="padding:0; ">
+										<button type="button" class="btn btn-default" style="width:150px; margin-right:50px; margin-left:25px; font-size:16px; height:36px;">取消</button>
+										<button type="button" class="btn btn-primary" onclick="save_uinfo()" style="width:150px; height:36px;font-size:16px;">保存</button>
+									</div>
+									<div class="col-xs-4">
+
+									</div>
+								</div>
+							</form>
+						</div>
+						</div>
+						<!--公众账号管理_end-->
+
+						<!--首次关注回复-->
+						<div class="col-xs-10" id="contain02"  >
+							<div class="row title_2">
+								<div class="col-xs-12"  >
+									<h3>首次关注时自动回复内容</h3>
+								</div>
+							</div>
+							<form id="fsp_Form">
+								<div class="row" style="margin-top:24px;">
+									<div class="col-xs-3" >
+										<p style="font-size:16px; color:#171717; text-align:right;" >
+											回复类型：
+										</p>
+									</div>
+
+									<div class="col-xs-5 "style="padding:0;" >
+
+										<select class="form-control" id="replytype"  onchange="replyChange();">
+											<option value="0" selected="selected">文本</option>
+											<option value="1">单图文</option>
+											<option value="2">多图文</option>
+											<option value="3">语音</option>
+											<option value="4">视频</option>
+										</select>
+									</div>
+									<div class="col-xs-4"></div>
+								</div>
+
+								<div class="row" style="margin-top:24px;">
+									<div class="col-xs-3" >
+										<p style="font-size:16px; color:#171717; text-align:right;" >
+											回复内容：
+										</p>
+									</div>
+
+									<div class="col-xs-5 "style="padding:0;" >
+										<div class="edit_bq" style="display:block;">
+											<textarea class="form-control" rows="5" style="resize:none; font-size:14px;" id="textContent"></textarea>
+										</div>
+										<input type="hidden" id="fsp_msg_id" value="0">
+										<select id="content" class="form-control" style="display:none;">
+											<option value="0"></option>
+										</select>
+									</div>
+									<div class="col-xs-4"></div>
+								</div>
+
+								<div class="row" style="margin-top:24px;">
+									<div class="col-xs-3"></div>
+									<div class="col-xs-5 "style="padding:0; ">
+										<button type="button" class="btn btn-primary save" onclick="fsp_save()">保存</button>
+										
+									</div>
+									<div class="col-xs-4"></div>
+								</div>
+							</form>
+
+						</div>
+						<!--首次关注回复_end-->
+
+						<!--关键字回复-->
+						<div class="col-xs-10" id="contain03" style="display:none;">
+							<div class="row title_2" >
+								<div class="col-xs-5">
+									<h3>自定义关键字回复信息</h3>
+								</div>
+								<div class="col-xs-1">
+									<div class="del"></div>
+								</div>
+								<div class="col-xs-2">
+									<button type="button" class="btn btn-primary keyword" data-toggle="modal" data-target="#myModal">添加关键字回复</button>
+								
+									<!-- Modal -->
+									<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content" style="width:598px; height:501px; margin:50px auto;">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+														&times;
+													</button>
+													<h4 class="modal-title" id="myModalLabel">添加关键字回复</h4>
+												</div>
+												<div class="modal-body">
+													<div class="row" style="line-height:32px;">
+														<div class="col-xs-2" style="text-align:right; font-size:16px; padding:0; color:#171717;">
+															关键词：
+														</div>
+														<div class="col-xs-5">
+															<input class="form-control" id="focusedInput" type="text" >
+														</div>
+														<div class="col-xs-5" style="font-size:14px; color:#999;">
+															多个关键词请用英文逗号隔开
+														</div>
+													</div>
+													<div class="row" style="line-height:32px; margin-top:20px;">
+														<div class="col-xs-2"style="text-align:right; font-size:16px; padding:0;color:#171717;">
+															关键词类型：
+														</div>
+														<div class="col-xs-10" style="font-size:14px; color:#999;">
+															<input type="checkbox" id="kw_trg_type" checked="checked"/>
+															完全匹配，用户输入的和此关键词一样才会触发！
+														</div>
+													</div>
+													<div class="row" style="line-height:32px; margin-top:20px;">
+														<div class="col-xs-2" style="text-align:right; font-size:16px; padding:0;color:#171717;">
+															回复类型：
+														</div>
+														<div class="col-xs-5">
+															<select  class="form-control" id="select_resptype" onchange="change_type()">
+																<option value="0">文本</option>
+																<option value="1">单图文</option>
+																<option value="2">多图文</option>
+																<option value="3">语音</option>
+																<option value="4">视频</option>
+															</select>
+														</div>
+														<div class="col-xs-5" style="font-size:14px; color:#999;">
+															回复图文、语音及视频资源时，请先进入素材管理进行资源添加
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-2"></div>
+														<div class="col-xs-2" style="display:none" id="sal">
+															<select id="select_article_list" class="form-control" style="width:215px">
+															 <option value="-1">暂无内容</option>
+															</select>
+														</div>
+														<div class="col-xs-5" id="krc">
+															<textarea class="form-control" id="kw_resp_content" rows="5" style="resize:none; font-size:12px;"></textarea>
+														</div>
+													</div>
+
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">
+														取消
+													</button>
+													<button type="button" onclick="save_keyword()" class="btn btn-primary"  data-dismiss="modal">
+														保存
+													</button>
+												</div>
+											</div>
+											<!-- /.modal-content -->
+										</div>
+										<!-- /.modal-dialog -->
+									</div>
+									<!-- /.modal -->
+								</div>
+								<div class="col-xs-4"></div>
+
+							</div>
+							<div class="row">
+								<table class="table table-bordered" >
+									<thead id="kw_thread">
+										<tr>
+											<td>
+											<input type="checkbox" name="fuxuankuang" id="selectAll">
+											全选</td>
+											<td>关键词</td>
+											<td>回复类型</td>
+											<td>匹配类型</td>
+											<td>时间</td>
+											<td>操作</td>
+										</tr>
+									</thead>
+									<tbody id="kw_tbody">	
+									</tbody>
+									<!-- Modal -->
+									<div class="modal fade" id="myModal02" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+										<div class="modal-dialog">
+											<div class="modal-content" style="width:598px; height:515px; margin:0 auto;">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true" >&times;</button>
+													<h4 class="modal-title" id="myModalLabel">添加关键字回复</h4>
+												</div>
+												<div class="modal-body">
+													
+													<div class="row" style="line-height:32px;">
+														<div class="col-xs-11 col-xs-offset-1" style="color:red;">
+															关键词创建后不能编辑，只能删除重新添加，可以编辑回复类型以及内容。
+														</div>
+													</div>
+													<div class="row" style="line-height:32px; margin-top:20px;">
+														<div class="col-xs-2" style="text-align:right; font-size:16px; padding:0; color:#171717;">
+															关键词：
+														</div>
+														<div class="col-xs-5">
+															<input class="form-control" id="text_keyword_s" type="text" >
+															<input type="hidden" id="kwd_id_s">
+														</div>
+														<div class="col-xs-5" style="font-size:14px; color:#999;">
+															多个关键词请用英文逗号隔开
+														</div>
+													</div>
+													<div class="row" style="line-height:32px; margin-top:20px;">
+														<div class="col-xs-2"style="text-align:right; font-size:16px; padding:0;color:#171717;">
+															关键词类型：
+														</div>
+														<div class="col-xs-10" style="font-size:14px; color:#999;">
+															<input type="checkbox" checked="checked" id="check_kwtype_s"/>
+															完全匹配，用户输入的和此关键词一样才会触发！
+														</div>
+													</div>
+													<div class="row" style="line-height:32px; margin-top:20px;">
+														<div class="col-xs-2" style="text-align:right; font-size:16px; padding:0;color:#171717;">
+															回复类型：
+														</div>
+														<div class="col-xs-5">
+															<select class="form-control" id="select_resptype_s" onchange="change_type_s()">
+																<option value="0">文本</option>
+																<option value="1">单图文</option>
+																<option value="2">多图文</option>
+																<option value="3">语音</option>
+																<option value="4">视频</option>
+															</select>
+														</div>
+														<div class="col-xs-5" style="font-size:14px; color:#999;">
+															回复图文、语音及视频资源时，请先进入素材管理进行资源添加
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-2"></div>
+														<div class="col-xs-2" style="display:none" id="sals">
+															<select id="select_article_list_s" class="form-control" style="width:215px">
+															 <option value="-1">暂无内容</option></select>
+														</div>
+														<div class="col-xs-5" id="trss">
+															<textarea id="text_respcontent_s" class="form-control" rows="5" style="resize:none; font-size:12px;"></textarea>											
+														</div>
+													</div>
+
+												</div>
+												<div class="modal-footer">
+													<button type="button" onclick="clean_kw()" class="btn btn-default" data-dismiss="modal" >
+														取消
+													</button>
+													<button type="button" onclick="update_keyword()" class="btn btn-primary"  data-dismiss="modal">
+														保存
+													</button>
+												</div>
+											</div>
+											<!-- /.modal-content-->
+										</div>
+										<!-- /.modal-dialog -->
+									</div>
+									<!-- /.modal -->
+
+								</table>
+							</div>
+						</div>
+
+						<!--关键字回复_end-->
+
+						<!--素材管理-->
+						<div class="col-xs-10 " id="contain04" >
+							<div class="row title_2 image_text" >
+								<ul >
+									<li class="press01">
+										<span class="pic0001 pic001">单图文消息</span>
+									</li>
+									<li >
+										<span class="pic0001 pic02">多图文消息</span>
+									</li>
+									<li>
+										<span class="pic0001 pic03">语音消息</span>
+									</li>
+									<li>
+										<span class="pic0001 pic04">视频消息</span>
+									</li>
+								</ul>
+							</div>
+							<div>
+								<!--单图文-->
+								<div class="tuwen01 dantuwen">
+									<div id="dantuwen01" style=" margin: 0 auto;">
+										<div class="gezi" style="border:none;">
+										<button type="button" class="btn btn-primary" id="add01" onclick="addSinArt()">添加素材</button></div>
+										<!--开始-->
+									</div>
+									<!--结束-->
+
+									<!--跳转页面开始-->
+									<div class="add_dantuwen" id="dantuwen02" style="display:none;">
+										<div class="row">
+											<div class="col-xs-6">
+												<div class="modal-body-left">
+													<div class="modal-body-left-con">
+														<div class="modal-body-left-top">
+															<h4 id="single_title_target">标题</h4>
+														</div>
+														<img src="images/dan.png"  style="border:0;width:285px;height:155px" id="single_img_target"/>
+														<textarea style="font-size:14px; margin-top:10px; resize:none; border:none;" class="form-control" rows="3">摘要
+														</textarea>
+													</div>
+												</div>
+												<button type="button" class="btn btn-primary " id="save_sinArticle"  onclick="save_sinArticle()" style="margin-top:20px; width:304px;height:36px; font-size:16px;">
+													保存
+												</button>
+												<button type="button" class="btn btn-default " id="cancel" style="margin-top:20px;width:304px; height:36px; font-size:16px;">
+													取消
+												</button>
+
+											</div>
+											<div class="col-xs-1" >
+												<div class="modal-body-center"></div>
+
+											</div>
+											<div class="col-xs-5" style="padding-left:0;">
+												<form role="form">
+													<div class="add_dantuwen_right">
+														<div style="color:#a3a3a3;">
+															<h5 style="display:inline-block; color:#171717;">标题：</h5>
+															不能超过64个字
+														</div>
+
+														<input type="text" class="form-control"  placeholder="必填" id="single_title" >
+
+														<div style="color:#a3a3a3;">
+															<h5 style="display:inline-block; color:#171717;">封面：</h5>
+															必填上传一张图片
+														</div>
+														<div class="add_dantuwen_right_pic">
+															选择图片
+															<input type="file" id="file1" name="file1" onchange="uploadingDTWImgage(this)" class="add_dantuwen_right_pic01" >
+														</div>
+														<div style="color:#a3a3a3;">
+															建议大小（360*200）
+														</div>
+														<div style="color:#a3a3a3;">
+															<h5 style="display:inline-block; color:#171717;">摘要：</h5>
+															必填，不能超过120个字
+														</div>
+														<textarea id="sin_abstract" class="form-control" rows="3" style="resize:none;color:#171717" placeholder="必填"></textarea>
+														<h5>链接类型：</h5>
+														<select class="form-control" id="linkType" onchange="changeType()">
+															<option value="0" selected="selected">建站后台</option>
+															<option value="1" >链接地址</option>
+														</select>
+														<div id="iwei" >
+														<h4>跳转类型：</h4>		
+														<select class="form-control" id="modelName" onchange="changeModel()">
+															<option value="0" selected>企业形象</option>
+															<option value="1">文章类别</option>
+															<option value="2">产品类别</option> 
+															<option value="3">自主栏目</option> 
+														</select>
+														<h5>列表页链接：</h5>
+														<select class="form-control" id="ChildmodelName">			
+															<option value="-1" selected>公司简介</option>
+															<option value="-2">二维码</option>
+														</select>
+														</div>
+														<div id="link" style="display:none">
+															<h4>链接地址：</h4>
+															<input type="text" name="url" class="form-control">						
+														</div>
+														<input type="hidden" name="art_id" value="0">
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+									<!--跳转页面开始end-->
+								</div>
+								<!--单图文结束-->
+
+								<!--多图文-->
+								<div class="tuwen02 duotuwen">
+									<div id="duotuwen01">
+										<div class="hezi" style="border:none;">
+											<button type="button" class="btn btn-primary add01" id="add02">添加素材</button>			
+										</div>
+									</div>
+									
+									<!--跳转页面开始-->
+									<div class="add_dantuwen" id="duotuwen02" style="display:none;">
+										<div class="row">
+										<form id="muti_article">
+											<div class="col-xs-12">
+												<div class="add_duotuwen">
+													<div class="add_duotuwen001">
+														<div class="gezi_pic" data-toggle="popover" id="example">
+														<input type='hidden' id='muti_presrc_0' name='muti_picurl'>
+															<img src="images/dan.png" id="muti_pre_0" width="280px" height="160px"/>
+															<div class="zhezhao">
+																标题
+															</div>
+														</div>
+														<dl data-toggle="popover" id="example1" onmouseover="xian(1)" onmouseout="yin(1)">
+															<dt>
+																标题
+															</dt>
+															<dd>
+															<input type='hidden' id='muti_presrc_1' name='muti_picurl'>
+																<img src="images/duo.png" id="muti_pre_1" width="44px" height="44px" style="border:1px solid #b5b2b3"/>
+															</dd>
+														</dl>			
+													</div>
+													<div class="add_duotuwen_last">
+														<a href="#"><img src="images/add_con.png">添加</a>
+													</div>
+												</div>
+												<button type="button" class="btn btn-primary" onclick="save_mutiArticle()" style="margin-top:20px; width:304px; height:36px;">
+													保存
+												</button>
+												<br/>
+												<button type="button" class="btn btn-default" id="cancel_mutiArticle" style="margin-top:20px;width:304px;height:36px;">
+													取消
+												</button>
+											</div>
+										</form>
+										</div>
+									</div>
+									<!--跳转页面结束-->
+								</div>
+								<!--多图文结束-->
+
+								<!--语音消息-->
+								<div class="voice">
+									<div class="row">
+										<div class="col-xs-1">
+											<div class="voice_del"></div>
+										</div>
+										<div class="col-xs-2">
+											<div class="voice_s">
+												上传语音
+												<input type="file" class="voice_sf"/>
+											</div>
+
+										</div>
+										<div class="col-xs-9">
+											<p style="height:53px; line-height:53px;">
+												<b style="color:#eb0000; font-size:20px; line-height:61px;height:61px; width:10px; display:block; float:left">*</b>注意：语音大小限制：5M，长度限制：60S，支持格式：mp3，amr 最多上传3个文件
+											</p>
+										</div>
+									</div>
+									<div class="row">
+										<table class="table table-bordered" >
+											<thead >
+												<tr>
+													<td>
+													<input type="checkbox" name="fuxuankuang" id="selectAll02">
+													全选</td>
+													<td>文件名称</td>
+													<td>大小</td>
+													<td>操作</td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>
+													<input type="checkbox" name="voice01">
+													</td>
+													<td>书店</td>
+													<td>34</td>
+													<td></span><span class="del_s"></span></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<!--语音消息结束-->
+
+								<!--视频消息-->
+
+								<div class="video" >
+									<div class="row">
+										<div class="col-xs-1">
+											<div class="voice_del"></div>
+										</div>
+										<div class="col-xs-2">
+											<div class="voice_s">
+												上传视频
+												<input type="file" class="voice_sf"/>
+											</div>
+
+										</div>
+										<div class="col-xs-9">
+											<p style="height:53px; line-height:53px;">
+												<b style="color:#eb0000; font-size:20px; line-height:61px;height:61px; width:10px; display:block; float:left">*</b>注意：大小不超过10M, 格式: mp4 最多上传3个文件
+											</p>
+										</div>
+									</div>
+									<div class="row">
+										<table class="table table-bordered" >
+											<thead >
+												<tr>
+													<td>
+													<input type="checkbox" name="fuxuankuang" id="selectAll01">
+													全选</td>
+													<td>文件名称</td>
+													<td>大小</td>
+													<td>操作</td>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>
+													<input type="checkbox" name="video01">
+													</td>
+													<td>书店</td>
+													<td>34</td>
+													<td><span class="del_s"></span></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<!--语音消息结束-->
+							</div>
+						</div>
+						<!--素材管理-end-->
+
+						<!--自定义菜单-->
+						<div class="col-xs-10 " id="contain05">
+							<div class="row title_20 user_defined" >
+
+								<ul >
+									<li class="press01">
+										<span class="pic0002 pic0010">授权设置</span>
+									</li>
+									<li >
+										<span class="pic0002 pic002">菜单设置</span>
+									</li>
+
+								</ul>
+							</div>
+
+							<div>
+
+								<!--授权设置-->
+								<div class="accredit" >
+									<div class="row">
+										<div class="accredit_con">
+											<p>
+												1. 要在微信公众平台“开发模式”下使用自定义菜单，首先要在公众平台申请自定义菜单使用的AppId
+												和AppSecret，然后填入下边表单。
+											</p>
+											<p>
+												2. 提交完id和密钥后，可以在【菜单设置】中设置各个菜单项，然后进行发布，您的微信公众号便支持
+												自定义菜单了。
+											</p>
+											<p>
+												3. 公众平台规定，菜单发布24小时后生效。如果为新增粉丝，则可马上看到菜单。
+											</p>
+										</div>
+										<div class="row">
+											<div class="col-xs-2"style="color: #171717; text-align:right; font-size:16px; padding-top:7px;">
+												应用ID：
+											</div>
+											<div class="col-xs-4">
+												<input class="form-control" id="focusedInput" type="text" >
+											</div>
+											<div class="col-xs-6" style="color: #999; font-size:14px; padding-top:7px;">
+												<b style="color:#eb0000; font-size:20px; line-height:29px;height:29px; width:10px; display:block; float:left">*</b> 公众平台申请到App ID
+											</div>
+										</div>
+
+										<div class="row" style="margin-top:24px;">
+											<div class="col-xs-2"style="color: #171717; text-align:right; font-size:16px; padding-top:7px;">
+												应用密匙：
+											</div>
+											<div class="col-xs-4">
+												<input class="form-control" id="focusedInput" type="text" >
+											</div>
+											<div class="col-xs-6" style="color: #999; font-size:14px; padding-top:7px;">
+												<b style="color:#eb0000; font-size:20px; line-height:29px;height:29px; width:10px; display:block; float:left">*</b> 公众平台申请到App Secret
+											</div>
+										</div>
+										<div class="row" style="margin-top:24px;">
+											<div class="col-xs-2"></div>
+											<div class="col-xs-4">
+												<button type="button save" class="btn btn-primary save">保存</button>
+												
+											</div>
+											<div class="col-xs-6"></div>
+
+										</div>
+									</div>
+								</div>
+
+								<!-- 授权设置结束 -->
+
+								<!-- 菜单设置 -->
+								<div class="menu">
+									<div class="row">
+
+										<div style="padding:20px; ">
+											<div style="width:10px; height:240px; float:left">
+												<b style="color:#eb0000; font-size:20px; line-height:29px;height:29px; width:10px; display:block; float:left">*</b>
+											</div>
+											<div style="color:#999;font-size:14px;">
+												<p>
+													1.主菜单至少开启1个，最多只能开启3个；2级子菜单最多开启5个，可不开启
+												</p>
+												<p>
+													2.如果尚未在授权设置中填写在公众平台申请自定义菜单使用的“AppId”和“AppSecret”，只能保存自定义菜单设置，不能生成自定义菜单！
+												</p>
+												<p>
+													注：自定义菜单使用的“AppId”和“AppSecret”在微信公众平台-功能-高级功能-开发模式页面获取
+												</p>
+												<p>
+													3.生成自定义菜单,必须在已经保存的基础上进行,临时添加或勾选启用后点击生成是无效的! 第一步必须先修改保存状态！第二步点击生成!
+												</p>
+												<p>
+													4.当您为自定义菜单填写链接地址时必须以"http://"开头
+												</p>
+												<p>
+													5.当您为自定义菜单填写关键字时只能填写一个关键字
+												</p>
+												<p>
+													6.添加主菜单时，默认状态为不启用状态；添加子菜单时，默认状态为启用状态，生成菜单时请注意菜单启用状态的勾选
+												</p>
+												<p>
+													7.添加菜单时显示顺序值默认都为0，当都为0时按添加时间排序，新添加的排在最后；当更改数字时（>=0）,按数字大小排序，数字越大越往后排
+												</p>
+											</div>
+										</div>
+										<div style="padding:20px; padding-top:0;">
+											<div class="main_table">
+												<input type="hidden" id="menusize" name="menusize" value="0"/>
+												<button type="button" class="btn btn-primary btn_blue" style="width:200px; height:36px; font-size:16px;" onclick="addMenu('',0,0);">
+													添加菜单
+												</button>
+											</div>
+										</div>
+									</div>
+									<form id="save_menu_form">
+									<div class="row">
+										<table class="table table-bordered table-hover">
+											<thead class="table-striped" style="color:#747474; ">
+												<tr>
+													<td>显示顺序</td>
+													<td>主菜单名称</td>
+													<td>触发关键词或链接地址</td>
+													<td>启用</td>
+													<td>操作</td>
+												</tr>
+												<tr id="nonum">
+													<td colspan="5">暂无数据！</td>
+												</tr>
+											</thead>
+											<tbody style="color:#999;" id="addopt">
+
+											</tbody>
+										</table>
+									</div>
+									<div class="row">
+										<div class="col-xs-3"></div>
+										<div class="col-xs-3">
+											<button type="button" onclick="save_menu()" class="btn btn-success " style="width:200px; height:36px; font-size:16px;">
+												保存
+											</button>
+										</div>
+										<div class="col-xs-3">
+											<button type="button" onclick="create_menu()" class="btn btn-primary " style="width:200px;height:36px; font-size:16px;">
+												生成菜单
+											</button>
+										
+										</div>
+										<div class="col-xs-3"></div>
+									</div>
+									<div id="menuNum"></div>
+								</form>
+								</div>
+								<!-- 菜单设置结束 -->
+								
+							</div>
+
+						</div>
+						<!--自定义菜单结束-->
+					</div>
+
+				</div>
+			</div>
+			<!--container_end-->
+		<input type="hidden" name="userid" id="userid">
+		</div>
+		
+		<script src="js/account.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/nav.js"></script>
+		<script src="js/user_defined.js"></script>
+		<script src="js/imgupload.js"></script>
+		<script src="js/dantuwenImgUp.js"></script>
+		<script src="js/duotuwenImgUp.js"></script>
+		<script src="js/menu.js"></script>
+		<script src="js/createmenu.js"></script>
+		<script src="js/keywords.js"></script>
+		<script src="js/msg.js"></script>
+		<script src="js/firstResp.js"></script>
+		<script src="js/loadClass.js"></script>
+		<script type="text/javascript">		
+		
+		function changeType(){
+		 	 if($('#linkType').val()==0){
+			 	 $('#iwei').show();
+			 	 $('#link').hide();
+		 	 }
+		 	 else{
+		 		 $('#iwei').hide();
+		 		 $('#link').show();
+		 	 }
+		}
+		
+		function change_muti_Type(){
+		 	 if($('#muti_type').val()==0){
+			 	 $('#muti_iwei').show();
+			 	 $('#muti_link').hide();
+		 	 }
+		 	 else{
+		 		 $('#muti_iwei').hide();
+		 		 $('#muti_link').show();
+		 	 }
+		}
+		
+		function changeModel(){	
+			$("#ChildmodelName").html("");
+			if($("#modelName").val()==0){
+				$("#ChildmodelName").append('<option value="-1" selected>公司简介</option><option value="-2" selected>二维码</option>');
+			}
+			if($("#modelName").val()==1){
+				loadNewsOneClass(0);
+			}
+			if($("#modelName").val()==2){
+				loadProductOneClass(0);
+			}
+			if($("#modelName").val()==3){
+				loadSelfModel(0);
+			}
+		}
+		
+		function changeMutiModel(co){
+			$("#muti_ChildmodelName_"+co).html("");
+			if($("#muti_modelName_"+co).val()==0){
+				$("#muti_ChildmodelName_"+co).append('<option value="-1" selected>公司简介</option><option value="-2" selected>二维码</option>');
+			}
+			if($("#muti_modelName_"+co).val()==1){
+				loadNewsOneClass(1,co);
+			}
+			if($("#muti_modelName_"+co).val()==2){
+				loadProductOneClass(1,co);
+			}
+			if($("#muti_modelName_"+co).val()==3){
+				loadSelfModel(1,co);
+			}
+		}
+		
+		//添加关键词窗口的类型选择框
+		function change_type(){
+			if($('#select_resptype').val()==0){
+			 	 $('#krc').show();
+			 	 $('#sal').hide();
+		 	 }
+			if($('#select_resptype').val()==1){
+		 		 $('#krc').hide();
+		 		 $('#sal').show();
+		 		 
+			 		$.ajax({
+						url:'../wx/findSinArticle',
+						type:'post',
+						data:{'kwd_id':0},
+						dataType:'json',
+						success:function(data){
+							$('#select_article_list').html('');
+							$.each(data,function(i,article){
+								$('#select_article_list').append('<option value="'+article.article_id+'">' + article.Title + '</option>');
+							});
+						},
+						error:function(data){
+							alert("加载单图文列表失败！");
+						}
+					});
+		 	 }
+			if($('#select_resptype').val()==2){
+				 $('#krc').hide();
+		 		 $('#sal').show();
+				$.ajax({
+					url:'../wx/findMutiArticle',
+					dataType:'json',
+					data:{'kwd_id':0},
+					type:'post',
+					success:function(data){
+						$('#select_article_list').html('');
+						$.each(data,function(i,bigPic){
+							if(bigPic.article_id==bigPic.mutiArticle_id){
+								$('#select_article_list').append('<option value="'+bigPic.article_id+'">' + bigPic.Title + '</option>');
+							}
+						});
+					}
+				});
+			}
+		} 
+		
+		function change_type_s(){
+			var id=$('#select_resptype_s').val();
+			if(id==0){
+			 	 $('#trss').show();
+			 	 $('#sals').hide();
+			 	 $('#select_article_list_s').html('');
+			 	 $('#select_article_list_s').append("<option value='-1'>暂无内容</option>");
+			     $('#select_article_list_s').val(-1);
+		 	 }
+		 	 if(id==1){
+		 		 $('#trss').hide();
+		 		 $('#sals').show();
+		 			$.ajax({
+					url:'../wx/findSinArticle',
+					type:'post',
+					data:{'kwd_id':0},
+					dataType:'json',
+					success:function(data){
+						$('#select_article_list_s').html('');
+						$.each(data,function(i,article){
+							$('#select_article_list_s').append('<option value="'+article.article_id+'">' + article.Title + '</option>');
+						});
+					},
+					error:function(data){
+						alert("加载单图文列表失败！");
+					}
+				});
+		 	 }
+		 	 if(id==2){
+		 		 $('#trss').hide();
+		 		 $('#sals').show();
+				$.ajax({
+					url:'../wx/findMutiArticle',
+					dataType:'json',
+					data:{'kwd_id':0},
+					type:'post',
+					success:function(data){
+						$('#select_article_list_s').html('');
+						$.each(data,function(i,bigPic){
+							if(bigPic.article_id==bigPic.mutiArticle_id){
+								$('#select_article_list_s').append('<option value="'+bigPic.article_id+'">' + bigPic.Title + '</option>');
+							}
+						});
+					}
+				});
+		 	 }
+		} 
+	
+			function addSinArt(){
+				$("#dantuwen01").hide();
+				$("#dantuwen02").show();
+			}
+			function save_sinArticle(){		
+				var userid=$("#userid").val();
+				var title=$('#single_title').val();
+				var picurl=$('#single_img_target').attr('src');
+				var description=$('#sin_abstract').val();	
+				var url=$("input[name='url']").val();
+				var artice_id=$("input[name='art_id']").val();
+				var classid=$("#ChildmodelName").val();
+				if($("#linkType").val()==0){
+					
+					if($("#modelName").val()==0){
+						if($("#ChildmodelName").val()==-1)
+							url="http://115.29.113.36/vcd/ws/firminfo?id="+userid;
+						if($("#ChildmodelName").val()==-2)
+							url="http://115.29.113.36/vcd/ws/appShowPicture?id="+userid;
+					}
+					if($("#modelName").val()==1){
+						url="http://115.29.113.36/vcd/ws/app/newsClass?classid="+classid;
+					}
+					if($("#modelName").val()==2){
+						url="http://115.29.113.36/vcd/ws/wxpages/product_list.html?class1id="+classid;
+					}
+					if($("#modelName").val()==3){
+						url="http://115.29.113.36/vcd/ws/getSMContent?id="+classid;
+					}
+				}
+				$.ajax({
+					url:'../wx/saveSinArticle',
+					type:'post',
+					dataType:'text',
+					data:{
+						'title':title,'picurl':picurl,'description':description,'url':url,'article_id':artice_id
+					},
+					success:function(data){
+						$("#dantuwen02").hide();
+						$("#dantuwen01").show();
+						dongdong();
+						$('#single_title').val('');
+						$('#single_img_target').attr('src','images/dan.png');
+						$('#sin_abstract').val('');	
+						$("input[name='url']").val('');		
+						$("input[name='art_id']").val(0);
+						if(data>0){
+							createDiv(title,picurl,description,url,artice_id,data);
+						}if(data==(-1)){
+							$("input[value='"+artice_id+"']").parent().parent().parent().remove();
+							createDiv(title,picurl,description,url,artice_id,data);
+							dongdong();
+						}if(data==(-2)){					
+							alert("操作失败！请重新操作！");
+						}
+					},
+					error:function(data){
+						alert("保存失败！");
+					}
+				});
+			}
+
+			function createDiv(title,picurl,description,url,artice_id,data){
+				if(data>0)
+					var s='<div class="gezi"><div class="gezi_title"><h4>'+title+'</h4><p style="margin:0; font-size:14px; color:#7a7a7a"></p></div>'+
+					'<div class="gezi_pic"><img src="'+picurl+'" style="border:0;width:285px;height:155px"/></div><div class="gezi_con"><p>'+description+'</p></div>'+
+					'<div class="gezi_last"><span class="add09_a_img"></span><span class="del09_d_img"><input type="hidden" name="article_id" value='+data+'><input type="hidden" name="article_url" value='+url+'></span></div></div></div>';
+				if(data==(-1))
+					var s='<div class="gezi"><div class="gezi_title"><h4>'+title+'</h4><p style="margin:0; font-size:14px; color:#7a7a7a"></p></div>'+
+					'<div class="gezi_pic"><img src="'+picurl+'" style="border:0;width:285px;height:155px"/></div><div class="gezi_con"><p>'+description+'</p></div>'+
+					'<div class="gezi_last"><span class="add09_a_img"></span><span class="del09_d_img"><input type="hidden" name="article_id" value='+artice_id+'><input type="hidden" name="article_url" value='+url+'></span></div></div></div>';
+									
+				$('.gezi').last().after(s);
+				$(".del09_d_img").click(function(){
+					var article_id=$(this).children("input[name='article_id']").val();
+					 if (confirm("确认要删除么？")) {
+						 deleteSinArticle(article_id);
+						 $(this).parent().parent().remove();
+					 }else{
+						 return false;
+					 }								
+				});
+				$(".add09_a_img").click(function(){
+					$("#dantuwen01").hide();
+					$("#dantuwen02").show();
+					$('#single_title').val($(this).parent().parent().children('div').children('h4').html());
+					$('#single_img_target').attr('src',$(this).parent().parent().children('div').next().children('img').attr('src'));
+					$('#sin_abstract').val($(this).parent().parent().children('div').next().next().children('p').html());	
+					$("input[name='url']").val($(this).next().children("input[name='article_url']").val());	
+					$("input[name='art_id']").val($(this).next().children("input[name='article_id']").val());
+					
+				});
+				dongdong();
+			}
+			
+			$("#cancel").click(function() {
+				$("#dantuwen02").hide();
+				$("#dantuwen01").show();
+				$('#single_title').val('');
+				$('#single_img_target').attr('src','images/dan.png');
+				$('#sin_abstract').val('');	
+				$("input[name='url']").val('');		
+				$("input[name='art_id']").val(0);
+				dongdong();
+			});
+
+			
+			$("#add02").click(function() {
+				$("#duotuwen01").hide();
+				$("#duotuwen02").show();
+			});
+			
+			function save_mutiArticle(){
+				$("#duotuwen02").hide();
+				$("#duotuwen01").show();
+				
+				$.ajax({
+					url:"../wx/saveMutiArticle",
+					data:$("#muti_article").serialize(),
+					type:"post",
+					success:function(data){
+						findMutiArticle();
+					},
+					error:function(data){
+						
+					}
+				});
+				pubuliu();
+			}
+			
+			$("#cancel_mutiArticle").click(function() {
+				$("#duotuwen02").hide();
+				$("#duotuwen01").show();
+				pubuliu();
+			});
+			
+			$(".add_home").click(function(){
+				$(".home").hide();
+				$(".home02").show();
+			});
+			
+			var co = 1;
+			$(".add_duotuwen_last").click(function add() {
+				co = co + 1;
+				var con = "<dl data-toggle='popover' id='example" + co + "'  style='position:relative' onclick='xianshi(" + co + ")'  onmouseover='xian(" + co + ")' onmouseout='yin(" + co + ")')>" + "<dt>标题</dt>" + "<dd><input type='hidden' id='muti_presrc_"+co+"' name='muti_picurl'><img src='images/duo.png' id='muti_pre_"+co+"' width='44px' height='44px' style='border:1px solid #b5b2b3'/></dd>" + "<div class='gezi_last exa' id='update_p" + co + "' >" + "<span class='add09_a_img' id='bb'></span><span class='del09_d_img' id='cc' onclick='delete_d("+ co +")'> </span></div></dl>"
+				$(".add_duotuwen001").append(con);
+			});
+			
+ 			function setOption(co){
+				var option = {
+						html : true,
+						content : '<div>' + '<div style="color:#a3a3a3;">' + '<h5 style="display:inline-block; color:#171717;">标题：</h5>' + '不能超过64个字 </div>' + '<input type="text" class="form-control" name="muti_title" placeholder="必填">' + '<div style="color:#a3a3a3;">' + '<h5 style="display:inline-block; color:#171717;">封面：</h5>' + '必填上传一张图片 </div>' + '<div class="add_dantuwen_right_pic">选择图片' + '<input type="file" id="muti_'+co+'" name="muti_'+co+'" onchange="uploadingMutiImgage(this)" class="add_dantuwen_right_pic01">' + '</div>' + '<div style="color:#a3a3a3;">建议大小（360*200）</div>' + '<div style="color:#a3a3a3;">' + '<h5>链接类型：</h5>' + '<select class="form-control" id="muti_type" name="muti_type" onclick="change_muti_Type()">' + '<option value="0" selected>建站后台</option>' + '<option value="1">链接</option>' + '</select>' + '<div id="muti_iwei"><h4>跳转类型：</h4>' + ' <select class="form-control" id="muti_modelName_'+co+'" name="muti_modelName" onchange="changeMutiModel('+co+')">' + '<option value="0" selected>企业形象</option>' + '<option value="1">文章类别</option>' + '<option value="2">产品类别</option><option value="3">自主栏目</option>' + ' </select> ' + ' <h5>列表页链接：</h5>' + '<select class="form-control" id="muti_ChildmodelName_'+co+'" name="muti_ChildmodelName">' + ' <option value="-1" selected>公司简介</option>' + '<option value="-2">二维码</option>' + '</select>' + ' <div class="last_del">' + '</div></div><div id="muti_link"  style="display:none"></h4>链接地址</h4><div><input type="text" class="form-control" name="muti_url"></div></div>' + ' </div></div>',
+						show : 500
+					}
+				return option;
+			}
+			
+			$("#example").popover(setOption(0));	
+			$("#example1").popover(setOption(1));
+			$("#example").on('show.bs.popover', function() {
+				$("#example1").popover('hide');
+				$(".popover").css("display","none");
+				$(".in").css("display","block");
+			})
+			
+			$("#example1").on('show.bs.popover', function() {
+				$("#example").popover('hide');
+				$("#example1").siblings().popover('hide');
+				$(".popover").css("display","none");
+				$(".in").css("display","block");
+				
+			})
+			function xian(co) {
+				$("#update_p" + co + "").css("display", "block");
+			}
+
+			function yin(co) {
+				$("#update_p" + co + "").css("display", "none");
+			}
+           function delete_d(co){
+           	   $("#example" + co + "").remove();
+           }
+			function xianshi(co) {
+				$("#example" + co + "").popover(setOption(co));
+				$("#example" + co + "").on('show.bs.popover', function() {
+					$("#example" + co + "").siblings().popover('hide');
+					$("#example").siblings().popover('hide');
+					
+					$(".popover").css("display","none");
+					$(".in").css("display","block");
+				})
+				$("#example").on('show.bs.popover', function() {
+					$("#example1").popover('hide');
+					$("#example" + co + "").siblings().popover('hide');
+					$(".popover").css("display","none");
+					$(".in").css("display","block");
+				})
+			}
+			
+			//退出按钮
+           function qiut(){
+        	   window.location.href="../wx/login.html";
+           }
+		</script>
+	</body>
+</html>

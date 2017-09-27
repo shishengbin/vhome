@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.wx.ArticleDao">
+	<insert id="saveArticle" parameterType="map">
+		insert into wx_article(content,msg_id) values(#{content},#{msg_id})
+	</insert>
+	
+	<insert id="saveSinArticle" parameterType="Article" useGeneratedKeys="true" keyProperty="article_id">
+		insert into wx_article(title,description,picurl,url) values(#{Title},#{Description},#{PicUrl},#{Url})
+	</insert>
+	
+	<insert id="saveSinRelArticle" parameterType="map">
+		insert into wx_rel_article_user(article_id,account_id,mutiarticle_id) values(#{article_id},#{account_id},#{mutiarticle_id})
+	</insert>
+	
+	<update id="updateArticle" parameterType="map">
+		update wx_article
+		<set>
+			<if test="content!=null and content!=''">content=#{content}</if>
+		</set>
+		where msg_id=#{msg_id}
+	</update>
+	
+	<select id="findSinArticle" parameterType="map" resultType="com.sy.modules.entity.wx.resp.Article">
+		select wa.article_id,title,description,picurl,url from wx_article wa left join wx_rel_article_user wrau 
+		on wa.article_id=wrau.article_id 
+		<where>
+			<if test="user_id!=null and user_id!=''">wrau.account_id=#{user_id}</if>
+			<if test="kwd_id==0">and wa.kw_id=0</if>
+			and wrau.mutiarticle_id=0
+		</where>
+	</select>
+	
+	<select id="count" parameterType="long" resultType="int">
+		select count(*) from wx_article where kw_id=#{kwd_id} and ISNULL(title);
+	</select>
+	
+	<delete id="deleteSinArticle" parameterType="map">
+		delete from wx_article
+		<where>
+			<if test="article_id!=null and article_id!=''">article_id=#{article_id}</if>
+			<if test="kwd_id!=null and kwd_id!=''">kw_id=#{kwd_id}</if>
+		</where>
+	</delete>
+	<delete id="deleteSinRelArticle" parameterType="long">
+		delete from wx_rel_article_user where article_id=#{article_id};
+	</delete>
+	
+	<update id="updateSinArticle" parameterType="Article">
+		update wx_article set title=#{Title},description=#{Description},picurl=#{PicUrl},url=#{Url} 
+		where article_id=#{article_id};
+	</update>
+	
+	<update id="updateArticleForRelID" parameterType="map">
+		update wx_article 
+		<set>
+			<if test="msg_id!=null and msg_id!=''">msg_id=#{msg_id},</if>
+			<if test="kwd_id!=null and kwd_id!=''">kw_id=#{kwd_id}</if>
+		</set>
+		where article_id=#{article_id};
+	</update>
+	<update id="updateMutiArticleForRelID" parameterType="map">
+		update wx_article wa LEFT JOIN wx_rel_article_user wrau on wa.article_id=wrau.article_id 
+		<set>
+			<if test="msg_id!=null and msg_id!=''">wa.msg_id=#{msg_id},</if>
+			<if test="kwd_id!=null and kwd_id!=''">wa.kw_id=#{kwd_id}</if>
+		</set>
+		 where wrau.mutiarticle_id=#{article_id};
+	</update>
+	
+	<update id="updataArticleMsgId" parameterType="map">
+		update wx_article 
+		<set>
+			<if test="msg_id!=null and msg_id!=''">msg_id=0</if>
+			<if test="kwd_id!=null and kwd_id!=''">kw_id=0</if>
+		</set>
+		<where>
+			<if test="msg_id!=null and msg_id!=''">msg_id=#{msg_id}</if>
+			<if test="kwd_id!=null and kwd_id!=''">kw_id=#{kwd_id}</if>
+		</where>
+	</update>
+	
+	<insert id="saveMutiArticle" parameterType="Article" useGeneratedKeys="true" keyProperty="article_id">
+		insert into wx_article(title,picurl,url) values(#{Title},#{PicUrl},#{Url});
+	</insert>
+	
+	<select id="findMutiArticle" parameterType="map" resultType="com.sy.modules.entity.wx.resp.Article">
+		select wa.article_id,title,picurl,url,mutiArticle_id from wx_article wa left join wx_rel_article_user wrau 
+		on wa.article_id=wrau.article_id
+		<where>
+			<if test="user_id!=null and user_id!=''">wrau.account_id=#{user_id}</if>
+			<if test="kwd_id==0">and wa.kw_id=0</if>
+			<if test="mutiarticle_id==null">and wrau.mutiarticle_id!=0</if>
+			<if test="mutiarticle_id!=null and mutiarticle_id!=''">and wrau.mutiarticle_id=#{mutiarticle_id}</if>
+		</where>
+	</select>
+	
+	
+	<!-- ////////////////////////////////////////////////////////////////////////////////////////////// -->
+	
+
+	
+</mapper>

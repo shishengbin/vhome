@@ -1,0 +1,162 @@
+@CHARSET "UTF-8";
+
+table tr td,th {
+	text-align: center;
+}
+
+.genduo {
+	font-weight: normal;
+	margin-top: 5px;
+	color: #698B69;
+	cursor: pointer;
+	text-decoration: none;
+	margin-left: 80%;
+}
+
+.newsContent {
+	width: 90%;
+	margin: 10px;
+}
+
+.newsContent tr td {
+	padding: 10px;
+	border-bottom: 1px dotted #B7B7B7;
+}
+
+.newsContent tr td a {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.addcp {
+	width: 100%;
+	height: 80%;
+}
+
+.addcp tr td {
+	padding: 8px;
+}
+
+select {
+	width: 95px;
+}
+
+.show_news {
+	border: 1px solid #FFFAFA;
+	width: 60%;
+	margin-left: 100px;
+	background-color: #FCFCFC;
+	overflow: scroll;
+}
+
+.spiltline {
+	border: none;
+	border-bottom: 1px dotted #BFCAE6;
+	display: block;
+	width: 80%;
+	height: 1px;
+	margin: auto;
+}
+
+.sortfont {
+	color: #945305;
+	font-family: '宋体';
+	font-size: 13px;
+}
+
+
+
+dl dd {
+	text-align: left;
+}
+
+dl dd select,div select {
+	margin-left: 20px;
+}
+
+.picspan {
+	width: 200px;
+	height: 200px;
+	border: 1px #C4C4C4 solid;
+	display: block;
+	float: left;
+	margin: 5px;
+}
+
+.picspan .picontent {
+	width: 100%;
+	height: 175px;
+	display: block;
+}
+
+.picspan #uploadPic1 {
+	width: 65px;
+	margin-left: 20px;
+}
+
+.replyBorder {
+	overflow: auto;
+	width: 90%;
+	height: 260px;
+	border: 0px dotted #635BA2;
+	margin: auto;
+	background-color: #FFFFFF"
+}
+
+.dfkleft {
+	width: 48%;
+	margin: 5px;
+	margin-left: 15px;
+	float: left;
+	min-height: 100px;
+}
+
+.dfkreight {
+	width: 49%;
+	float: left;
+	min-height: 100px;
+	margin-top: 5px;
+	margin-left: 0px;
+}
+
+.dfk {
+	margin: 5px;
+}
+
+.dfk table tr td {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.dfk .jj {
+	vertical-align: top;
+	padding: 5px;
+	text-align: left;
+}
+
+.dfk em {
+	height: 200px;
+	width: 1px;
+	border: 1px;
+	background-color: #B7B7B7;
+	display: block;
+}
+
+.b {
+	background-color: #ffffff;
+}
+
+.dfk .tqybg {
+	background-image: url('../images/abc.png');
+	width: 100%;
+	height: 121px;
+	margin-top: 88px;
+}
+
+.messageBg {
+	width: 90%;
+	border: none;
+	margin: auto;
+	border-bottom: 1px dotted #635BA2;
+	margin-top: 8px;
+}

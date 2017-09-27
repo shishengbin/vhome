@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsNewsDao">
+	<!-- 新闻封装结果集 -->
+	<resultMap type="WsNews" id="newsResult">
+		<id column="news_id" property="id" />
+		<result column="news_title" property="newsTitle" />
+		<result column="news_content" property="newsContent" />
+		<result column="news_author" property="newsAuthor" />
+		<result column="news_remark" property="newsRemark" />
+		<result column="create_name" property="createName" />
+		<result column="create_time" property="createTime" />
+		<result column="update_name" property="updateName" />
+		<result column="update_time" property="updateTime" />
+		<!-- 新闻类型 -->
+		<collection property="newsClass" ofType="WsNewsClass" column="news_cat_id" select="newsIdQueryNewsClass"></collection>
+	</resultMap>
+	<!-- 根据新闻id查找新闻分类 -->
+	<select id="newsIdQueryNewsClass" parameterType="Long" resultType="WsNewsClass">
+	    select 
+	    n.news_cat_id as id,
+	    n.news_cat_remark as remark
+	    from ws_news_cat n where n.news_cat_id = #{news_cat_id};
+	</select>
+	<!-- 分页查询新闻信息 -->
+	<select id="findAllNewsByPage" parameterType="Map" resultMap="newsResult">
+		select * from ws_mt_news as mn left join ws_user_news as un on
+		mn.news_id = un.news_id
+		where mn.del_status =1 and un.del_status=1
+		and un.User_id=#{userid}
+		<if test="newsClass!=null and newsClass!=0">
+		    and mn.news_cat_id = #{newsClass}
+		</if>
+		<if test="title!=null">
+	 	    and mn.news_title like CONCAT('%','${title}','%')
+	 	</if>
+	 	<if test="date!=null">
+	 	    <!-- 在当天范围内 -->
+	 	    and mn.update_time > #{date} and mn.update_time <![CDATA[<]]> #{date2}
+	 	</if>
+	 	group by mn.news_id order by mn.update_time DESC
+		<if test="lowerLimit!=null and upperLimit!=null">
+			limit #{lowerLimit},#{upperLimit};
+		</if>
+	</select>
+	
+	<!-- 首页展示新闻 -->
+	
+	<select id="findIndexNewsByPage" parameterType="Map" resultMap="newsResult">
+		select
+		  mn.news_id as id,  
+		  mn.news_title,
+          mn.news_content,
+          mn.news_author,
+		  mn.create_time,
+		  mn.update_time
+		from ws_mt_news as mn left join ws_user_news as un on
+		mn.news_id = un.news_id
+		where mn.del_status =1 and un.del_status=1
+		and un.User_id=#{userid}
+		<if test="newsClass!=null and newsClass!=0">
+		    and mn.news_cat_id = #{newsClass}
+		</if>
+		<if test="title!=null">
+	 	    and mn.news_title like CONCAT('%','${title}','%')
+	 	</if>
+	 	<if test="date!=null">
+	 	    <!-- 在当天范围内 -->
+	 	    and mn.update_time > #{date} and mn.update_time <![CDATA[<]]> #{date2}
+	 	</if>
+	 	group by mn.news_id order by mn.update_time DESC
+		<if test="lowerLimit!=null and upperLimit!=null">
+			limit #{lowerLimit},#{upperLimit};
+		</if>
+	</select>
+	
+	<!-- 查看单条新闻信息 -->
+	<select id="findById" resultMap="newsResult" parameterType="Long">
+		select mn.* from ws_mt_news mn left join ws_user_news un on 
+		mn.news_id =un.news_id 
+		where mn.del_status =1 and un.del_status=1
+		and mn.news_id =#{id} <!-- and un.user_id=#{userid}; -->
+	</select>
+	<!-- 新闻总数 -->
+	<select id="count" resultType="int" parameterType="Map">
+		select count(*) from ws_mt_news as mn left join ws_user_news as un on
+		mn.news_id = un.news_id
+		where mn.del_status =1 and un.del_status=1
+		and un.User_id=#{userid}
+		<if test="newsClass!=null and newsClass!=0">
+		    and mn.news_cat_id = #{newsClass}
+		</if>
+		<if test="title!=null">
+	 	    and mn.news_title like CONCAT('%','${title}','%' )
+	 	</if>
+	 	<if test="date!=null">
+	 	    and mn.update_time > #{date} and mn.update_time <![CDATA[<]]> #{date2}
+	 	</if>
+	</select>
+	<!-- 所有新闻信息 -->
+	<select id="getAll" resultMap="newsResult">
+		select * from ws_mt_news where
+		del_status=1
+		<!-- and un.User_id=#{0} -->;
+	</select>
+	<!-- 根据新闻分类查询新闻信息 -->
+	<select id="getByClass" resultMap="newsResult" parameterType="Long">
+		select * from ws_mt_news where
+		del_status =1 and
+		news_cat_id=#{id}
+	</select>
+	<!-- 添加新闻 -->
+	<insert id="create" parameterType="WsNews"  keyProperty="id" useGeneratedKeys="true">
+		insert into ws_mt_news(news_title,news_content,news_author,news_remark,create_name,create_time,news_cat_id)
+		values(#{newsTitle},#{newsContent},#{newsAuthor},#{newsRemark},#{createName},#{createTime},#{newsClass.id});
+	</insert>
+	<!-- 注册新闻与用户关系 -->
+	<insert id="addNewsUser" parameterType="WsNewsUser">
+		insert into ws_user_news(news_id,user_id,create_name,create_time)
+		values(#{newsId},#{userId},#{createName},#{createTime});
+	</insert>
+
+	<!-- 修改新闻 -->
+	<update id="update" parameterType="WsNews">
+		update ws_mt_news set
+		news_title = #{newsTitle},
+		news_content =#{newsContent},
+		news_author =#{newsAuthor},
+		news_remark =#{newsRemark},
+		<if test="newsClass!=null">
+		    news_cat_id = #{newsClass.id},
+		</if>
+		update_name =#{updateName}
+		where news_id = #{id};
+	</update>
+
+
+	<!-- 删除新闻 -->
+	<update id="deleteById" parameterType="Long">
+		update ws_mt_news set del_status=0 where news_id = #{id};
+	</update>
+	<!--清除新闻与用户关系 -->
+	<update id="deleteNewsUser"  parameterType="Long">
+	    update ws_user_news set del_status=0 where news_id = #{id};
+	</update>
+</mapper>

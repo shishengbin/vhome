@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width"name="viewport" />
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" type="text/css" href="css/regist.css" />
+<link rel="stylesheet" type="text/css" href="css/login.css" />
+<script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/cookieTools.js"></script>
+<script type="text/javascript" src="js/indexinit.js"></script>
+<title>登录</title>
+<script type="text/javascript">
+	$(function() {
+		$("input").focus(function() {
+			var current = $(this).val();
+			$(this).val("");
+			$(this).blur(function() {
+				if ($.trim($(this).val()) == "")
+					$(this).val(current);
+			});
+		});
+	});
+</script>
+</head>
+<body>
+	<h2 class="title">登录</h2>
+	<form>
+		<div class="content">
+			<div class="contentlist">
+				<div style="height: 40px;">
+					<img align="middle" class="username"
+						src="images/login-regist/yonghuming.png" height="30px;" /> <input
+						id="human_account" placeholder="请输入用户名" />
+				</div>
+				<div style="height: 40px;">
+					<hr
+						style="height: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid rgba(255, 255, 255, .45);" />
+					<img align="middle" class="pwd"
+						src="images/login-regist/shurumima.png" height="30px;" /> <input
+						id="human_password" type="password" class="pwd"
+						placeholder="请输入密码" />
+				</div>
+				<!-- <input class="rember" type="checkbox" /> <span class="rember2">记住密码</span> -->
+			</div>
+		</div>
+		<div class="login" onclick="doLogin()">登录</div>
+		<a href="regist.html" id="regist">
+			<div class="regist">注册</div>
+		</a> <input type="hidden" id="humanId" />
+	</form>
+	<script>
+		//账号id
+		var accountid = request("accountid");
+		var pid = request("pid");
+		$("#regist").attr("href", "regist.html?accountid=" + accountid);
+		function doLogin() {
+			$.ajax({
+						url : '/vhome_web/ws/wap/login',
+						type : 'post',
+						data : {
+							'id' : accountid,
+							'username' : $('#human_account').val(),
+							'password' : $('#human_password').val()
+						},
+						dataType : 'json',
+						success : function(data) {
+							if (data != null) {
+								$("#humanId").val(data.id);
+								addCookie("humanId", data.id);
+								if (pid == '') {
+									location.href = "index.html?accountid="
+											+ accountid;
+								} else {
+									location.href = "detail.html?accountid="
+											+ accountid + "&id=" + pid;
+								}
+							} else {
+								alert("登录失败！请检查用户名密码是否正确！");
+							}
+						},
+						error : function() {
+							alert("登录失败！请重新输入用户名密码！");
+						}
+					});
+		}
+	</script>
+</body>
+</html>

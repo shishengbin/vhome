@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+* { margin: 0 auto; padding: 0px; }
+body{font-family:Arial,Tahoma;color:#333;background:#eee;font-size: 12px; margin: 0px; padding: 0px;}
+a { text-decoration: none;color: #888; }
+a:hover { color: rgb(237, 109, 0); }
+.myaccount {color: #528311;font-size: 12px;}
+.edition {color: #42870a;font-size: 12px;}
+
+/*wap_firminfo*/
+.firm{margin: auto;max-width: 640px;min-height: 100%;overflow: hidden;position: relative;}
+.firm_img{height: 170px;}
+.firm_img img{height: 100%;width: 100%;}
+.firm_text{ background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);bottom: 0;color: #fff;height: 20px;line-height: 20px; padding: 5px 10px;}
+.line{height: 5px;}
+.firm_main{border: 1px solid #b9d9e9;padding:15px;width: 98%;	font-size: 13px;line-height: 24px;box-sizing: border-box;}
+.firm_main h4{border-bottom: 1px solid #b9d9e9;color: #425760;font-size: 15px;font-weight: bold;line-height: 40px;margin-bottom: 15px;text-shadow: none;}
+.firm_footer{height: 35px;line-height: 35px;position: relative;text-align: center;z-index: 0;}

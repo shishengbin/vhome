@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.agt.AgtPostDao" >
+
+	<insert id="create" parameterType="AgtPost"  
+	          useGeneratedKeys="true" keyProperty="id">
+	          insert into ag_post
+	         (postname,postcontent,createdate) 
+	         values(#{postname},#{postcontent},now())
+	</insert>
+	
+	<delete id="deleteById"  parameterType="long" >
+	         delete from ag_post where id = #{id}
+	</delete>
+	
+	<select id="showAgPostBypage" parameterType="map" resultType="AgtPost">
+				SELECT
+				ap.id,
+				ap.postname,
+				ap.postcontent, 
+				ap.createdate as createTime
+				FROM
+				ag_post as ap
+				where 1=1 
+				ORDER BY ap.createdate DESC
+				 <if test="lowerLimit!=null and upperLimit != null">
+				limit #{lowerLimit},#{upperLimit}
+				</if>
+	</select>
+	
+	<select id="count"  resultType="long">
+	   select count(*) from ag_post where 1=1
+	</select>
+	
+	<select id="findById" parameterType="long" resultType="AgtPost">
+	   select * from ag_post where id = #{id}
+	</select>
+ 
+</mapper>

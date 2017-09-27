@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.wx.MenuDao">
+	<select id="findMenu" parameterType="long" resultType="com.sy.modules.entity.wx.menu.CommonButton">
+		select * from wx_button WHERE account_id=#{userid}
+	</select>
+	<select id="findMenuByid" parameterType="long" resultType="CommonButton">
+	    select * from wx_button WHERE bt_id=#{id}
+	</select>
+	<!-- 添加主菜单 -->
+	<insert id="savefatMenu" parameterType="ComplexButton" useGeneratedKeys="true" keyProperty="bt_id">
+		insert into wx_button(name,type,`key`,status,url,account_id,remark) values
+		(#{name},#{type},#{key},#{status},#{url},#{account_id},#{remark})
+	</insert>
+	<!-- 添加子菜单 -->
+	<insert id="saveSonMenu" parameterType="CommonButton" useGeneratedKeys="true" keyProperty="bt_id">
+		insert into wx_button(name,type,`key`,status,url,fat_bt_id,account_id,remark) values
+		(#{name},#{type},#{key},#{status},#{url},#{fat_bt_id},#{account_id},#{remark})
+	</insert>
+	<insert id="saveMenu" parameterType="java.util.List">
+		insert into wx_button(name,type,`key`,status,url,fat_bt_id,account_id) values
+		<foreach collection="list" item="item" index="" separator=",">
+		(#{item.name},#{item.type},#{item.key},#{item.status},#{item.url},#{item.fat_bt_id},#{item.account_id})
+		</foreach>
+	</insert>
+	
+	<!-- 修改菜单 -->
+	<update id="updateMenu"  parameterType="Button">
+		update wx_button 
+		<set>
+			<if test="name!=null and name!=''">`name`=#{name},</if>
+			<if test="type!=null and type!=''">type=#{type},</if>
+			<if test="key!=null and key!=''">`key`=#{key},</if>
+			<if test="url!=null and url!=''">url=#{url},</if>
+			<if test="remark!=null and remark!=''">remark=#{remark}</if>
+		</set>
+		where bt_id=#{bt_id}
+	</update>
+
+	<delete id="delSonMenu" parameterType="long">
+		delete from wx_button where bt_id=#{bt_id}
+	</delete>
+	
+	<delete id="delFatMenu" parameterType="long">
+		delete from wx_button where bt_id=#{bt_id} 
+	</delete>
+	
+	
+	<!-- /////////////////////////////////////////////////////// -->
+	
+	<select id="findParentMenu" parameterType="long" resultType="com.sy.modules.entity.wx.menu.ComplexButton" >
+	    select 
+	      wb.bt_id as bt_id,
+		  wb.`name` as `name`,
+		  wb.type as type,
+		  wb.`key` as 'key',
+		  wb.url
+	    from wx_button AS wb WHERE wb.account_id=#{accountid} and wb.fat_bt_id = 0
+	</select>
+	
+	<select id="findParentMenuCount" parameterType="long" resultType="int" >
+	    select count(*)from wx_button AS wb WHERE wb.account_id=#{accountid} and wb.fat_bt_id = 0
+	</select>
+	<!-- 查询子菜单 -->
+	<select id="findSonMenusByFatId" parameterType="CommonButton" resultType="CommonButton">
+	     select 
+			wb.bt_id,
+			wb.`name`,
+			wb.`key`,
+			wb.url,
+			wb.type
+         from wx_button AS wb
+         WHERE wb.fat_bt_id=${fatid} and wb.account_id=${accountid}
+	    
+	</select>
+	
+	<select id="findSonMenuCountByParent" resultType="int">
+	     select count(*)from wx_button AS wb WHERE wb.account_id=#{accountid} and wb.fat_bt_id = #{fatid}
+	</select>
+	
+</mapper>

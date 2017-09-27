@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.agt.AgtUserDao">
+ <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+ <!--/////////////////////////begin/////////////////LC//////////////////////////  -->
+ 
+ <resultMap type="AgtUser" id="agtuserResult">
+ 	<id column="u_id" property="id"/>
+ 	<result column="u_name" property="u_name"/>
+ 	<result column="u_pass" property="u_pass"/>
+ 	<result column="u_remark" property="u_remark"/>
+ 	<result column="u_status" property="u_status"/>
+ 	<result column="create_time" property="createTime"/>
+ 	<result column="create_name" property="createName"/>
+ 	<result column="update_time" property="updateTime"/>
+ 	<result column="update_name" property="updateName"/>
+ 	<result column="money_box" property="money_box"/>
+ 	<result column="discount" property="discount"/>
+ 	<result column="roleId" property="roleId"/>
+ 	<result column="fatherid" property="fatherId"/>
+ 	<association property="clientCount" select="queryClientCount" column="u_id" javaType="Integer" />
+ 	<association property="indentCount" select="queryIndentCount" column="u_id" javaType="Integer" />
+ 	<association property="coms" resultMap="com.sy.modules.dao.sys.CompanyInfoDao.comResult"></association>
+ 	<association property="role" javaType="Role">
+ 		<id column="role_id" property="id"/>
+ 		<result property="role_name" column="role_name"/>
+ 	</association>
+ </resultMap>
+ <!-- 某代理商下客户总数 -->
+ <select id="queryClientCount" parameterType="Long" resultType="Integer" flushCache="true">
+ 	select count(*) from sys_company c 
+ 	left join rel_agt_company ac on ac.company_id = c.company_id 
+ 	where c.company_state=0 and ac.agt_id=#{id}
+ </select>
+ <!-- 某代理商下订单总数 -->
+ <select id="queryIndentCount" parameterType="Long" resultType="Integer" flushCache="true">
+ 	select count(*) from agt_indent ai
+		left join sys_user_company suc on suc.user_id = ai.sys_user_id
+		left join rel_agt_company ac on ac.company_id = suc.company_id 		
+		left join sys_company com on com.company_id = suc.company_id
+		where ac.agt_id=#{id} and com.company_state=0  
+ </select>
+ <!--  单条-->
+ <select id="findAgentById" parameterType="Long" resultMap="agtuserResult">
+ 	select * from agt_user au
+	left join rel_agt_company ac on ac.agt_id = au.u_id
+	left join sys_company sc on sc.company_id = ac.company_id
+	left join sys_role sr on sr.role_id = au.roleId
+	where au.u_id=#{id} and sc.company_state=1 and u_status=1
+ </select>
+ <!-- 禁用代理商账号 -->
+ <update id="update" parameterType="AgtUser">
+ 	update agt_user set u_status=#{u_status} where u_id = #{id};
+ </update>
+ <!-- 代理商登录 -->
+ <select id="agtLogin" parameterType="String" resultMap="agtuserResult" flushCache="true">
+ 	select * from agt_user au
+ 	left join sys_role sr on sr.role_id = au.roleId 
+ 	left join rel_agt_company ac on ac.agt_id= au.fatherId
+ 	left join sys_company c on c.company_id = ac.company_id
+ 	where au.u_name=#{u_name} and company_state=1 and u_status=1;
+ </select>
+ <!-- 修改代理商密码 -->
+ <select id="updatePass" parameterType="Map">
+ 	update agt_user set u_pass=#{pass2} where u_name=#{name} and u_pass=#{pass}
+ </select>
+ <!-- 修改代理商账户余额 -->
+ <update id="updateBalance" parameterType="Map">
+ 	update agt_user set money_box=#{balance} where u_id = #{id};
+ </update>
+ <select id="queryBalance" resultType="double" parameterType="Long">
+ 	select money_box from agt_user where u_id=#{id};
+ </select>
+ <!-- 根据关键词查找用户ID -->
+ <select id="queryUserIdByKey" parameterType="String" resultType="Long">
+ 	select user_id from sys_user su 
+ 	left join rel_user_keyword ruk on ruk.sys_user_id = su.user_id
+ 	left join ag_keyword k on k.kw_id = ruk.keyword_id
+ 	where k.kw_name = #{keyword}
+ </select>
+ <!-- ///////////////////////////end/////////////////////////////////////////// -->
+ <select id="findUserByName" parameterType="String" resultMap="agtuserResult" flushCache="true">
+	select
+		u_id as id,
+		u_name as u_name,
+		u_pass as u_pass,
+		u_pass as u_pass,
+		u_pass as u_pass,
+		create_name as createName,
+		create_time as createTime,
+		update_name as updateName,
+		update_time as updateTime
+	from agt_user
+		left join sys_role sr on sr.role_id = au.roleId 
+ 		left join rel_agt_company ac on ac.agt_id= au.fatherId
+ 		left join sys_company c on c.company_id = ac.company_id
+ 	where au.u_name=#{username} and company_state=1 and u_status=1;
+     </select> 
+     <sql id="findpage">
+     	from agt_user au left join rel_agt_company ac on ac.agt_id = au.u_id
+		left join sys_company c on c.company_id = ac.company_id
+		where c.company_state=1 and au.u_id!=#{id} and 2=au.roleId
+		<if test="userName!=null">
+		  and c.company_name like "%"#{userName}"%"
+		</if>
+     </sql>
+     <!-- 分页查询所有帐号-->
+	<select id="findAllUserByPage" parameterType="map" resultMap="agtuserResult" useCache="false" flushCache="true">
+	    select *
+	    <include refid="findpage"/> 
+		<if test="lowerLimit!=null and upperLimit != null">
+				limit #{lowerLimit},#{upperLimit}
+	    </if>
+	</select>
+	<select id="findCountByParam" parameterType="map" resultType="long">
+	   select count(*) <include refid="findpage"/>
+	</select>
+	<insert id="create" parameterType="AgtUser" useGeneratedKeys="true" keyProperty="id">
+      insert into agt_user (u_name,u_pass,roleId,fatherId,u_remark,create_time,discount) values 
+      (#{u_name},#{u_pass},#{roleId},#{fatherId},#{u_remark},now(),#{discount})
+   </insert> 
+   <select id="findCompanyIdById" parameterType="long" resultType="long">
+			SELECT
+			sys_company.company_id
+			FROM
+			rel_agt_company,
+			sys_company
+			where
+			rel_agt_company.company_id = sys_company.company_id
+			and
+			rel_agt_company.agt_id =#{aid}
+			and
+			sys_company.company_state = 1
+   </select>
+</mapper>

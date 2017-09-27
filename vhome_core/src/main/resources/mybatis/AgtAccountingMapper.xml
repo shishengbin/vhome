@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.agt.AccountingDao">
+<resultMap type="Accounting" id="accountingResult">
+		<id column="accounting_id" property="id"/>
+		<result column="accounting_type" property="type"/>
+		<result column="accounting_sum" property="sum"/>
+		<result column="accounting_balance" property="balance"/>
+		<result column="accounting_antistop" property="antistop"/>
+		<result column="accounting_term" property="term" />
+		<result column="accounting_rebate" property="rebate"/>
+		<result column="create_time" property="createTime"/>
+		<result column="remark" property="remark"/>
+		<result column="create_name" property="createName" />
+		<result column="company_name" property="firmName"/>
+</resultMap>
+	<!-- 根据代理商附组合查询账务信息 -->
+	<sql id="fromacc">
+		from agt_accounting a
+		left join rel_agt_company ac on ac.agt_id = a.agt_id
+		left join sys_company c on c.company_id = ac.company_id
+		where c.company_state=1 and a.del_status=1 
+		<if test="role!=1">
+			and a.agt_id = #{id}
+		</if>
+		<if test="accountingType!=null and accountingType!=0">
+			and a.accounting_type=#{accountingType}
+		</if>
+		<if test="agentName!=null and agentName!=''">
+			and c.company_name=#{agentName}
+		</if>
+	</sql>
+	<!-- 分页查看所有账务 -->
+	<select id="findAccountingBypage" parameterType="Map" resultMap="accountingResult">
+		select a.*,c.company_name  <include refid="fromacc"/>
+		order by a.create_time DESC
+		<if test="lowerLimit!=null and upperLimit != null">
+		  limit #{lowerLimit},#{upperLimit}
+	    </if>
+	</select>
+	 <!-- 最新一条充值记录 -->
+	 <select id="queryNewestOne" parameterType="Long" resultMap="accountingResult">
+	 	select a.accounting_id,a.accounting_sum,a.accounting_balance,a.create_name,a.create_time from agt_accounting a 
+	 	where a.accounting_type=1 and a.agt_id=#{id} 
+	 	order by a.accounting_id desc  limit 1
+	 </select>
+	<!-- 总数 -->
+	<select id="count" parameterType="Map" resultType="Integer">
+		select count(*) <include refid="fromacc"/>
+	</select>
+	
+	<select id="getAll" parameterType="Long" resultMap="accountingResult">
+		<include refid="fromacc"/> order by create_time
+	</select>
+	<insert id="create" parameterType="Accounting">
+		insert into agt_accounting(accounting_type,accounting_sum,accounting_balance,accounting_antistop,accounting_term,accounting_rebate,create_time,remark,agt_id,create_name)
+		values(#{type},#{sum},#{balance},#{antistop},#{term},#{rebate},#{createTime},#{remark},#{agt.id},#{createName});
+	</insert> 
+</mapper>

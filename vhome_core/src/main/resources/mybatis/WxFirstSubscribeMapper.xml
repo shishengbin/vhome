@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.wx.FirstSubscribeDao">
+	
+    <select id="findFirstSubscribeInfo" parameterType="long" resultType="FirstSubscribe">
+		SELECT
+			wfm.fst_msg_id as id,
+			wfm.msg_type as msg_type,
+			wfm.article_id as article_id,
+			wfm.account_id as account_id,
+			wfm.remark as remark,
+			wfm.create_name as createName,
+			wfm.create_time as createTime,
+			wfm.update_name as updateName,
+			wfm.update_time as updateTime
+		FROM
+		    wx_first_rep_msg AS wfm
+		WHERE wfm.account_id=#{accountid}
+    </select>
+    
+    <select id="findSubscribeCount" parameterType="long" resultType="int">
+        select count(*) from wx_first_rep_msg AS wfm WHERE wfm.account_id=#{accountid}
+    </select>
+    
+   <insert id="create" parameterType="FirstSubscribe" useGeneratedKeys="true" keyProperty="id">
+		insert into wx_first_rep_msg (msg_type,article_id,account_id,remark,create_name,create_time)
+		values (#{msg_type},#{article_id},#{account_id},#{remark},#{createName},#{createTime})
+	</insert>
+	
+   <update id="update" parameterType="FirstSubscribe">
+		update wx_first_rep_msg 
+        <set>
+			msg_type=#{msg_type},
+			<if test="article_id!=null and article_id!=''">article_id=#{article_id},</if>
+			<if test="remark!=null and remark!=''">remark=#{remark},</if>
+			<if test="updateName!=null and updateName!=''">update_name=#{updateName},</if>
+			<if test="updateTime!=null and updateTime!=''">update_time=#{updateTime}</if>
+		</set>
+		where account_id=#{account_id}
+	</update>
+	
+   <select id="findContentByid" parameterType="long" resultType="com.sy.modules.entity.wx.resp.TextMessageResp">
+		select wa.content from wx_article wa LEFT JOIN wx_first_rep_msg wfm on wa.article_id=wfm.article_id
+				where wfm.account_id=#{userid} and wfm.msg_type=0;
+	</select>
+	<!-- 关注查询单图文 -->
+   <select id="findArticleByid" parameterType="long" resultType="com.sy.modules.entity.wx.resp.MyArticle">
+		SELECT
+			wa.article_id as id,
+			wa.title as Title,
+			wa.description as Description,
+			wa.picurl as PicUrl,
+			wa.url as Url,
+			wa.content as content,
+			wa.create_name as createName,
+		  wa.create_time as createTime,
+		  wa.update_name as updateName,
+		  wa.update_time as updateTime
+      
+		FROM
+		    wx_rel_article_account AS wraa LEFT JOIN wx_first_rep_msg AS wfrm ON wraa.aa_id=wfrm.article_id
+                                       LEFT JOIN wx_article AS wa ON wa.article_id=wraa.article_id
+     where wfrm.account_id=#{userid}
+	</select>
+	
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.wx.ArticleaccountDao">
+    <!-- 关联图文和公众号 -->
+    <insert id="create" parameterType="Articleaccount" useGeneratedKeys="true" keyProperty="id">
+        	insert into wx_rel_article_account(article_id,mutiArticle_id,account_id)
+		    values(#{artcleId},#{mutiArticle_id},#{accountId});
+    </insert>
+
+    <select id="findById" parameterType="long" resultType="Articleaccount">
+        select *
+	    from wx_rel_article_account AS wraa
+	    where wraa.aa_id=#{id}
+        
+    </select>
+    <select id="findInfoByAticleId" parameterType="map" resultType="Articleaccount">
+        select wraa.aa_id as id
+	    from wx_rel_article_account AS wraa
+	    where wraa.article_id=#{id} and  wraa.mutiarticle_id=#{mutiarticle_id} 
+    </select>
+    
+    <delete id="deleteById" parameterType="long">
+        delete from wx_rel_article_account
+        where article_id=#{id}
+    </delete>
+    
+    <delete id="deleteByMutiId" parameterType="long">
+        delete from wx_rel_article_account
+        where mutiarticle_id=#{id}
+    </delete>
+    
+	
+</mapper>

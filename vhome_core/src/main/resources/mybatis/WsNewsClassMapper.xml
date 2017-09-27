@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsNewsClassDao">
+    <resultMap type="WsNewsClass" id="newsClassResult">
+        <id column="news_cat_id" property="id"/>
+        <result column="news_cat_remark" property="remark"/>
+        <result column="create_name" property="createName"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="update_name" property="updateName"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="count" column="news_cat_id" ofType="Integer" select="countNews" />
+    </resultMap>
+
+	<!-- 新闻分类结果集 -->
+	<select id="getAllClass" resultMap="newsClassResult" parameterType="Long">
+	    select * from ws_news_cat nc
+	    left join rel_user_news_cat unc on nc.news_cat_id = unc.news_cat_id
+	    where nc.del_status=1 and unc.user_id = #{id}
+	</select>
+	<!-- 附条件总条数 -->
+	<select id="count" resultType="Integer" parameterType="Map">
+	    select count(nc.news_cat_id) from ws_news_cat nc
+	    left join rel_user_news_cat unc on nc.news_cat_id = unc.news_cat_id
+	    where nc.del_status=1 and unc.user_id = #{userid}
+	    <if test="newsCatText!=null">
+	        and nc.news_cat_remark like CONCAT('%','${newsCatText}','%')
+	    </if>
+	</select>
+	<!-- 一种类型下有多少条新闻 -->
+	<select id="countNews" parameterType="Long" resultType="Integer">
+	    select count(*) from ws_mt_news where news_cat_id = #{news_cat_id} and del_status = 1;
+	</select>
+	<!-- 附条件数据结果集（分页） -->
+	<select id="findAllNewsClassByPage" resultMap="newsClassResult" parameterType="Map">
+	    select * from ws_news_cat nc
+	    left join rel_user_news_cat unc on nc.news_cat_id = unc.news_cat_id
+	    where nc.del_status=1 and unc.user_id = #{userid}
+	    <if test="newsCatText!=null">
+	        and nc.news_cat_remark like CONCAT('%','${newsCatText}','%' )
+	    </if>
+	    <if test="lowerLimit!=null and upperLimit!=null">
+			limit #{lowerLimit},#{upperLimit};
+		</if>
+	</select>
+	<!-- 增加新闻类型 -->
+	<insert id="create" parameterType="WsNewsClass" keyProperty="id" useGeneratedKeys="true">
+	    insert into ws_news_cat(
+	    news_cat_remark,create_time,create_name
+	    )
+	    values(#{remark},#{createTime},#{createName});
+	</insert>
+	<!-- 注册分类与企业关联 -->
+	<insert id="createUserNewsCat" parameterType="WsNewsClassUser">
+	    insert into rel_user_news_cat(user_id,news_cat_id,create_time,create_name)
+	    values(#{userId},#{newsCatId},#{createTime},#{createName});
+	</insert>
+	<!-- 删除新闻类型 -->
+	<update id="deleteById" parameterType="Long">
+	    update ws_news_cat set del_status=0 where news_cat_id = #{id};
+	</update>
+	<!-- 清除新闻与用户关联 -->
+	<update id="deleteNewsCat" parameterType="Long">
+	    update rel_user_news_cat set del_status = 0 where news_cat_id = #{id};
+	</update>
+	<!-- 修改新闻类型 -->
+	<update id="update" parameterType="WsNewsClass">
+	    update ws_news_cat 
+	    set news_cat_remark = #{remark},
+	    update_name=#{updateName}
+	    where news_cat_id = #{id};
+	</update>
+	<!-- 单条 -->
+	<select id="findById" parameterType="Long" resultMap="newsClassResult">
+	    select * from ws_news_cat where news_cat_id = #{id} and del_status=1; 
+	</select>
+</mapper>

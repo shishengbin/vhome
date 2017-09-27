@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+.idlb {font-family: Arial,sans-serif;display: block;width: 100%;}
+.idlb table {border: 1px #09c solid;border-collapse: collapse;width: 99%;overflow-y:scroll;}
+.idlb table thead,tfoot tr td {border: 1px #09c solid;}
+.idlb table tbody tr td,th {border: 1px solid #09c;font-size: 11px;border-left: none;}
+.idlb table tr {height: 36px;}
+.idlb table tbody .hed {width: 185px;height: 30px;}
+.idlb table tbody .hed .imh {overflow: hidden;}
+.idlb table tbody .hed .imh img {width: 80px;height: 80px;}
+.idlb table tr th {background-color: #09c;font-weight: bold;font-size: 15px;height: 33px; width: 228px;}
+.idlb table thead,tfoot {background-color: #FCFCFC;}
+.idlb table .fleft {float: left;}
+.idlb table .fright {float: right;}
+.idlb table tr td dl {width: 100%;display: block;border-top: 1px #90EE90;margin: 0px 0px;padding: 4px;float: left;}
+.idlb table tr td dl dt {background-color: #FFFFFF;float: left;font-size: 14px;color: #575757;margin-left: 4px;margin-top: 6px;vertical-align: middle;}
+.idlb table tr td dl dd {float: left;font-size: 14px;margin: 6px;display: block;min-width: 50px;vertical-align: middle;}
+.idlb dl dd.showbor {padding-right: 8px;border-right: 1px #9BCD9B solid;}
+#bt {font-size: 20px;float: left;padding: 40px;}
+.idlb .title {color: #7D9EC0;}
+.idlb .price {color: red;}
+.idlb thead tr { display:block; } 
+.idlb tbody { display: block; height: 300px; overflow: auto; } 

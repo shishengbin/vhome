@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsPictureDao">
+	<resultMap type="WsMtPicture" id="pictureResult">
+		<id column="picture_id" property="id" />
+		<result column="picture" property="picture" />
+		<result column="picture_name" property="pictureName" />
+	</resultMap>
+	<!-- 添加图片 -->
+	<insert id="create" parameterType="WsMtPicture" keyProperty="id"
+		useGeneratedKeys="true">
+		insert into ws_picture(picture,picture_name,create_name,create_time)
+		values(#{picture},#{pictureName},#{createName},#{createTime});
+	</insert>
+	<!-- 注册图片和企业关系 -->
+	<!-- <insert id="create_user_pic" parameterType="UserPic"
+		keyProperty="id" useGeneratedKeys="true">
+		insert into rel_user_pic(picture_id,user_id,create_name,create_time)
+		values(#{picture_id},#{user_id},#{createName},#{createTime});
+	</insert> -->
+	<!-- 创建账号与ICon关联 -->
+	<insert id="createIcon" parameterType="Map">
+		insert into
+		rel_user_picture(picture_id,user_id)values(#{picId},#{userId});
+	</insert>
+	<!-- 删除单这张图片 -->
+	<delete id="deleteById" parameterType="int">
+		delete from ws_picture where picture_id = #{picture_id};
+	</delete>
+	<!-- 根据id查找单张图片 -->
+	<select id="findById" parameterType="Long" resultMap="pictureResult">
+		select picture_id,picture,picture_name from ws_picture where picture_id =
+		#{id};
+	</select>
+	<!-- 根据user_id查找单张图片 -->
+	<select id="findByUserId" parameterType="Long" resultMap="pictureResult">
+		select * from ws_picture left join rel_user_pic on
+		ws_picture.picture_id=rel_user_pic.picture_id where
+		rel_user_pic.user_id = #{id};
+	</select>
+	<!-- 修改图片信息 -->
+	<select id="update" parameterType="WsMtPicture">
+		update ws_picture set picture=#{picture} where picture_id = #{id};
+	</select>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.ws.WsProductIndentDao">
+	<resultMap type="WsProductIndnet" id="ipResult">
+		<id column="id" property="id" />
+		<result column="indent_id" property="indentid" />
+		<result column="product_id" property="productid" />
+		<result column="count" property="count" />
+		<result column="remark" property="remark" />
+		<association property="product"	resultMap="com.sy.modules.dao.ws.WsMtProductDao.productResult"></association>
+	</resultMap>
+
+	<select id="selectProduct" resultMap="ipResult" parameterType="Long">
+		select
+		p.product_id,p.product_name,p.product_remark,p.product_price,p.product_city,p.product_postage,p.product_favorable,p.bazaar_price,
+		p.create_name,p.create_time,p.update_time,p.update_name,pic.picture_id,pic.picture_name,pic.picture
+		,pi.*
+		from rel_product_indent
+		pi left join ws_mt_product p on pi.product_id = p.product_id
+		left join ws_user_product up on p.product_id = up.product_id
+		left join sys_user as u on u.user_id = up.user_id
+		left join ws_product_picture pp on pp.product_id = p.product_id
+		left join ws_picture pic on pic.picture_id = pp.picture_id
+	
+		where p.del_status=1 and up.del_status=1 and
+		pi.indent_id = #{indent_id};
+	</select>
+	<!-- 查找购物车内是否存在某件商品 -->
+	<select id="queryCart" resultMap="ipResult">
+		select * from rel_product_indent where remark =#{remark} and indent_id is null and product_id=#{productid} 
+	</select>
+	<insert id="addProductToCart" parameterType="java.util.List">
+		insert into rel_product_indent(product_id,indent_id,count,remark)values
+		<foreach collection="list" item="item" index="" separator=",">
+		(#{item.productid},#{item.indentid},#{item.count},#{item.remark})
+		</foreach>
+	</insert>
+	<!-- 查询购物车内所有商品 -->
+	<select id="getAll" parameterType="String" resultType="com.sy.modules.entity.ws.WsMtProduct">
+	    SELECT     
+	        wmp.product_id as id ,
+			wmp.product_name as productName,
+			wpt.tid as tid,
+			wmp.product_remark as productRemark,
+			wmp.product_price as productPrice,
+			wmp.product_city as productCity,
+			wmp.del_status as deleteStatus,
+			wmp.module_type_id as wptyeid,
+			wmp.supp_id as suppid,
+			ws.supp_company as suppcomany,
+			wmp.product_expdate as expdate,
+			wmp.product_date as producedate,
+			wmp.product_address as productaddress,
+			wmp.spec_id as specid,
+			wsp.spec_name as specname,
+			wmp.create_name as createName,
+			wmp.create_time as createTime,
+			wmp.update_name as updateName,
+			wmp.update_time as updateTime,
+			wmp.product_favorable as productFavorable,
+			wmp.bazaar_price as bazaarPrice,
+			wpt.tname as tname,
+			wmp.product_picpath as picPath,
+			rpi.count as count
+		FROM ws_mt_product AS wmp LEFT JOIN ws_user_product AS wup ON wup.product_id=wmp.product_id
+			                     LEFT JOIN rel_product_type AS rwpt ON rwpt.ws_product_id=wmp.product_id
+			                     LEFT JOIN ws_pro_type AS wpt ON wpt.tid=rwpt.ws_type_id 
+			                     LEFT JOIN ws_product_picture pp on pp.product_id = wmp.product_id
+		                         LEFT JOIN ws_picture pic on pic.picture_id = pp.picture_id
+		                         LEFT JOIN ws_supplier AS ws on wmp.supp_id=ws.supp_id
+		                         LEFT JOIN ws_spec AS wsp on wmp.spec_id=wsp.spec_id 
+                                 LEFT JOIN rel_product_indent rpi on wmp.product_id = rpi.product_id 
+		   where 1=1 and  rpi.remark =#{humanidstr} and rpi.indent_id is null and rpi.product_id is not null
+	</select>
+	
+	<!-- 修改 -->
+	<update id="updateProductCart" parameterType="WsProductIndnet">
+		update rel_product_indent
+		<choose>
+			<when test="count!=null and count!=0">
+				set count = #{count} where product_id=#{productid}
+			</when>
+			<otherwise>
+				set indent_id=#{indentid} where product_id is not null
+			</otherwise>
+		</choose>
+		and remark =#{remark} and indent_id is null
+	</update>
+	<!-- 删除 -->
+	<delete id="deleteById" parameterType="WsProductIndnet">
+		delete from rel_product_indent where remark =#{remark} and indent_id is null and product_id =#{productid}
+	</delete>
+</mapper>

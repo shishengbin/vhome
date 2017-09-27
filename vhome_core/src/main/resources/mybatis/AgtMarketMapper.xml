@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sy.modules.dao.agt.MarketDao">
+ 	<resultMap type="Market" id="marketResult">
+		<id column="market_id" property="id" />
+		<result column="market_name" property="name" />
+		<result column="market_type" property="type"/>
+	</resultMap>
+
+	<select id="getAll" resultMap="marketResult">
+		select * from agt_market where
+		del_status=1;
+	</select>
+	<insert id="create" parameterType="Market">
+		insert into
+		agt_market(market_name)
+		values(#{name});
+	</insert>
+	<update id="update" parameterType="Market">
+		update agt_market set
+		market_name = #{name} where market_id = #{id};
+	</update>
+	<update id="deleteById" parameterType="Long">
+		update agt_market set
+		del_status = 0 where market_id = #{id};
+	</update>
+</mapper>
