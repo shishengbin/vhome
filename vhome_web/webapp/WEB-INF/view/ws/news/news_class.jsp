@@ -9,7 +9,7 @@
 			<tr>
 				<td>
 					新闻类型：
-					<input id="newsCatText" name="newsCatText" value="${newsCatText }">
+					<input id="newsCatText" type="text" name="newsCatText" value="${newsCatText }">
 				</td>
 			</tr>
 		</table>

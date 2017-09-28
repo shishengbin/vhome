@@ -51,7 +51,7 @@ SysUser user = (SysUser) session.getAttribute(Constants.USER_LOGIN_SESSION_KEY);
 				 <td align="center">${p.url}</td>
 				</c:if>
 				<td align="center">
-					<a title="添加子菜单" target="dialog" href="wx/findMenuByid?id=${p.bt_id}&flag=add" width="650" height="400">添加子菜单</a>
+					<a title="添加子菜单" target="dialog" href="wx/findMenuById?id=${p.bt_id}&flag=add" width="650" height="400">添加子菜单</a>
 				  <!-- 	<a title="查看子菜单" target="navTab" rel="page10" href="wx/findSonMenusByFatId?id={sid_user}" width="650" height="400">查看子菜单</a>  -->
 				</td>
 			</tr>

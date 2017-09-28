@@ -9,7 +9,7 @@
 			<tr>
 				<td>
 					规格名称：
-					<input id="specname" name="specname" value="${specname }">
+					<input id="specname" type="text" name="specname" value="${specname }">
 				</td>
 			</tr>
 		</table>
